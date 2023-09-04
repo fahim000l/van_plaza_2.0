@@ -12,11 +12,12 @@ import {
   TextField,
 } from "@mui/material";
 import Dashboard from "@/layouts/Dashboard";
-import AddCategoryDrawer from "@/components/add_category-drawer";
 import useGetAllCategories from "@/hooks/useGetAllCategories";
 import { Edit, Delete, Done } from "@mui/icons-material";
 import { toast } from "react-hot-toast";
 import DeleteConfirmationDialog from "@/components/common_dlt_confirmation-dialog";
+import CategoriesTableRow from "@/components/dashboard/dashboard-categories/CategoriesTableRow";
+import AddCategoryDrawer from "@/components/dashboard/dashboard-categories/add_category-drawer";
 
 export default function DashboardCategories() {
   const [editingCategory, setEditingCategory] = React.useState("");
@@ -106,60 +107,17 @@ export default function DashboardCategories() {
           </TableHead>
           <TableBody>
             {categories?.map((category) => (
-              <TableRow
+              <CategoriesTableRow
                 key={category?._id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  <Avatar
-                    alt="Remy Sharp"
-                    src={`/uploads/images/categories/${category?.categoryImage}`}
-                    sx={{ width: 56, height: 56 }}
-                  />
-                </TableCell>
-                <TableCell align="center">
-                  <TextField
-                    error={
-                      error && editingCategory === category?._id ? true : false
-                    }
-                    helperText={error}
-                    onChange={(event) => setEditingName(event.target.value)}
-                    size="small"
-                    defaultValue={category?.categoryName}
-                    disabled={editingCategory != category?._id}
-                  />
-                </TableCell>
-                <TableCell align="center">{category?._id}</TableCell>
-                <TableCell align="center">{0}</TableCell>
-                <TableCell align="center">
-                  {editingCategory === category?._id ? (
-                    <IconButton
-                      onClick={handleEditCategory}
-                      className="bg-[green] text-white hover:bg-green-400"
-                    >
-                      <Done />
-                    </IconButton>
-                  ) : (
-                    <IconButton
-                      onClick={() => setEditingCategory(category?._id)}
-                      className="bg-[darkblue] text-white hover:bg-blue-400"
-                    >
-                      <Edit />
-                    </IconButton>
-                  )}
-                </TableCell>
-                <TableCell align="center">
-                  <IconButton
-                    onClick={() => {
-                      setDeleteOpen(true);
-                      setDeletingCategory(category);
-                    }}
-                    className="bg-[red] text-white hover:bg-red-500"
-                  >
-                    <Delete />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
+                category={category}
+                error={error}
+                editingCategory={editingCategory}
+                setEditingCategory={setEditingCategory}
+                setDeleteOpen={setDeleteOpen}
+                handleEditCategory={handleEditCategory}
+                setDeletingCategory={setDeletingCategory}
+                setEditingName={setEditingName}
+              />
             ))}
           </TableBody>
         </Table>

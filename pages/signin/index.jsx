@@ -25,6 +25,7 @@ import { useRouter } from "next/router";
 
 const signin = () => {
   const [passShow, setPassShow] = useState(false);
+  const { data: sessionData } = useSession();
   const [loading, setLoading] = useState(false);
   const { push } = useRouter();
 
@@ -32,6 +33,10 @@ const signin = () => {
     const confirmation = await signIn("google", {
       callbackUrl: "/",
     });
+
+    if (confirmation.ok) {
+      console.log(sessionData?.user);
+    }
   };
 
   const handleSubmit = async (value) => {

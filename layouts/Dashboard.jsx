@@ -22,6 +22,7 @@ import {
   Inventory,
   AddBusiness,
   CategoryOutlined,
+  SquareFootOutlined,
 } from "@mui/icons-material";
 import { FaTshirt } from "react-icons/fa";
 
@@ -52,6 +53,11 @@ const navItems = [
     path: "/dashboard/dashboard-categories",
     content: "Categories",
     icon: <CategoryOutlined />,
+  },
+  {
+    path: "/dashboard/dashboard-sizes",
+    content: "Sizes",
+    icon: <SquareFootOutlined />,
   },
 ];
 

@@ -19,26 +19,26 @@ const Header = ({ setMobileOpen, navItems }) => {
     useContext(AUTH_CONTEXT);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  const [storingUser, setStoringUser] = useState(null);
+  // const [storingUser, setStoringUser] = useState(null);
 
-  const { dbConfirmation } = useStoreUser(storingUser);
+  // const { dbConfirmation } = useStoreUser(storingUser);
 
-  useEffect(() => {
-    if (dbConfirmation) {
-      setStoringUser(null);
-    }
-  }, [dbConfirmation]);
+  // useEffect(() => {
+  //   if (dbConfirmation) {
+  //     setStoringUser(null);
+  //   }
+  // }, [dbConfirmation]);
 
-  useEffect(() => {
-    if (sessionData?.user) {
-      console.log(sessionData?.user);
-      setStoringUser({
-        email: sessionData?.user?.email,
-        userName: sessionData?.user?.name,
-        profilePic: sessionData?.user?.image,
-      });
-    }
-  }, [sessionData]);
+  // useEffect(() => {
+  //   if (sessionData?.user) {
+  //     console.log(sessionData?.user);
+  //     setStoringUser({
+  //       email: sessionData?.user?.email,
+  //       userName: sessionData?.user?.name,
+  //       profilePic: sessionData?.user?.image,
+  //     });
+  //   }
+  // }, [sessionData]);
 
   return (
     <AppBar
