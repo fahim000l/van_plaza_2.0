@@ -7,8 +7,15 @@ const useGetDbUser = (userEmail) => {
     isLoading: dbUserLoading,
   } = useQuery({
     queryKey: ["/api/get-db_user", userEmail],
-    queryFn: () =>
-      fetch(`/api/get-db_user?email=${userEmail}`).then((res) => res.json()),
+    queryFn: async () => {
+      if (userEmail) {
+        return await fetch(`/api/get-db_user?email=${userEmail}`).then((res) =>
+          res.json()
+        );
+      }
+
+      return null;
+    },
   });
 
   return { dbUser, dbUserRefetch, dbUserLoading };
