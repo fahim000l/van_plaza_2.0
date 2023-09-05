@@ -23,6 +23,7 @@ import {
   AddBusiness,
   CategoryOutlined,
   SquareFootOutlined,
+  Hail,
 } from "@mui/icons-material";
 import { FaTshirt } from "react-icons/fa";
 
@@ -30,7 +31,7 @@ const drawerWidth = 240;
 
 const navItems = [
   {
-    path: "/clothings",
+    path: "/dashboard/stock-in",
     content: "Stock In",
     icon: <AddBusiness />,
   },
@@ -50,6 +51,11 @@ const navItems = [
     icon: <FaTshirt />,
   },
   {
+    path: "/dashboard/suppliers-collection",
+    content: "Suppliers",
+    icon: <Hail />,
+  },
+  {
     path: "/dashboard/dashboard-categories",
     content: "Categories",
     icon: <CategoryOutlined />,
@@ -63,9 +69,6 @@ const navItems = [
 
 function Dashboard({ window, children }) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
-
-  const container =
-    window !== undefined ? () => window().document.body : undefined;
 
   return (
     <Box sx={{ display: "flex" }}>
