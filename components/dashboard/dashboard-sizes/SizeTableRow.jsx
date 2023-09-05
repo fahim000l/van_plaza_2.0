@@ -16,7 +16,13 @@ import { toast } from "react-hot-toast";
 import useGetAllSizes from "@/hooks/useGetAllSizes";
 import SizeDetailsDrawer from "./SizeDetailsDrawer";
 
-const SizeTableRow = ({ size, editingSize, setEditingSize }) => {
+const SizeTableRow = ({
+  size,
+  editingSize,
+  setEditingSize,
+  setDeletingSize,
+  setDeleteOpen,
+}) => {
   const { sizeName, categoryId, sizeAttributes, _id } = size;
 
   const { categories } = useGetAllCategories();
@@ -65,10 +71,11 @@ const SizeTableRow = ({ size, editingSize, setEditingSize }) => {
       <TableCell align="center">
         {category && (
           <Autocomplete
+            fullWidth
             disabled={editingSize !== _id}
             size="small"
             id="country-select-demo"
-            sx={{ width: 200 }}
+            sx={{ width: 300 }}
             options={categories}
             defaultValue={category}
             onChange={(event, newValue) =>
@@ -110,6 +117,7 @@ const SizeTableRow = ({ size, editingSize, setEditingSize }) => {
       <TableCell align="center">
         <SizeDetailsDrawer
           sizeName={sizeName}
+          sizeId={_id}
           categoryId={categoryId}
           sizeAttributes={sizeAttributes}
         />
@@ -135,7 +143,7 @@ const SizeTableRow = ({ size, editingSize, setEditingSize }) => {
         <IconButton
           onClick={() => {
             setDeleteOpen(true);
-            setDeletingCategory(category);
+            setDeletingSize(size);
           }}
           className="bg-[red] text-white hover:bg-red-500"
         >
