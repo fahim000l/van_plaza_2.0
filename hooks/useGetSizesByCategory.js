@@ -9,9 +9,9 @@ const useGetSizesByCategory = (categoryId) => {
     queryKey: ["/api/get-sizes-by-category", categoryId],
     queryFn: async () => {
       if (categoryId) {
-        return await fetch(`/api/get-sizes-by-category`).then((res) =>
-          res.json()
-        );
+        return await fetch(
+          `/api/get-sizes-by-category?categoryId=${categoryId}`
+        ).then((res) => res.json());
       }
       return [];
     },

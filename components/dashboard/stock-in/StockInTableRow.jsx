@@ -13,6 +13,7 @@ import useGetAllProducts from "@/hooks/useGetAllProducts";
 import { RestartAlt } from "@mui/icons-material";
 import { STOCK_IN_CONTEXT } from "@/contexts/StockInProvider";
 import useGetProductById from "@/hooks/useGetProductById";
+import QuantityInDrawer from "./QuantityInDrawer";
 
 const StockInTableRow = ({ record, i, setRecords, records }) => {
   const { products } = useGetAllProducts();
@@ -24,7 +25,7 @@ const StockInTableRow = ({ record, i, setRecords, records }) => {
   const flaw1Ref = useRef();
   const flaw2Ref = useRef();
   const flaw3Ref = useRef();
-  const { product } = useGetProductById(
+  const { product, productRefetch } = useGetProductById(
     Formik.values.stockProducts[i]?.productId
   );
 
@@ -46,8 +47,10 @@ const StockInTableRow = ({ record, i, setRecords, records }) => {
             const updatedProduct = {
               ...updatedStockProducts[i],
               productId: newValue?._id,
+              transId: Formik.values.transId,
               buyPrice: newValue?.buyPrice,
               sellPrice: newValue?.sellPrice,
+              quantities: [],
             };
             updatedStockProducts[i] = updatedProduct;
             Formik.setFieldValue("stockProducts", updatedStockProducts);
@@ -237,12 +240,21 @@ const StockInTableRow = ({ record, i, setRecords, records }) => {
         />
       </TableCell>
       <TableCell size="small" align="center">
-        <IconButton>
-          <Chip label={"0"} />
-        </IconButton>
+        <QuantityInDrawer i={i} product={product} disabled={!product} />
       </TableCell>
       <TableCell align="center">
-        <IconButton size="small" className="bg-info text-primary">
+        <IconButton
+          onClick={() => {
+            const updatedStockProducts = [...Formik.values.stockProducts];
+
+            updatedStockProducts[i] = "";
+
+            Formik.setFieldValue("stockProducts", updatedStockProducts);
+            productRefetch();
+          }}
+          size="small"
+          className="bg-info text-primary"
+        >
           <RestartAlt />
         </IconButton>
       </TableCell>

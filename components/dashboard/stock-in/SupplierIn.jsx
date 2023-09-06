@@ -65,23 +65,23 @@ const SupplierIn = () => {
             fullWidth
             name="date"
             disabled={!Formik?.values?.supplierId}
+            onClick={(event) => (event.target.value = "")}
             onChange={(event) =>
               Formik.setFieldValue("date", event.target.value)
             }
-            defaultValue={`${new Date().getDate()}-${
-              new Date().getMonth() + 1
-            }-${new Date().getFullYear()}`}
+            value={Formik.values.date}
             size="small"
             placeholder="Date"
             className="mx-2 bg-white"
           />
           <TextField
             name="transId"
+            onClick={(event) => (event.target.value = "")}
             onChange={(event) =>
               Formik.setFieldValue("transId", event.target.value)
             }
             disabled={!Formik?.values?.supplierId}
-            defaultValue={new Date().getTime()}
+            value={Formik.values.transId}
             fullWidth
             size="small"
             placeholder="Trans Id"

@@ -33,9 +33,7 @@ const StockIn = () => {
           </Fab>
         </div>
         <div className="divider" />
-        <div className="grid card bg-base-300 rounded-box p-10">
-          <InvoiceSummary />
-        </div>
+        <InvoiceSummary />
       </div>
     </Dashboard>
   );

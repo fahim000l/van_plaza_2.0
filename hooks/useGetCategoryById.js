@@ -7,10 +7,15 @@ const useGetCategoryById = (categoryId) => {
     isLoading: categoryLoading,
   } = useQuery({
     queryKey: ["/api/get-caregory-by-id", categoryId],
-    queryFn: () =>
-      fetch(`/api/get-caregory-by-id?categoryId=${categoryId}`).then((res) =>
-        res.json()
-      ),
+    queryFn: async () => {
+      if (categoryId) {
+        return await fetch(
+          `/api/get-caregory-by-id?categoryId=${categoryId}`
+        ).then((res) => res.json());
+      }
+
+      return null;
+    },
   });
 
   return { category, categoryrefetch, categoryLoading };
