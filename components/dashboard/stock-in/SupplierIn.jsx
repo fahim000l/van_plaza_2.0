@@ -63,8 +63,12 @@ const SupplierIn = () => {
         <div className="flex justify-between my-2">
           <TextField
             fullWidth
+            name="date"
             disabled={!Formik?.values?.supplierId}
-            value={`${new Date().getDate()}-${
+            onChange={(event) =>
+              Formik.setFieldValue("date", event.target.value)
+            }
+            defaultValue={`${new Date().getDate()}-${
               new Date().getMonth() + 1
             }-${new Date().getFullYear()}`}
             size="small"
@@ -72,6 +76,10 @@ const SupplierIn = () => {
             className="mx-2 bg-white"
           />
           <TextField
+            name="transId"
+            onChange={(event) =>
+              Formik.setFieldValue("transId", event.target.value)
+            }
             disabled={!Formik?.values?.supplierId}
             defaultValue={new Date().getTime()}
             fullWidth

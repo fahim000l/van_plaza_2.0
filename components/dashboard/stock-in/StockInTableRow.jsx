@@ -46,6 +46,8 @@ const StockInTableRow = ({ record, i, setRecords, records }) => {
             const updatedProduct = {
               ...updatedStockProducts[i],
               productId: newValue?._id,
+              buyPrice: newValue?.buyPrice,
+              sellPrice: newValue?.sellPrice,
             };
             updatedStockProducts[i] = updatedProduct;
             Formik.setFieldValue("stockProducts", updatedStockProducts);
@@ -202,21 +204,41 @@ const StockInTableRow = ({ record, i, setRecords, records }) => {
       </TableCell>
       <TableCell align="center">
         <TextField
+          onClick={(event) => (event.target.value = "")}
+          onChange={(event) => {
+            const updatedStockProducts = [...Formik.values.stockProducts];
+            const updatedProduct = {
+              ...updatedStockProducts[i],
+              buyPrice: event.target.value,
+            };
+            updatedStockProducts[i] = updatedProduct;
+            Formik.setFieldValue("stockProducts", updatedStockProducts);
+          }}
           disabled={!product}
-          defaultValue={product?.buyPrice || 0}
+          value={Formik.values.stockProducts[i]?.buyPrice || 0}
           size="small"
         />
       </TableCell>
       <TableCell align="center">
         <TextField
+          onClick={(event) => (event.target.value = "")}
+          onChange={(event) => {
+            const updatedStockProducts = [...Formik.values.stockProducts];
+            const updatedProduct = {
+              ...updatedStockProducts[i],
+              sellPrice: event.target.value,
+            };
+            updatedStockProducts[i] = updatedProduct;
+            Formik.setFieldValue("stockProducts", updatedStockProducts);
+          }}
           disabled={!product}
-          defaultValue={product?.sellPrice || 0}
+          value={Formik.values.stockProducts[i]?.sellPrice || 0}
           size="small"
         />
       </TableCell>
       <TableCell size="small" align="center">
         <IconButton>
-          <Chip label={"10"} />
+          <Chip label={"0"} />
         </IconButton>
       </TableCell>
       <TableCell align="center">

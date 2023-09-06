@@ -7,8 +7,10 @@ const StockInProvider = ({ children }) => {
   const Formik = useFormik({
     initialValues: {
       supplierId: "",
-      date: "",
-      transId: "",
+      date: `${new Date().getDate()}-${
+        new Date().getMonth() + 1
+      }-${new Date().getFullYear()}`,
+      transId: new Date().getTime(),
       stockProducts: [],
     },
   });
