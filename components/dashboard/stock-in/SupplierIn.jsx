@@ -17,6 +17,7 @@ const SupplierIn = () => {
       <div>
         <div className="flex justify-between my-2">
           <Autocomplete
+            disabled={!suppliers}
             className="mx-2"
             size="small"
             id="country-select-demo"

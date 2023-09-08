@@ -1,3 +1,9 @@
+// import dynamic from "next/dynamic";
+// const InvoiceSummary = dynamic(() =>
+//   import("@/components/dashboard/stock-in/InvoiceSummary", {
+//     ssr: false,
+//   })
+// );
 import InvoiceSummary from "@/components/dashboard/stock-in/InvoiceSummary";
 import ProductsIn from "@/components/dashboard/stock-in/ProductsIn";
 import SupplierIn from "@/components/dashboard/stock-in/SupplierIn";

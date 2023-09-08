@@ -36,7 +36,7 @@ const navItems = [
     icon: <AddBusiness />,
   },
   {
-    path: "/stock-collection",
+    path: "/dashboard/stock-collection/products-stock",
     content: "Stock Collection",
     icon: <Inventory />,
   },

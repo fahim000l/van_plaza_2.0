@@ -116,7 +116,9 @@ const StockInTableRow = ({ record, i, setRecords, records }) => {
               });
               const fileWithCustomName = new File(
                 [blob],
-                product.productName.replaceAll(" ", "_"),
+                product.productName.replaceAll(" ", "_") +
+                  "." +
+                  event.target.files[0].name.split(".")[1],
                 {
                   type: event.target.files[0].type,
                 }
@@ -148,7 +150,9 @@ const StockInTableRow = ({ record, i, setRecords, records }) => {
               });
               const fileWithCustomName = new File(
                 [blob],
-                product.productName.replaceAll(" ", "_"),
+                product.productName.replaceAll(" ", "_") +
+                  "." +
+                  event.target.files[0].name.split(".")[1],
                 {
                   type: event.target.files[0].type,
                 }
@@ -178,7 +182,9 @@ const StockInTableRow = ({ record, i, setRecords, records }) => {
               });
               const fileWithCustomName = new File(
                 [blob],
-                product.productName.replaceAll(" ", "_"),
+                product.productName.replaceAll(" ", "_") +
+                  "." +
+                  event.target.files[0].name.split(".")[1],
                 {
                   type: event.target.files[0].type,
                 }
