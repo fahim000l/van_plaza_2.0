@@ -13,6 +13,7 @@ import {
   Chip,
 } from "@mui/material";
 import { Inbox, Mail } from "@mui/icons-material";
+import useGetPsByProductId from "@/hooks/useGetPsByProductId";
 
 export default function ProductStockFlawsDrawer() {
   const [state, setState] = React.useState({

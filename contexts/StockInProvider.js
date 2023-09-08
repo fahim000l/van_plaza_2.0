@@ -1,9 +1,12 @@
 import { useFormik } from "formik";
+import { useRouter } from "next/router";
 import React, { createContext, useEffect } from "react";
 
 export const STOCK_IN_CONTEXT = createContext();
 
 const StockInProvider = ({ children }) => {
+  const { push } = useRouter();
+
   const Formik = useFormik({
     initialValues: {
       supplierId: "",
@@ -67,51 +70,18 @@ const StockInProvider = ({ children }) => {
         quantityData,
       };
 
-      fetch("/api/store-invoices", {
+      fetch("/api/store-stock", {
         method: "POST",
         headers: {
           "content-type": "application/json",
         },
-        body: JSON.stringify(invoiceData),
+        body: JSON.stringify(stockData),
       })
         .then((res) => res.json())
-        .then((invoiceResult) => {
-          console.log(invoiceResult);
-          if (invoiceResult?.acknowledged) {
-            const invoiceId = invoiceResult?.insertedId;
-            productsData?.forEach((pd) => (pd.invoiceId = invoiceId));
-            quantityData?.forEach((qd) => (qd.invoiceId = invoiceId));
-
-            fetch("/api/store-products-stocks", {
-              method: "POST",
-              headers: {
-                "content-type": "application/json",
-              },
-              body: JSON.stringify(productsData),
-            })
-              .then((res) => res.json())
-              .then((productsResult) => {
-                console.log(productsResult);
-                if (productsResult?.acknowledged) {
-                  fetch("/api/store-quantities-stock", {
-                    method: "POST",
-                    headers: {
-                      "content-type": "application/json",
-                    },
-                    body: JSON.stringify(quantityData),
-                  })
-                    .then((res) => res.json())
-                    .then((quantitiesResult) => {
-                      console.log(quantitiesResult);
-                      if (quantitiesResult?.acknowledged) {
-                        values.date = "";
-                        values.stockProducts = [];
-                        values.supplierId = "";
-                        values.transId = "";
-                      }
-                    });
-                }
-              });
+        .then((data) => {
+          console.log(data);
+          if (data?.success) {
+            push("/dashboard/stock-collection/products-stock");
           }
         });
 

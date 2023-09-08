@@ -74,14 +74,6 @@ const ProductsStockRow = ({ product }) => {
         <TableCell align="center">
           <ProductStockInvoiceDrawer product={product} />
         </TableCell>
-        <TableCell align="center">
-          <ProductStockFlawsDrawer />
-        </TableCell>
-        <TableCell align="center">
-          <IconButton className="bg-[red] text-white hover:bg-red-500">
-            <Delete />
-          </IconButton>
-        </TableCell>
       </TableRow>
     );
   }

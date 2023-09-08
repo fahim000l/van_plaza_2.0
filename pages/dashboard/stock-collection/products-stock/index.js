@@ -76,12 +76,6 @@ export default function productsStock() {
               <TableCell className="text-white font-bold" align="center">
                 Invoices
               </TableCell>
-              <TableCell className="text-white font-bold" align="center">
-                Flaws
-              </TableCell>
-              <TableCell className="text-white font-bold" align="center">
-                Delete
-              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

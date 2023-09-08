@@ -16,6 +16,7 @@ import { Inbox, Mail } from "@mui/icons-material";
 import useGetSizesByCategory from "@/hooks/useGetSizesByCategory";
 import ProductStockQuantityRow from "./ProductStockQuantityRow";
 import useGetQsByProductIdSizeId from "@/hooks/useGetQsByProductIdSizeId";
+import useGetQsByProductId from "@/hooks/useGetQsByProductId";
 
 export default function ProductStockQuantiryDrawer({ product }) {
   const [state, setState] = React.useState({
@@ -37,14 +38,19 @@ export default function ProductStockQuantiryDrawer({ product }) {
   };
 
   const { sizes_category } = useGetSizesByCategory(product?.categoryId);
-  // const {} = useGetQsByProductIdSizeId
+
+  const { qps_product } = useGetQsByProductId(product?._id);
 
   return (
     <div>
       {["right"].map((anchor) => (
         <React.Fragment key={anchor}>
           <IconButton onClick={toggleDrawer(anchor, true)}>
-            <Chip label={"10"} />
+            <Chip
+              label={qps_product?.reduce((total, newValue) => {
+                return total + parseInt(newValue?.quantity);
+              }, 0)}
+            />
           </IconButton>
           <Drawer
             anchor={anchor}
