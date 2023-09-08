@@ -144,7 +144,7 @@ function Dashboard({ window, children }) {
           </Box>
         </Drawer>
       </Box>
-      <div className="w-full place-items-center p-10">
+      <div className="w-full place-items-center p-10 overflow-x-hidden">
         <Toolbar />
         {children}
       </div>

@@ -14,18 +14,6 @@ import useGetAllProducts from "@/hooks/useGetAllProducts";
 import ProductsStockRow from "@/components/dashboard/stock-collection/products-stock/ProductsStockRow";
 import { ArrowRight, ArrowLeft } from "@mui/icons-material";
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
-
 export default function productsStock() {
   const { products } = useGetAllProducts();
   const tableContainerRef = React.useRef();
@@ -52,7 +40,7 @@ export default function productsStock() {
       </IconButton>
       <TableContainer
         ref={tableContainerRef}
-        sx={{ overflowX: "hidden", width: 1020 }}
+        sx={{ overflowX: "hidden", width: 1050 }}
         component={Paper}
       >
         <Table aria-label="simple table">
@@ -90,9 +78,6 @@ export default function productsStock() {
               </TableCell>
               <TableCell className="text-white font-bold" align="center">
                 Flaws
-              </TableCell>
-              <TableCell className="text-white font-bold" align="center">
-                Edit
               </TableCell>
               <TableCell className="text-white font-bold" align="center">
                 Delete

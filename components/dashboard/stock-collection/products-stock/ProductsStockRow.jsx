@@ -1,9 +1,12 @@
 import React from "react";
-import { TableRow, TableCell, TextField } from "@mui/material";
+import { TableRow, TableCell, IconButton } from "@mui/material";
 import useGetPsByProductId from "@/hooks/useGetPsByProductId";
 import useGetCategoryById from "@/hooks/useGetCategoryById";
-import AutoSelect from "@/components/common_auto-complete";
 import useGetAllProducts from "@/hooks/useGetAllProducts";
+import ProductStockQuantiryDrawer from "./ProductStockQuantiryDrawer";
+import ProductStockInvoiceDrawer from "./ProductStockInvoiceDrawer";
+import ProductStockFlawsDrawer from "./ProductStockFlawsDrawer";
+import { Delete } from "@mui/icons-material";
 
 const ProductsStockRow = ({ product }) => {
   const { sps_product } = useGetPsByProductId(product?._id);
@@ -19,60 +22,66 @@ const ProductsStockRow = ({ product }) => {
     };
 
     const avgPrice = (priceTitle) => {
-      return sps_product?.reduce((total, newValue) => {
-        return (total + parseFloat(newValue[priceTitle])) / total;
-      }, 0);
+      return (
+        sps_product?.reduce((total, newValue) => {
+          return total + parseFloat(newValue[priceTitle]);
+        }, 0) / sps_product?.length
+      );
     };
 
-    const { standardImage } = product;
+    const { productName, standardImage } = product;
 
-    console.log(product);
-    console.log(sps_product);
     return (
       <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
         <TableCell component="th" scope="row">
-          <div className="flex items-center">
-            <div className="avatar mx-1">
+          <div className="flex items-center w-40">
+            <div className="avatar mx-2">
               <div className="w-8 rounded">
                 <img src={`/uploads/images/products/${standardImage}`} />
               </div>
             </div>
-            <AutoSelect
-              sx={{ width: 200 }}
-              value={product}
-              imgSrc={"standardImage"}
-              imgType={"products"}
-              globalLabel={"productName"}
-              options={products}
-            />
+            {productName}
           </div>
         </TableCell>
-        <TableCell align="center">{category?.categoryName}</TableCell>
         <TableCell align="center">
-          <TextField
-            className="w-20"
-            size="small"
-            value={netPrice("buyPrice")}
-          />
+          <div className="w-32">{category?.categoryName}</div>
         </TableCell>
         <TableCell align="center">
-          <TextField
-            className="w-20"
-            size="small"
-            value={netPrice("sellPrice")}
-          />
+          <div className="w-32">{netPrice("buyPrice")}</div>
         </TableCell>
         <TableCell align="center">
-          {netPrice("sellPrice") - netPrice("buyPrice")}
+          <div className="w-32">{netPrice("sellPrice")}</div>
         </TableCell>
-        <TableCell align="center">stomethong</TableCell>
-        <TableCell align="center">stomethong</TableCell>
-        <TableCell align="center">stomethong</TableCell>
-        <TableCell align="center">stomethong</TableCell>
-        <TableCell align="center">stomethong</TableCell>
-        <TableCell align="center">stomethong</TableCell>
-        <TableCell align="center">stomethong</TableCell>
-        <TableCell align="center">stomethong</TableCell>
+        <TableCell align="center">
+          <div className="w-32">
+            {netPrice("sellPrice") - netPrice("buyPrice")}
+          </div>
+        </TableCell>
+        <TableCell align="center">
+          <div className="w-32">{avgPrice("buyPrice")}</div>
+        </TableCell>
+        <TableCell align="center">
+          <div className="w-32">{avgPrice("sellPrice")}</div>
+        </TableCell>
+        <TableCell align="center">
+          <div className="w-32">
+            {avgPrice("sellPrice") - avgPrice("buyPrice")}
+          </div>
+        </TableCell>
+        <TableCell align="center">
+          <ProductStockQuantiryDrawer product={product} />
+        </TableCell>
+        <TableCell align="center">
+          <ProductStockInvoiceDrawer product={product} />
+        </TableCell>
+        <TableCell align="center">
+          <ProductStockFlawsDrawer />
+        </TableCell>
+        <TableCell align="center">
+          <IconButton className="bg-[red] text-white hover:bg-red-500">
+            <Delete />
+          </IconButton>
+        </TableCell>
       </TableRow>
     );
   }

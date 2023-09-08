@@ -1,5 +1,6 @@
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const uri = `${process.env.DB_URL}`;
+// const uri = `mongodb://localhost:27017/`;
 console.log(uri);
 
 const client = new MongoClient(uri, {
@@ -10,6 +11,7 @@ const client = new MongoClient(uri, {
   },
 });
 
+// const client = new MongoClient(uri);
 const connectMongo = async () => {
   try {
     // Connect the client to the server	(optional starting in v4.7)
