@@ -14,9 +14,11 @@ import { RestartAlt } from "@mui/icons-material";
 import { STOCK_IN_CONTEXT } from "@/contexts/StockInProvider";
 import useGetProductById from "@/hooks/useGetProductById";
 import QuantityInDrawer from "./QuantityInDrawer";
+import AutoSelect from "@/components/common_auto-complete";
 
 const StockInTableRow = ({ record, i, setRecords, records }) => {
   const { products } = useGetAllProducts();
+  const selectProductRef = useRef(null);
   const { Formik } = useContext(STOCK_IN_CONTEXT);
   const [flaw1img, setFlaw1img] = useState("");
   const [flaw2img, setFlaw2img] = useState("");
@@ -35,13 +37,15 @@ const StockInTableRow = ({ record, i, setRecords, records }) => {
         <Chip label={i + 1} />
       </TableCell>
       <TableCell align="center">
-        <Autocomplete
+        <AutoSelect
+          ref={selectProductRef}
           disabled={!Formik?.values?.supplierId}
-          className="mx-2"
-          size="small"
-          id="country-select-demo"
-          sx={{ width: 200 }}
-          fullWidth
+          className={"mx-2"}
+          getOptionDisabled={(option) =>
+            Formik?.values?.stockProducts?.some(
+              (r) => r.productId === option?._id
+            )
+          }
           onChange={(event, newValue) => {
             const updatedStockProducts = [...Formik.values.stockProducts];
             const updatedProduct = {
@@ -55,42 +59,13 @@ const StockInTableRow = ({ record, i, setRecords, records }) => {
             updatedStockProducts[i] = updatedProduct;
             Formik.setFieldValue("stockProducts", updatedStockProducts);
           }}
+          size={"small"}
+          sx={{ width: 200 }}
           options={products}
-          autoHighlight
-          getOptionLabel={(option) => option.productName}
-          renderOption={(props, option) => (
-            <Box
-              className={`${
-                records?.find((r) => r.productId === option?._id)
-                  ? "hidden"
-                  : ""
-              }`}
-              component="li"
-              sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
-              {...props}
-            >
-              <img
-                loading="lazy"
-                width="20"
-                src={`/uploads/images/products/${option?.standardImage}`}
-                alt=""
-              />
-              {option.productName}
-            </Box>
-          )}
-          renderInput={(params) => (
-            <TextField
-              name="category"
-              fullWidth
-              {...params}
-              className="bg-white my-2"
-              label="Select Product"
-              inputProps={{
-                ...params.inputProps,
-                autoComplete: "new-password", // disable autocomplete and autofill
-              }}
-            />
-          )}
+          globalLabel={"productName"}
+          imgType={"products"}
+          imgSrc={"standardImage"}
+          label={"Select Product"}
         />
       </TableCell>
       <TableCell align="center">

@@ -7,7 +7,7 @@ export default async function (req, res) {
     await client.connect();
     const quantitiesStock_collection = client
       .db("van_plaza")
-      .collection("quantities-stock");
+      .collection("quantities_stock");
 
     if (!req.query.productId) {
       return res.status(404).json({ error: "Invalid query" });

@@ -1,11 +1,12 @@
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
-import React, { createContext, useEffect } from "react";
+import React, { createContext, useEffect, useState } from "react";
 
 export const STOCK_IN_CONTEXT = createContext();
 
 const StockInProvider = ({ children }) => {
   const { push } = useRouter();
+  const [stockInLoader, setStockInLoader] = useState(false);
 
   const Formik = useFormik({
     initialValues: {
@@ -14,9 +15,10 @@ const StockInProvider = ({ children }) => {
         new Date().getMonth() + 1
       }-${new Date().getFullYear()}`,
       transId: `auto-${new Date().getTime()}`,
-      stockProducts: [],
+      stockProducts: ["", "", "", "", ""],
     },
     onSubmit: (values) => {
+      setStockInLoader(true);
       const invoiceData = values;
       const productsData = invoiceData?.stockProducts?.filter(
         (sp) => sp !== ""
@@ -58,7 +60,9 @@ const StockInProvider = ({ children }) => {
         }
 
         sp.quantities?.forEach((spq) => {
-          quantityData.push(spq);
+          if (spq?.size && spq?.quantity) {
+            quantityData.push(spq);
+          }
         });
 
         delete sp.quantities;
@@ -81,6 +85,7 @@ const StockInProvider = ({ children }) => {
         .then((data) => {
           console.log(data);
           if (data?.success) {
+            setStockInLoader(false);
             push("/dashboard/stock-collection/products-stock");
           }
         });
@@ -89,7 +94,7 @@ const StockInProvider = ({ children }) => {
     },
   });
 
-  const stockInInfo = { Formik };
+  const stockInInfo = { Formik, stockInLoader };
   // console.log(process.env.IMAGE_BB_SECRET);
 
   const handleUploadImage = (uploadingImage) => {

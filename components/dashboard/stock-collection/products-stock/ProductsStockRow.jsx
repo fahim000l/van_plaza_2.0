@@ -1,18 +1,15 @@
 import React from "react";
-import { TableRow, TableCell, IconButton } from "@mui/material";
+import { TableRow, TableCell, Chip } from "@mui/material";
 import useGetPsByProductId from "@/hooks/useGetPsByProductId";
 import useGetCategoryById from "@/hooks/useGetCategoryById";
-import useGetAllProducts from "@/hooks/useGetAllProducts";
 import ProductStockQuantiryDrawer from "./ProductStockQuantiryDrawer";
 import ProductStockInvoiceDrawer from "./ProductStockInvoiceDrawer";
-import ProductStockFlawsDrawer from "./ProductStockFlawsDrawer";
-import { Delete } from "@mui/icons-material";
+import useGetQsByProductId from "@/hooks/useGetQsByProductId";
 
 const ProductsStockRow = ({ product }) => {
   const { sps_product } = useGetPsByProductId(product?._id);
-  const { products } = useGetAllProducts();
-
   const { category } = useGetCategoryById(product?.categoryId);
+  const { qps_product } = useGetQsByProductId(product?._id);
 
   if (sps_product?.length > 0) {
     const netPrice = (priceTitle) => {
@@ -26,15 +23,25 @@ const ProductsStockRow = ({ product }) => {
         sps_product?.reduce((total, newValue) => {
           return total + parseFloat(newValue[priceTitle]);
         }, 0) / sps_product?.length
-      );
+      ).toFixed(3);
+    };
+
+    const totalQuantity = () => {
+      return qps_product?.reduce((total, newValue) => {
+        return total + parseInt(newValue?.quantity);
+      }, 0);
     };
 
     const { productName, standardImage } = product;
 
     return (
       <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-        <TableCell component="th" scope="row">
-          <div className="flex items-center w-40">
+        <TableCell
+          component="th"
+          scope="row"
+          className="sticky left-0 bg-white"
+        >
+          <div className="flex items-center w-40 b-r-2 border-[blue] border-solid">
             <div className="avatar mx-2">
               <div className="w-8 rounded">
                 <img src={`/uploads/images/products/${standardImage}`} />
@@ -44,28 +51,76 @@ const ProductsStockRow = ({ product }) => {
           </div>
         </TableCell>
         <TableCell align="center">
-          <div className="w-32">{category?.categoryName}</div>
+          <div className="w-full">{category?.categoryName}</div>
         </TableCell>
         <TableCell align="center">
-          <div className="w-32">{netPrice("buyPrice")}</div>
-        </TableCell>
-        <TableCell align="center">
-          <div className="w-32">{netPrice("sellPrice")}</div>
-        </TableCell>
-        <TableCell align="center">
-          <div className="w-32">
-            {netPrice("sellPrice") - netPrice("buyPrice")}
+          <div className="w-full">
+            <Chip className="my-1" label={`Single : ${netPrice("buyPrice")}`} />
+            <Chip
+              className="my-1"
+              label={`Each : ${netPrice("buyPrice") * totalQuantity()}`}
+            />
           </div>
         </TableCell>
         <TableCell align="center">
-          <div className="w-32">{avgPrice("buyPrice")}</div>
+          <div className="w-full">
+            <Chip className="my-1" label={`Single : ${netPrice("buyPrice")}`} />
+            <Chip
+              className="my-1"
+              label={`Each : ${netPrice("sellPrice") * totalQuantity()}`}
+            />
+          </div>
         </TableCell>
         <TableCell align="center">
-          <div className="w-32">{avgPrice("sellPrice")}</div>
+          <div className="w-full">
+            <Chip
+              className="my-1"
+              label={`Single : ${netPrice("sellPrice") - netPrice("buyPrice")}`}
+            />
+            <Chip
+              className="my-1"
+              label={`Each : ${
+                (netPrice("sellPrice") - netPrice("buyPrice")) * totalQuantity()
+              }`}
+            />
+          </div>
         </TableCell>
         <TableCell align="center">
-          <div className="w-32">
-            {avgPrice("sellPrice") - avgPrice("buyPrice")}
+          <div className="w-full">
+            <Chip className="my-1" label={`Single : ${avgPrice("buyPrice")}`} />
+            <Chip
+              className="my-1"
+              label={`Each : ${avgPrice("buyPrice") * totalQuantity()}`}
+            />
+          </div>
+        </TableCell>
+        <TableCell align="center">
+          <div className="w-full">
+            <Chip
+              className="my-1"
+              label={`Single : ${avgPrice("sellPrice")}`}
+            />
+            <Chip
+              className="my-1"
+              label={`Each : ${avgPrice("sellPrice") * totalQuantity()}`}
+            />
+          </div>
+        </TableCell>
+        <TableCell align="center">
+          <div className="w-full">
+            <Chip
+              className="my-1"
+              label={`Single : ${(
+                avgPrice("sellPrice") - avgPrice("buyPrice")
+              ).toFixed(3)}`}
+            />
+            <Chip
+              className="my-1"
+              label={`Each : ${
+                (avgPrice("sellPrice") - avgPrice("buyPrice")).toFixed(3) *
+                totalQuantity()
+              }`}
+            />
           </div>
         </TableCell>
         <TableCell align="center">

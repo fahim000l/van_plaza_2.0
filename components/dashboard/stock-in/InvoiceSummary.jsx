@@ -5,11 +5,11 @@ import usegetSupplierById from "@/hooks/usegetSupplierById";
 import { LoadingButton } from "@mui/lab";
 
 const InvoiceSummary = () => {
-  const { Formik } = useContext(STOCK_IN_CONTEXT);
+  const { Formik, stockInLoader } = useContext(STOCK_IN_CONTEXT);
 
   let pureStockProducts = [];
 
-  pureStockProducts = Formik.values.stockProducts.filter((sp) => sp !== "");
+  pureStockProducts = Formik?.values?.stockProducts?.filter((sp) => sp !== "");
 
   const { supplier } = usegetSupplierById(Formik.values.supplierId);
 
@@ -97,13 +97,14 @@ const InvoiceSummary = () => {
             <Chip label={new Date().getTime()} />{" "}
           </div> */}
         </div>
-        <Button
+        <LoadingButton
+          loading={stockInLoader}
           onClick={Formik.handleSubmit}
           variant="contained"
           className="bg-[darkblue] h-10"
         >
           Stock In
-        </Button>
+        </LoadingButton>
       </div>
     </div>
   );

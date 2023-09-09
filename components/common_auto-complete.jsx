@@ -13,13 +13,20 @@ const AutoSelect = ({
   imgType,
   imgSrc,
   disabled,
+  getOptionDisabled,
+  className,
+  size,
+  ref,
 }) => {
   return (
     <Autocomplete
+      ref={ref}
       defaultValue={defaultValue}
       disabled={disabled}
+      getOptionDisabled={getOptionDisabled}
       value={value}
-      size="small"
+      className={className}
+      size={size}
       id="country-select-demo"
       sx={sx}
       options={options}
@@ -32,12 +39,14 @@ const AutoSelect = ({
           sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
           {...props}
         >
-          <img
-            loading="lazy"
-            width="20"
-            src={`/uploads/images/${imgType}/${option[imgSrc]}`}
-            alt=""
-          />
+          {imgType && imgType && (
+            <img
+              loading="lazy"
+              width="20"
+              src={`/uploads/images/${imgType}/${option[imgSrc]}`}
+              alt=""
+            />
+          )}
           {option[globalLabel]}
         </Box>
       )}

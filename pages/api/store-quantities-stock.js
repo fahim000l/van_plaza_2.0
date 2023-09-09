@@ -7,7 +7,7 @@ export default async function (req, res) {
     await client.connect();
     const quantitiesStocksCollection = client
       .db("van_plaza")
-      .collection("quantities-stock");
+      .collection("quantities_stock");
 
     if (req.method === "POST") {
       if (!req.body) {

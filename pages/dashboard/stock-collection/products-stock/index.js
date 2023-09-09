@@ -46,34 +46,74 @@ export default function productsStock() {
         <Table aria-label="simple table">
           <TableHead className="bg-[blue]">
             <TableRow>
-              <TableCell className="text-white font-bold" align="left">
+              <TableCell
+                sx={{ minWidth: 32 }}
+                className="text-white font-bold"
+                align="left"
+              >
                 Product
               </TableCell>
-              <TableCell className="text-white font-bold" align="center">
+              <TableCell
+                sx={{ minWidth: 32 }}
+                className="text-white font-bold"
+                align="center"
+              >
                 Category
               </TableCell>
-              <TableCell className="text-white font-bold" align="center">
+              <TableCell
+                sx={{ minWidth: 32 }}
+                className="text-white font-bold"
+                align="center"
+              >
                 Net Buy Price
               </TableCell>
-              <TableCell className="text-white font-bold" align="center">
+              <TableCell
+                sx={{ minWidth: 32 }}
+                className="text-white font-bold"
+                align="center"
+              >
                 Net Sell Price
               </TableCell>
-              <TableCell className="text-white font-bold" align="center">
+              <TableCell
+                sx={{ minWidth: 32 }}
+                className="text-white font-bold"
+                align="center"
+              >
                 Net Profit
               </TableCell>
-              <TableCell className="text-white font-bold" align="center">
+              <TableCell
+                sx={{ minWidth: 32 }}
+                className="text-white font-bold"
+                align="center"
+              >
                 Avg Buy Price
               </TableCell>
-              <TableCell className="text-white font-bold" align="center">
+              <TableCell
+                sx={{ minWidth: 32 }}
+                className="text-white font-bold"
+                align="center"
+              >
                 Avg Sell Price
               </TableCell>
-              <TableCell className="text-white font-bold" align="center">
+              <TableCell
+                sx={{ minWidth: 32 }}
+                className="text-white font-bold"
+                align="center"
+              >
                 Avg Profit
               </TableCell>
-              <TableCell className="text-white font-bold" align="center">
+              <TableCell
+                sx={{ minWidth: 32 }}
+                className="text-white font-bold"
+                align="center"
+              >
                 Quantity
               </TableCell>
-              <TableCell className="text-white font-bold" align="center">
+              <TableCell
+                sx={{ minWidth: 32 }}
+                className="text-white font-bold"
+                align="center"
+              >
                 Invoices
               </TableCell>
             </TableRow>

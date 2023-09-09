@@ -36,7 +36,7 @@ export default function QuantityInDrawer({ disabled, product, i }) {
               label={
                 Formik.values.stockProducts?.[i]?.quantities?.reduce(
                   (total, nextNumber) => {
-                    return total + parseInt(nextNumber?.quantity);
+                    return total + (parseInt(nextNumber?.quantity) || 0);
                   },
                   0
                 ) || 0
@@ -122,7 +122,9 @@ export default function QuantityInDrawer({ disabled, product, i }) {
                           label={Formik.values.stockProducts?.[
                             i
                           ]?.quantities?.reduce((total, nextNumber) => {
-                            return total + parseInt(nextNumber?.quantity);
+                            return (
+                              total + (parseInt(nextNumber?.quantity) || 0)
+                            );
                           }, 0)}
                         />
                       </td>

@@ -12,7 +12,7 @@ export default async function (req, res) {
     .collection("products_stocks");
   const quantitiesStockCollection = client
     .db("van_plaza")
-    .collection("quantities-stock");
+    .collection("quantities_stock");
 
   if (req.method === "POST") {
     if (!req.body) {

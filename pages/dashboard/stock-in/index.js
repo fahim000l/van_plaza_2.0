@@ -10,10 +10,14 @@ import SupplierIn from "@/components/dashboard/stock-in/SupplierIn";
 import Dashboard from "@/layouts/Dashboard";
 import { Fab } from "@mui/material";
 import { Add } from "@mui/icons-material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { STOCK_IN_CONTEXT } from "@/contexts/StockInProvider";
 
 const StockIn = () => {
   const [records, setRecords] = useState([{}, {}, {}, {}, {}]);
+
+  const { Formik } = useContext(STOCK_IN_CONTEXT);
+
   return (
     <Dashboard>
       <div className="flex flex-col w-full border-opacity-50">
@@ -22,14 +26,28 @@ const StockIn = () => {
         </div>
         <div className="divider" />
         <div className="grid card bg-base-300 rounded-box p-10">
-          <ProductsIn setRecords={setRecords} records={records} />
+          <ProductsIn
+            setRecords={setRecords}
+            records={Formik?.values?.stockProducts}
+          />
           <Fab
             sx={{
               position: "absolute",
               bottom: 16,
               right: 16,
             }}
-            onClick={() => setRecords((r) => [...r, {}, {}, {}, {}, {}])}
+            onClick={() => {
+              const newArray = [
+                ...Formik?.values?.stockProducts,
+                "",
+                "",
+                "",
+                "",
+                "",
+              ];
+
+              Formik.setFieldValue("stockProducts", newArray);
+            }}
             size="small"
             aria-label={"Add"}
             color="primary"

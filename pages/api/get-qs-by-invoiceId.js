@@ -8,7 +8,7 @@ export default async function (req, res) {
 
     const quantities_stocks_collection = client
       .db("van_plaza")
-      .collection("quantities-stock");
+      .collection("quantities_stock");
 
     if (!req.query.invoiceId) {
       return res.status(404).json({ error: "Invalid query" });
