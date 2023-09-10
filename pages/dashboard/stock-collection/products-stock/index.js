@@ -44,11 +44,11 @@ export default function productsStock() {
         component={Paper}
       >
         <Table aria-label="simple table">
-          <TableHead className="bg-[blue]">
+          <TableHead className="bg-[blue] z-[200]">
             <TableRow>
               <TableCell
                 sx={{ minWidth: 32 }}
-                className="text-white font-bold"
+                className="text-white font-bold bg-[darkblue] z-[300] sticky left-0"
                 align="left"
               >
                 Product

@@ -58,7 +58,9 @@ const ProductsStockRow = ({ product }) => {
             <Chip className="my-1" label={`Single : ${netPrice("buyPrice")}`} />
             <Chip
               className="my-1"
-              label={`Each : ${netPrice("buyPrice") * totalQuantity()}`}
+              label={`Each : ${(netPrice("buyPrice") * totalQuantity()).toFixed(
+                3
+              )}`}
             />
           </div>
         </TableCell>
@@ -67,7 +69,9 @@ const ProductsStockRow = ({ product }) => {
             <Chip className="my-1" label={`Single : ${netPrice("buyPrice")}`} />
             <Chip
               className="my-1"
-              label={`Each : ${netPrice("sellPrice") * totalQuantity()}`}
+              label={`Each : ${(
+                netPrice("sellPrice") * totalQuantity()
+              ).toFixed(3)}`}
             />
           </div>
         </TableCell>

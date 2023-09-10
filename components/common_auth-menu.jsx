@@ -33,7 +33,7 @@ const AuthMenu = ({ anchorEl, setAnchorEl, open }) => {
         </ListItemIcon>
         Profile
       </MenuItem>
-      <Link href={"/dashboard/add-products/regular-image"}>
+      <Link href={"/dashboard/stock-in"}>
         <MenuItem onClick={() => setAnchorEl(null)}>
           <ListItemIcon sx={{ mr: 2 }}>
             <Avatar

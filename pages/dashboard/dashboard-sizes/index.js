@@ -47,19 +47,19 @@ export default function DashboardSizes() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead className="bg-[blue]">
             <TableRow>
-              <TableCell className="text-white font-blue" align="center">
+              <TableCell className="text-white font-bold" align="center">
                 Size
               </TableCell>
-              <TableCell className="text-white font-blue" align="center">
+              <TableCell className="text-white font-bold" align="center">
                 Category
               </TableCell>
-              <TableCell className="text-white font-blue" align="center">
+              <TableCell className="text-white font-bold" align="center">
                 Details
               </TableCell>
-              <TableCell className="text-white font-blue" align="center">
+              <TableCell className="text-white font-bold" align="center">
                 Edit
               </TableCell>
-              <TableCell className="text-white font-blue" align="center">
+              <TableCell className="text-white font-bold" align="center">
                 Delete
               </TableCell>
             </TableRow>
