@@ -14,6 +14,8 @@ import useGetQsByInvoiceId from "@/hooks/useGetQsByInvoiceId";
 import { Edit, Delete, Done } from "@mui/icons-material";
 import { useFormik } from "formik";
 import useGetAllInvoices from "@/hooks/useGetAllInvoices";
+import toast from "react-hot-toast";
+import InvoiceStockProductsDrawer from "./InvoiceStockProductsDrawer";
 
 const InvoiceStockRow = ({ invoice, editingInvoice, setEditingInvoice }) => {
   const { _id, supplierId, date, transId } = invoice;
@@ -45,6 +47,7 @@ const InvoiceStockRow = ({ invoice, editingInvoice, setEditingInvoice }) => {
             invoicesRefetch();
             sps_invoice_refetch();
             qps_invoice_refetch();
+            toast.success(`Invoice Id : ${_id} modified successfully`);
           }
         });
     },
@@ -55,7 +58,7 @@ const InvoiceStockRow = ({ invoice, editingInvoice, setEditingInvoice }) => {
 
   const totalPrice = (priceTitle) => {
     return sps_invoice?.reduce((total, newValue) => {
-      return total + parseFloat(newValue[priceTitle]).toFixed(3);
+      return total + parseFloat(newValue[priceTitle]).toFixed(2);
     }, 0);
   };
 
@@ -64,7 +67,7 @@ const InvoiceStockRow = ({ invoice, editingInvoice, setEditingInvoice }) => {
       sps_invoice?.reduce((total, newValue) => {
         return total + parseFloat(newValue[priceTitle]);
       }, 0) / sps_invoice?.length
-    ).toFixed(3);
+    ).toFixed(2);
   };
 
   const totalQuantity = () => {
@@ -127,14 +130,14 @@ const InvoiceStockRow = ({ invoice, editingInvoice, setEditingInvoice }) => {
         <div>
           <Chip
             className="my-1"
-            label={`Single : ${parseFloat(totalPrice("buyPrice")).toFixed(3)}`}
+            label={`Single : ${parseFloat(totalPrice("buyPrice")).toFixed(2)}`}
           />
           <Chip
             className="my-1"
             label={`Each : ${(
-              parseFloat(totalPrice("buyPrice")).toFixed(3) *
+              parseFloat(totalPrice("buyPrice")).toFixed(2) *
               parseInt(totalQuantity())
-            ).toFixed(3)}`}
+            ).toFixed(2)}`}
           />
         </div>
       </TableCell>
@@ -143,14 +146,14 @@ const InvoiceStockRow = ({ invoice, editingInvoice, setEditingInvoice }) => {
         <div>
           <Chip
             className="my-1"
-            label={`Single : ${parseFloat(totalPrice("sellPrice")).toFixed(3)}`}
+            label={`Single : ${parseFloat(totalPrice("sellPrice")).toFixed(2)}`}
           />
           <Chip
             className="my-1"
             label={`Each : ${(
-              parseFloat(totalPrice("sellPrice")).toFixed(3) *
+              parseFloat(totalPrice("sellPrice")).toFixed(2) *
               parseInt(totalQuantity())
-            ).toFixed(3)}`}
+            ).toFixed(2)}`}
           />
         </div>
       </TableCell>
@@ -161,7 +164,7 @@ const InvoiceStockRow = ({ invoice, editingInvoice, setEditingInvoice }) => {
             label={`Single : ${(
               parseFloat(totalPrice("sellPrice")) -
               parseFloat(totalPrice("buyPrice"))
-            ).toFixed(3)}`}
+            ).toFixed(2)}`}
           />
           <Chip
             className="my-1"
@@ -169,7 +172,7 @@ const InvoiceStockRow = ({ invoice, editingInvoice, setEditingInvoice }) => {
               (parseFloat(totalPrice("sellPrice")) -
                 parseFloat(totalPrice("buyPrice"))) *
               totalQuantity()
-            ).toFixed(3)}`}
+            ).toFixed(2)}`}
           />
         </div>
       </TableCell>
@@ -177,14 +180,14 @@ const InvoiceStockRow = ({ invoice, editingInvoice, setEditingInvoice }) => {
         <div>
           <Chip
             className="my-1"
-            label={`Single : ${parseFloat(avgPrice("buyPrice")).toFixed(3)}`}
+            label={`Single : ${parseFloat(avgPrice("buyPrice")).toFixed(2)}`}
           />
           <Chip
             className="my-1"
             label={`Each : ${(
-              parseFloat(avgPrice("buyPrice")).toFixed(3) *
+              parseFloat(avgPrice("buyPrice")).toFixed(2) *
               parseInt(totalQuantity())
-            ).toFixed(3)}`}
+            ).toFixed(2)}`}
           />
         </div>
       </TableCell>
@@ -192,14 +195,14 @@ const InvoiceStockRow = ({ invoice, editingInvoice, setEditingInvoice }) => {
         <div>
           <Chip
             className="my-1"
-            label={`Single : ${parseFloat(avgPrice("sellPrice")).toFixed(3)}`}
+            label={`Single : ${parseFloat(avgPrice("sellPrice")).toFixed(2)}`}
           />
           <Chip
             className="my-1"
             label={`Each : ${(
-              parseFloat(avgPrice("sellPrice")).toFixed(3) *
+              parseFloat(avgPrice("sellPrice")).toFixed(2) *
               parseInt(totalQuantity())
-            ).toFixed(3)}`}
+            ).toFixed(2)}`}
           />
         </div>
       </TableCell>
@@ -210,7 +213,7 @@ const InvoiceStockRow = ({ invoice, editingInvoice, setEditingInvoice }) => {
             label={`Single : ${(
               parseFloat(avgPrice("sellPrice")) -
               parseFloat(avgPrice("buyPrice"))
-            ).toFixed(3)}`}
+            ).toFixed(2)}`}
           />
           <Chip
             className="my-1"
@@ -218,9 +221,12 @@ const InvoiceStockRow = ({ invoice, editingInvoice, setEditingInvoice }) => {
               (parseFloat(avgPrice("sellPrice")) -
                 parseFloat(avgPrice("buyPrice"))) *
               totalQuantity()
-            ).toFixed(3)}`}
+            ).toFixed(2)}`}
           />
         </div>
+      </TableCell>
+      <TableCell align="center">
+        <InvoiceStockProductsDrawer sps_invoice={sps_invoice} />
       </TableCell>
       <TableCell className="sticky right-0 bg-white z-[300]" align="center">
         <div className="flex justify-between items-center">

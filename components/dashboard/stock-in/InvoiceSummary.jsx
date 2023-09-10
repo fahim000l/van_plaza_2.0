@@ -29,7 +29,7 @@ const InvoiceSummary = () => {
                     ?.reduce((total, newValue) => {
                       return total + parseFloat(newValue?.buyPrice);
                     }, 0)
-                    .toFixed(3)
+                    .toFixed(2)
                 : 0
             } /-`}
           />{" "}
@@ -43,7 +43,7 @@ const InvoiceSummary = () => {
                     ?.reduce((total, newValue) => {
                       return total + parseFloat(newValue?.sellPrice);
                     }, 0)
-                    .toFixed(3)
+                    .toFixed(2)
                 : 0
             } /-`}
           />{" "}
@@ -57,7 +57,7 @@ const InvoiceSummary = () => {
                     pureStockProducts?.reduce((total, newValue) => {
                       return total + parseFloat(newValue?.buyPrice);
                     }, 0) / pureStockProducts?.length
-                  ).toFixed(3)
+                  ).toFixed(2)
                 : 0
             } /-`}
           />{" "}
@@ -71,7 +71,7 @@ const InvoiceSummary = () => {
                     pureStockProducts?.reduce((total, newValue) => {
                       return total + parseFloat(newValue?.sellPrice);
                     }, 0) / pureStockProducts?.length
-                  ).toFixed(3)
+                  ).toFixed(2)
                 : 0
             } /-`}
           />{" "}

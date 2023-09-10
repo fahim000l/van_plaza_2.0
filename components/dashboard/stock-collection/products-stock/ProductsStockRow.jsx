@@ -23,7 +23,7 @@ const ProductsStockRow = ({ product }) => {
         sps_product?.reduce((total, newValue) => {
           return total + parseFloat(newValue[priceTitle]);
         }, 0) / sps_product?.length
-      ).toFixed(3);
+      ).toFixed(2);
     };
 
     const totalQuantity = () => {
@@ -71,7 +71,7 @@ const ProductsStockRow = ({ product }) => {
               className="my-1"
               label={`Each : ${(
                 netPrice("sellPrice") * totalQuantity()
-              ).toFixed(3)}`}
+              ).toFixed(2)}`}
             />
           </div>
         </TableCell>
@@ -116,12 +116,12 @@ const ProductsStockRow = ({ product }) => {
               className="my-1"
               label={`Single : ${(
                 avgPrice("sellPrice") - avgPrice("buyPrice")
-              ).toFixed(3)}`}
+              ).toFixed(2)}`}
             />
             <Chip
               className="my-1"
               label={`Each : ${
-                (avgPrice("sellPrice") - avgPrice("buyPrice")).toFixed(3) *
+                (avgPrice("sellPrice") - avgPrice("buyPrice")).toFixed(2) *
                 totalQuantity()
               }`}
             />

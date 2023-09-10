@@ -71,6 +71,9 @@ export default function InvoiceStock() {
               <TableCell className="font-bold text-white" align="center">
                 Avg Profit
               </TableCell>
+              <TableCell className="font-bold text-white" align="center">
+                Products
+              </TableCell>
               <TableCell className="font-bold text-white flex justify-evenly sticky right-0 bg-[darkblue] z-auto">
                 <span>Edit</span> <span>Delete</span>
               </TableCell>
