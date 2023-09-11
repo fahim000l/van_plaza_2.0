@@ -6,10 +6,12 @@ import { Chip } from "@mui/material";
 import useGetCategoryById from "@/hooks/useGetCategoryById";
 import useGetQsByProductIdInvoiceId from "@/hooks/useGetQsByProductIdInvoiceId";
 import useGetPsByInvoiceId from "@/hooks/useGetPsByInvoiceId";
-import InvoiceStockQuantityDrawer from "./InvoiceStockQuantityDrawer";
 import { Edit, Delete, Done } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import { useFormik } from "formik";
+import InvoiceStockQuantityDrawer from "./InvoiceStockQuantityDrawer";
+import toast from "react-hot-toast";
+import useGetAllInvoices from "@/hooks/useGetAllInvoices";
 
 const InvoiceStockProductsRow = ({
   sp,
@@ -19,21 +21,11 @@ const InvoiceStockProductsRow = ({
 }) => {
   const { _id, productId, transId, buyPrice, sellPrice, invoiceId } = sp;
 
-  const { product } = useGetProductById(productId);
-  const { products } = useGetAllProducts();
-  const { category } = useGetCategoryById(product?.categoryId);
-  const { sps_invoice } = useGetPsByInvoiceId(invoiceId);
+  const { sps_invoice, sps_invoice_refetch } = useGetPsByInvoiceId(invoiceId);
+  const { invoicesRefetch } = useGetAllInvoices();
 
-  const { qps_product_invoice } = useGetQsByProductIdInvoiceId(
-    productId,
-    invoiceId
-  );
-
-  const totalQuantity = () => {
-    return qps_product_invoice?.reduce((total, newValue) => {
-      return total + parseInt(newValue?.quantity);
-    }, 0);
-  };
+  const { qps_product_invoice, qps_product_invoice_refetch } =
+    useGetQsByProductIdInvoiceId(productId, invoiceId);
 
   const Formik = useFormik({
     initialValues: {
@@ -43,9 +35,40 @@ const InvoiceStockProductsRow = ({
     },
     onSubmit: (values) => {
       console.log(values);
-      setEditingProduct("");
+
+      fetch(`/api/edit-ps?invoiceId=${invoiceId}&productId=${productId}`, {
+        method: "PUT",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(values),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          if (data?.success) {
+            sps_invoice_refetch();
+            qps_product_invoice_refetch();
+            invoicesRefetch();
+            setEditingProduct("");
+            toast.success(
+              `Ps Id : ${_id} of Invoice Id : ${invoiceId} modified successfully`
+            );
+          }
+        });
     },
   });
+  const { product } = useGetProductById(Formik?.values?.productId);
+  const { products } = useGetAllProducts();
+  const { category } = useGetCategoryById(product?.categoryId);
+
+  console.log(qps_product_invoice);
+
+  const totalQuantity = () => {
+    return qps_product_invoice?.reduce((total, newValue) => {
+      return total + parseInt(newValue?.quantity);
+    }, 0);
+  };
 
   return (
     <tr>
@@ -88,12 +111,12 @@ const InvoiceStockProductsRow = ({
             type="text"
             name="buyPrice"
             {...Formik.getFieldProps("buyPrice")}
-            value={parseFloat(Formik?.values?.buyPrice).toFixed(2)}
+            value={Formik?.values?.buyPrice}
           />
           <Chip
             className="my-1 w-full"
             label={`Each : ${parseFloat(
-              parseInt(buyPrice) * parseInt(totalQuantity())
+              parseInt(Formik?.values?.buyPrice) * parseInt(totalQuantity())
             ).toFixed(2)}`}
           />
         </div>
@@ -107,12 +130,12 @@ const InvoiceStockProductsRow = ({
             type="text"
             name="sellPrice"
             {...Formik?.getFieldProps("sellPrice")}
-            value={parseFloat(Formik?.values?.sellPrice).toFixed(2)}
+            value={Formik?.values?.sellPrice}
           />
           <Chip
             className="my-1 w-full"
             label={`Each : ${parseFloat(
-              parseInt(sellPrice) * parseInt(totalQuantity())
+              parseInt(Formik?.values?.sellPrice) * parseInt(totalQuantity())
             ).toFixed(2)}`}
           />
         </div>
@@ -122,14 +145,15 @@ const InvoiceStockProductsRow = ({
           <Chip
             className="my-1 w-full"
             label={`Single : ${parseFloat(
-              parseFloat(sellPrice).toFixed(2) - parseFloat(buyPrice).toFixed(2)
+              parseFloat(Formik?.values?.sellPrice).toFixed(2) -
+                parseFloat(Formik?.values?.buyPrice).toFixed(2)
             ).toFixed(2)}`}
           />
           <Chip
             className="my-1 w-full"
             label={`Each : ${parseFloat(
-              (parseFloat(sellPrice).toFixed(2) -
-                parseFloat(buyPrice).toFixed(2)) *
+              (parseFloat(Formik?.values?.sellPrice).toFixed(2) -
+                parseFloat(Formik?.values?.buyPrice).toFixed(2)) *
                 parseInt(totalQuantity())
             ).toFixed(2)}`}
           />
@@ -141,14 +165,16 @@ const InvoiceStockProductsRow = ({
           <Chip
             className="my-1 w-full"
             label={`Single : ${parseFloat(
-              parseFloat(buyPrice).toFixed(2) / sps_invoice?.length
+              parseFloat(Formik?.values?.buyPrice).toFixed(2) /
+                sps_invoice?.length
             ).toFixed(2)}`}
           />
           <Chip
             className="my-1 w-full"
             label={`Each : ${parseFloat(
               parseFloat(
-                parseFloat(buyPrice).toFixed(2) / sps_invoice?.length
+                parseFloat(Formik?.values?.buyPrice).toFixed(2) /
+                  sps_invoice?.length
               ).toFixed(2) * parseInt(totalQuantity())
             ).toFixed(2)}`}
           />
@@ -159,14 +185,16 @@ const InvoiceStockProductsRow = ({
           <Chip
             className="my-1 w-full"
             label={`Single : ${parseFloat(
-              parseFloat(sellPrice).toFixed(2) / sps_invoice?.length
+              parseFloat(Formik?.values?.sellPrice).toFixed(2) /
+                sps_invoice?.length
             ).toFixed(2)}`}
           />
           <Chip
             className="my-1 w-full"
             label={`Each : ${parseFloat(
               parseFloat(
-                parseFloat(sellPrice).toFixed(2) / sps_invoice?.length
+                parseFloat(Formik?.values?.sellPrice).toFixed(2) /
+                  sps_invoice?.length
               ).toFixed(2) * parseInt(totalQuantity())
             ).toFixed(2)}`}
           />
@@ -178,10 +206,12 @@ const InvoiceStockProductsRow = ({
             className="my-1 w-full"
             label={`Single : ${
               parseFloat(
-                parseFloat(sellPrice).toFixed(2) / sps_invoice?.length
+                parseFloat(Formik?.values?.sellPrice).toFixed(2) /
+                  sps_invoice?.length
               ).toFixed(2) -
               parseFloat(
-                parseFloat(buyPrice).toFixed(2) / sps_invoice?.length
+                parseFloat(Formik?.values?.buyPrice).toFixed(2) /
+                  sps_invoice?.length
               ).toFixed(2)
             }`}
           />
@@ -189,10 +219,12 @@ const InvoiceStockProductsRow = ({
             className="my-1 w-full"
             label={`Each : ${parseFloat(
               (parseFloat(
-                parseFloat(sellPrice).toFixed(2) / sps_invoice?.length
+                parseFloat(Formik?.values?.sellPrice).toFixed(2) /
+                  sps_invoice?.length
               ).toFixed(2) -
                 parseFloat(
-                  parseFloat(buyPrice).toFixed(2) / sps_invoice?.length
+                  parseFloat(Formik?.values?.buyPrice).toFixed(2) /
+                    sps_invoice?.length
                 ).toFixed(2)) *
                 parseInt(totalQuantity())
             ).toFixed(2)}`}
@@ -207,7 +239,7 @@ const InvoiceStockProductsRow = ({
           <div className="mx-2">
             {editindProduct === _id ? (
               <IconButton
-                onClick={Formik?.handleSubmit}
+                onClick={Formik.handleSubmit}
                 className="bg-[green] text-white hover:bg-green-400"
               >
                 <Done />

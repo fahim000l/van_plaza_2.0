@@ -13,6 +13,8 @@ const useGetQsByProductIdInvoiceId = (productId, invoiceId) => {
           `/api/get-qs-by-productId-invoiceId?productId=${productId}&invoiceId=${invoiceId}`
         ).then((res) => res.json());
       }
+
+      return null;
     },
   });
 

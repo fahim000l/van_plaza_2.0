@@ -15,6 +15,7 @@ import {
 import useGetSizesByCategory from "@/hooks/useGetSizesByCategory";
 import useGetProductById from "@/hooks/useGetProductById";
 import useGetQsByProductIdInvoiceId from "@/hooks/useGetQsByProductIdInvoiceId";
+import useGetQsByProductId from "@/hooks/useGetQsByProductId";
 import InvoiceStockQuantiryRow from "./InvoiceStockQuantiryRow";
 
 export default function InvoiceStockQuantityDrawer({ sp }) {
@@ -37,10 +38,6 @@ export default function InvoiceStockQuantityDrawer({ sp }) {
   };
 
   const { _id, productId, transId, buyPrice, sellPrice, invoiceId } = sp;
-
-  const { product } = useGetProductById(productId);
-
-  const { sizes_category } = useGetSizesByCategory(product?.categoryId);
 
   const { qps_product_invoice } = useGetQsByProductIdInvoiceId(
     productId,
@@ -75,12 +72,8 @@ export default function InvoiceStockQuantityDrawer({ sp }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {sizes_category?.map((size) => (
-                      <InvoiceStockQuantiryRow
-                        key={size?._id}
-                        product={product}
-                        size={size}
-                      />
+                    {qps_product_invoice?.map((qp) => (
+                      <InvoiceStockQuantiryRow key={qp?._id} qp={qp} />
                     ))}
                   </tbody>
                 </table>

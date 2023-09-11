@@ -1,40 +1,32 @@
 import useGetQsByProductIdSizeId from "@/hooks/useGetQsByProductIdSizeId";
 import React from "react";
 import SizeDetailsDrawer from "../../dashboard-sizes/SizeDetailsDrawer";
+import useGetSizeById from "@/hooks/useGetSizeById";
+import useGetProductById from "@/hooks/useGetProductById";
 
-const InvoiceStockQuantiryRow = ({ size, product }) => {
-  const { sizeName, _id, sizeAttributes } = size;
+const InvoiceStockQuantiryRow = ({ qp }) => {
+  const { size: sizeId, quantity, productId } = qp;
 
-  const { qps_product_size } = useGetQsByProductIdSizeId(
-    product?._id,
-    size?._id
-  );
+  const { size } = useGetSizeById(sizeId);
+  const { product } = useGetProductById(productId);
 
-  if (qps_product_size?.length > 0) {
-    console.log(qps_product_size);
-
-    const totalQuantity = () => {
-      return qps_product_size?.reduce((total, newValue) => {
-        return total + parseInt(newValue?.quantity);
-      }, 0);
-    };
-
-    return (
-      <tr>
-        <th>{_id}</th>
-        <td>{sizeName}</td>
-        <td>{totalQuantity()}</td>
-        <td>
+  return (
+    <tr>
+      <th>{sizeId}</th>
+      <td>{size?.sizeName}</td>
+      <td>{quantity}</td>
+      <td>
+        {size && product && (
           <SizeDetailsDrawer
-            sizeAttributes={sizeAttributes}
-            sizeName={sizeName}
+            sizeAttributes={size?.sizeAttributes}
+            sizeName={size?.sizeName}
             categoryId={product?.categoryId}
-            sizeId={_id}
+            sizeId={sizeId}
           />
-        </td>
-      </tr>
-    );
-  }
+        )}
+      </td>
+    </tr>
+  );
 };
 
 export default InvoiceStockQuantiryRow;
