@@ -13,11 +13,31 @@ import StockCollection from "@/layouts/StockCollection";
 import InvoiceStockRow from "@/components/dashboard/stock-collection/invoice-stock/InvoiceStockRow";
 import useGetAllInvoices from "@/hooks/useGetAllInvoices";
 import { ArrowLeft, ArrowRight } from "@mui/icons-material";
+import toast from "react-hot-toast";
+import DeleteConfirmationDialog from "@/components/common_dlt_confirmation-dialog";
 
 export default function InvoiceStock() {
-  const { invoices } = useGetAllInvoices();
+  const { invoices, invoicesRefetch } = useGetAllInvoices();
   const [editingInvoice, setEditingInvoice] = React.useState();
   const tableContainerRef = React.useRef();
+  const [deletingInvoice, setDeletingInvoice] = React.useState(null);
+  const [isDeleteOpen, setDeleteOpen] = React.useState(false);
+
+  const handleDeleteInvoice = () => {
+    fetch(`/api/delete-invoice?invoiceId=${deletingInvoice?._id}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data?.success) {
+          invoicesRefetch();
+          toast.success("Invoice deleted successfully");
+          setDeletingInvoice(null);
+          setDeleteOpen(false);
+        }
+      });
+  };
 
   const scrollRight = () => {
     if (tableContainerRef.current) {
@@ -84,6 +104,8 @@ export default function InvoiceStock() {
               <InvoiceStockRow
                 editingInvoice={editingInvoice}
                 setEditingInvoice={setEditingInvoice}
+                setDeletingInvoice={setDeletingInvoice}
+                setDeleteOpen={setDeleteOpen}
                 invoice={invoice}
                 key={invoice?._id}
               />
@@ -91,6 +113,17 @@ export default function InvoiceStock() {
           </TableBody>
         </Table>
       </TableContainer>
+      {deletingInvoice && (
+        <DeleteConfirmationDialog
+          confirmMessage={
+            "Are you sure to delete this Invoice ? All the products and quantity of this invoice would be removed."
+          }
+          confirmTitle={"Confirmation for deleting the Invoice."}
+          actionFunction={handleDeleteInvoice}
+          open={isDeleteOpen}
+          setOpen={setDeleteOpen}
+        />
+      )}
     </StockCollection>
   );
 }

@@ -17,7 +17,13 @@ import useGetAllInvoices from "@/hooks/useGetAllInvoices";
 import toast from "react-hot-toast";
 import InvoiceStockProductsDrawer from "./InvoiceStockProductsDrawer";
 
-const InvoiceStockRow = ({ invoice, editingInvoice, setEditingInvoice }) => {
+const InvoiceStockRow = ({
+  invoice,
+  editingInvoice,
+  setEditingInvoice,
+  setDeletingInvoice,
+  setDeleteOpen,
+}) => {
   const { _id, supplierId, date, transId } = invoice;
   const { invoicesRefetch } = useGetAllInvoices();
   const { sps_invoice, sps_invoice_refetch } = useGetPsByInvoiceId(_id);
@@ -248,7 +254,13 @@ const InvoiceStockRow = ({ invoice, editingInvoice, setEditingInvoice }) => {
             )}
           </div>
           <div className="mx-2">
-            <IconButton className="bg-[red] text-white hover:bg-red-500">
+            <IconButton
+              onClick={() => {
+                setDeletingInvoice(invoice);
+                setDeleteOpen(true);
+              }}
+              className="bg-[red] text-white hover:bg-red-500"
+            >
               <Delete />
             </IconButton>
           </div>
