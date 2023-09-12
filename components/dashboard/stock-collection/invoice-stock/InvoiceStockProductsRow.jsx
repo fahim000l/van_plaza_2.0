@@ -18,6 +18,8 @@ const InvoiceStockProductsRow = ({
   i,
   editindProduct,
   setEditingProduct,
+  setDeletingProduct,
+  setDeleteOpen,
 }) => {
   const { _id, productId, transId, buyPrice, sellPrice, invoiceId } = sp;
 
@@ -61,8 +63,6 @@ const InvoiceStockProductsRow = ({
   const { product } = useGetProductById(Formik?.values?.productId);
   const { products } = useGetAllProducts();
   const { category } = useGetCategoryById(product?.categoryId);
-
-  console.log(qps_product_invoice);
 
   const totalQuantity = () => {
     return qps_product_invoice?.reduce((total, newValue) => {
@@ -254,7 +254,13 @@ const InvoiceStockProductsRow = ({
             )}
           </div>
           <div className="mx-2">
-            <IconButton className="bg-[red] text-white hover:bg-red-500">
+            <IconButton
+              onClick={() => {
+                setDeleteOpen(true);
+                setDeletingProduct(sp);
+              }}
+              className="bg-[red] text-white hover:bg-red-500"
+            >
               <Delete />
             </IconButton>
           </div>

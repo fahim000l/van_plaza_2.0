@@ -13,6 +13,8 @@ const useGetPsByInvoiceId = (invoiceId) => {
           `/api/get-ps-by-invoiceId?invoiceId=${invoiceId}`
         ).then((res) => res.json());
       }
+
+      return [];
     },
   });
 

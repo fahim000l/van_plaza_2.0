@@ -23,12 +23,6 @@ const InvoiceStockRow = ({ invoice, editingInvoice, setEditingInvoice }) => {
   const { sps_invoice, sps_invoice_refetch } = useGetPsByInvoiceId(_id);
   const { qps_invoice, qps_invoice_refetch } = useGetQsByInvoiceId(_id);
 
-  useEffect(() => {
-    if (sps_invoice && qps_invoice) {
-      console.log(sps_invoice, qps_invoice);
-    }
-  }, [sps_invoice, qps_invoice]);
-
   const Formik = useFormik({
     initialValues: {
       date,

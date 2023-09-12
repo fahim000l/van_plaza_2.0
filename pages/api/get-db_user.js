@@ -1,7 +1,9 @@
 import { client, connectMongo } from "@/database/config";
 
 export default async function (req, res) {
-  connectMongo().catch((err) => res.json({ error: "Connection Failed...!" }));
+  connectMongo().catch((err) =>
+    res.json({ error: "Connection Failed...!", err })
+  );
   try {
     await client.connect();
     const userCollection = client.db("van_plaza").collection("users");

@@ -2,6 +2,9 @@ import * as React from "react";
 import { IconButton, Drawer, Chip } from "@mui/material";
 import { ArrowRight, ArrowLeft, Backspace } from "@mui/icons-material";
 import InvoiceStockProductsRow from "./InvoiceStockProductsRow";
+import DeleteConfirmationDialog from "@/components/common_dlt_confirmation-dialog";
+import useGetPsByInvoiceId from "@/hooks/useGetPsByInvoiceId";
+import toast from "react-hot-toast";
 
 export default function InvoiceStockProductsDrawer({ sps_invoice }) {
   const [state, setState] = React.useState({
@@ -37,13 +40,37 @@ export default function InvoiceStockProductsDrawer({ sps_invoice }) {
   };
 
   const [editindProduct, setEditingProduct] = React.useState("");
+  const [deletingProduct, setDeletingProduct] = React.useState(null);
+  const [isDeleteOpen, setDeleteOpen] = React.useState(false);
+  const { sps_invoice_refetch } = useGetPsByInvoiceId(
+    deletingProduct?.invoiceId
+  );
+
+  const handleDeletePs = () => {
+    fetch(
+      `/api/delete-ps?invoiceId=${deletingProduct?.invoiceId}&productId=${deletingProduct?.productId}`,
+      {
+        method: "DELETE",
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data?.success) {
+          sps_invoice_refetch();
+          toast.success("Product Removed from stock successfully.");
+          setDeletingProduct(null);
+          setDeleteOpen(false);
+        }
+      });
+  };
 
   return (
     <div>
       {["right"].map((anchor) => (
         <React.Fragment key={anchor}>
           <IconButton onClick={toggleDrawer(anchor, true)}>
-            <Chip className="my-1" label={10} />
+            <Chip className="my-1" label={sps_invoice?.length} />
           </IconButton>
           <Drawer
             anchor={anchor}
@@ -94,6 +121,8 @@ export default function InvoiceStockProductsDrawer({ sps_invoice }) {
                       <InvoiceStockProductsRow
                         setEditingProduct={setEditingProduct}
                         editindProduct={editindProduct}
+                        setDeletingProduct={setDeletingProduct}
+                        setDeleteOpen={setDeleteOpen}
                         sp={sp}
                         key={sp?._id}
                         i={i}
@@ -103,6 +132,15 @@ export default function InvoiceStockProductsDrawer({ sps_invoice }) {
                 </table>
               </div>
             </div>
+            {deletingProduct && (
+              <DeleteConfirmationDialog
+                actionFunction={handleDeletePs}
+                open={isDeleteOpen}
+                setOpen={setDeleteOpen}
+                confirmMessage={`Are you sure to remove the product from Stock ?`}
+                confirmTitle={"Confirmation for removing product from Stock"}
+              />
+            )}
           </Drawer>
         </React.Fragment>
       ))}

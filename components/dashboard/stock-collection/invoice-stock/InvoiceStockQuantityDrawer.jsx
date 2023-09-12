@@ -17,6 +17,7 @@ import useGetProductById from "@/hooks/useGetProductById";
 import useGetQsByProductIdInvoiceId from "@/hooks/useGetQsByProductIdInvoiceId";
 import useGetQsByProductId from "@/hooks/useGetQsByProductId";
 import InvoiceStockQuantiryRow from "./InvoiceStockQuantiryRow";
+import useGetQsByProductIdSizeId from "@/hooks/useGetQsByProductIdSizeId";
 
 export default function InvoiceStockQuantityDrawer({ sp }) {
   const [state, setState] = React.useState({
@@ -38,11 +39,15 @@ export default function InvoiceStockQuantityDrawer({ sp }) {
   };
 
   const { _id, productId, transId, buyPrice, sellPrice, invoiceId } = sp;
+  const { product } = useGetProductById(productId);
 
   const { qps_product_invoice } = useGetQsByProductIdInvoiceId(
     productId,
     invoiceId
   );
+
+  const { sizes_category } = useGetSizesByCategory(product?.categoryId);
+  const [editingQuantity, setEditingQuantity] = React.useState("");
 
   return (
     <div>
@@ -72,8 +77,15 @@ export default function InvoiceStockQuantityDrawer({ sp }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {qps_product_invoice?.map((qp) => (
-                      <InvoiceStockQuantiryRow key={qp?._id} qp={qp} />
+                    {sizes_category?.map((size) => (
+                      <InvoiceStockQuantiryRow
+                        key={size?._id}
+                        size={size}
+                        sp={sp}
+                        product={product}
+                        editingQuantity={editingQuantity}
+                        setEditingQuantity={setEditingQuantity}
+                      />
                     ))}
                   </tbody>
                 </table>
