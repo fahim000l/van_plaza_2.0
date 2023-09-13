@@ -7,8 +7,17 @@ export default async function (req, res) {
     const categoryCollection = client.db("van_plaza").collection("categories");
 
     const query = {};
-    const categories = await categoryCollection.find(query).toArray();
-    return res.status(200).json(categories);
+
+    if (req.limit) {
+      const categories = await categoryCollection
+        .find(query)
+        .limit(req.limit)
+        .toArray();
+      return res.status(200).json(categories);
+    } else {
+      const categories = await categoryCollection.find(query).toArray();
+      return res.status(200).json(categories);
+    }
   } finally {
   }
 }
