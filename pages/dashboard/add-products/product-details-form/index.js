@@ -7,6 +7,7 @@ import Image from "next/image";
 import noImage from "../../../../public/common/no_image.png";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/router";
+import AutoSelect from "@/components/common_auto-complete";
 
 const AddProductForm = () => {
   const { categories } = useGetAllCategories();
@@ -47,68 +48,34 @@ const AddProductForm = () => {
       buyPrice,
       sellPrice,
       categoryId,
+      detailedImage,
+      standardImage,
+      regularImage,
     };
 
     console.log(productInfo);
-    const formData = new FormData();
-    if (regularImgFile) {
-      formData.append("regular_image", regularImgFile);
-    }
 
-    if (detailedImgFile) {
-      formData.append("detailed_image", detailedImgFile);
-    }
-
-    if (standardImgFile) {
-      formData.append("standard_image", standardImgFile);
-    }
-
-    fetch("/api/store-products-image-file", {
+    fetch("/api/store-new-product", {
       method: "POST",
-      body: formData,
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(productInfo),
     })
       .then((res) => res.json())
-      .then((imageData) => {
-        console.log(imageData);
-        if (imageData?.success) {
-          if (imageData?.fileInfo?.detailed_image) {
-            productInfo["detailedImage"] =
-              imageData?.fileInfo?.detailed_image[0]?.newFilename;
-          }
-
-          if (imageData?.fileInfo?.regular_image) {
-            productInfo["regularImage"] =
-              imageData?.fileInfo?.regular_image[0]?.newFilename;
-          }
-
-          if (imageData?.fileInfo?.standard_image) {
-            productInfo["standardImage"] =
-              imageData?.fileInfo?.standard_image[0]?.newFilename;
-          }
-
-          fetch("/api/store-new-product", {
-            method: "POST",
-            headers: {
-              "content-type": "application/json",
-            },
-            body: JSON.stringify(productInfo),
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              console.log(data);
-              if (data?.acknowledged) {
-                form.reset();
-                setSelectedCategory(null);
-                setRegularImage("");
-                setRegularImgFile(null);
-                setStandardImage("");
-                setStandardImgFile(null);
-                setDetailedImage("");
-                setDetailedImgFile("");
-                toast.success("Product inserted successfully");
-                push("/dashboard/add-products/regular-image");
-              }
-            });
+      .then((data) => {
+        console.log(data);
+        if (data?.acknowledged) {
+          form.reset();
+          setSelectedCategory(null);
+          setRegularImage("");
+          setRegularImgFile(null);
+          setStandardImage("");
+          setStandardImgFile(null);
+          setDetailedImage("");
+          setDetailedImgFile("");
+          toast.success("Product inserted successfully");
+          push("/dashboard/add-products/regular-image");
         }
       });
   };
@@ -142,43 +109,14 @@ const AddProductForm = () => {
             className="my-2 bg-white"
           />
           <div className="flex justify-between w-full items-center">
-            <Autocomplete
-              fullWidth
-              id="country-select-demo"
-              sx={{ width: 300 }}
+            <AutoSelect
               options={categories}
+              fullWidth={true}
+              sx={{ width: 300 }}
+              globalLabel={"categoryName"}
+              label={"Select Category"}
+              imgSrc={"categoryImage"}
               onChange={(event, newValue) => setSelectedCategory(newValue)}
-              autoHighlight
-              getOptionLabel={(option) => option.categoryName}
-              renderOption={(props, option) => (
-                <Box
-                  component="li"
-                  sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
-                  {...props}
-                >
-                  <img
-                    loading="lazy"
-                    width="20"
-                    src={`/uploads/images/categories/${option?.categoryImage}`}
-                    alt=""
-                  />
-                  {option.categoryName}
-                </Box>
-              )}
-              renderInput={(params) => (
-                <TextField
-                  name="category"
-                  onChange={() => setSelectedCategory(params)}
-                  fullWidth
-                  {...params}
-                  className="bg-white my-2"
-                  label="Select Category"
-                  inputProps={{
-                    ...params.inputProps,
-                    autoComplete: "new-password", // disable autocomplete and autofill
-                  }}
-                />
-              )}
             />
             <Button
               type="submit"

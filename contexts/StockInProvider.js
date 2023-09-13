@@ -29,36 +29,6 @@ const StockInProvider = ({ children }) => {
       const quantityData = [];
       console.log(productsData);
       productsData.forEach((sp, i) => {
-        if (sp.flaw1) {
-          handleUploadImage(sp.flaw1)
-            .then((res) => res.json())
-            .then((imgdata) => {
-              console.log(imgdata);
-              sp.flaw1 = imgdata?.data?.url;
-              sp.flaw1_delete_url = imgdata?.data?.delete_url;
-            });
-        }
-
-        if (sp.flaw2) {
-          handleUploadImage(sp.flaw2)
-            .then((res) => res.json())
-            .then((imgdata) => {
-              console.log(imgdata);
-              sp.flaw2 = imgdata?.data?.url;
-              sp.flaw2_delete_url = imgdata?.data?.delete_url;
-            });
-        }
-
-        if (sp.flaw3) {
-          handleUploadImage(sp.flaw3)
-            .then((res) => res.json())
-            .then((imgData) => {
-              console.log(imgData);
-              sp.flaw3 = imgData?.data?.url;
-              sp.flaw3_delete_url = imgData?.data?.delete_url;
-            });
-        }
-
         sp.quantities?.forEach((spq) => {
           if (spq?.size && spq?.quantity) {
             quantityData.push(spq);
@@ -94,7 +64,6 @@ const StockInProvider = ({ children }) => {
     },
   });
 
-  const stockInInfo = { Formik, stockInLoader };
   // console.log(process.env.IMAGE_BB_SECRET);
 
   const handleUploadImage = (uploadingImage) => {
@@ -109,6 +78,7 @@ const StockInProvider = ({ children }) => {
     );
   };
 
+  const stockInInfo = { Formik, stockInLoader, handleUploadImage };
   return (
     <STOCK_IN_CONTEXT.Provider value={stockInInfo}>
       {children}

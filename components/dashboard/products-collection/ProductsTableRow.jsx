@@ -59,7 +59,7 @@ const ProductsTableRow = ({
   return (
     <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
       <TableCell component="th" scope="row">
-        <Avatar src={`/uploads/images/products/${product?.standardImage}`} />
+        <Avatar src={product?.standardImage} />
       </TableCell>
       <TableCell align="left">
         <TextField

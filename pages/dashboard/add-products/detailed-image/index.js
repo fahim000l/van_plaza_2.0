@@ -1,27 +1,34 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { Box } from "@mui/system";
 import Typography from "@mui/material/Typography";
 import { Link } from "@mui/material";
 import AddProducts from "@/layouts/AddProducts";
 import { ADD_PRODUCT_CONTEXT } from "@/contexts/AddProductProvider";
+import useBase64 from "@/hooks/useBase64";
 
 const DetailedImage = () => {
-  const { detailedImage, setDetailedImage, setDetailedImgFile } =
-    useContext(ADD_PRODUCT_CONTEXT);
+  const { detailedImage, setDetailedImage } = useContext(ADD_PRODUCT_CONTEXT);
   const fileInputRef = useRef();
+
+  const [convertingFile, setConvertingFile] = useState(null);
+  const { convertedImg } = useBase64(convertingFile);
+
+  useEffect(() => {
+    if (convertedImg) {
+      setDetailedImage(convertedImg);
+    }
+  }, [convertedImg]);
 
   const handleFileUpload = (event) => {
     console.log(event.target.files[0]);
-    setDetailedImgFile(event.target.files[0]);
-    setDetailedImage(URL.createObjectURL(fileInputRef.current.files[0]));
+    setConvertingFile(event.target.files[0]);
   };
 
   const handleDrop = (event) => {
     event.preventDefault();
     console.log(event?.dataTransfer?.files[0]);
-    setDetailedImgFile(event?.dataTransfer?.files[0]);
-    setDetailedImage(URL.createObjectURL(event?.dataTransfer?.files[0]));
+    setConvertingFile(event?.dataTransfer?.files[0]);
   };
 
   return (

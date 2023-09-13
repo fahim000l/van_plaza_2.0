@@ -44,7 +44,7 @@ const ProductsStockRow = ({ product }) => {
           <div className="flex items-center w-40 b-r-2 border-[blue] border-solid">
             <div className="avatar mx-2">
               <div className="w-8 rounded">
-                <img src={`/uploads/images/products/${standardImage}`} />
+                <img src={standardImage} />
               </div>
             </div>
             {productName}

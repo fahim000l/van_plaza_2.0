@@ -78,9 +78,7 @@ const InvoiceStockProductsRow = ({
           <div className="flex items-center b-r-2 border-[blue] border-solid">
             <div className="avatar mx-2">
               <div className="w-10 rounded">
-                <img
-                  src={`/uploads/images/products/${product?.standardImage}`}
-                />
+                <img src={product?.standardImage} />
               </div>
             </div>
             <div>

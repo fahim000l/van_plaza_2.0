@@ -23,7 +23,7 @@ const CategoriesTableRow = ({
       <TableCell component="th" scope="row">
         <Avatar
           alt="Remy Sharp"
-          src={`/uploads/images/categories/${category?.categoryImage}`}
+          src={category?.categoryImage}
           sx={{ width: 56, height: 56 }}
         />
       </TableCell>

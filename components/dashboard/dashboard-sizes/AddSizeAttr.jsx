@@ -10,6 +10,7 @@ const AddSizeAttr = ({ record, setRecords, i, records }) => {
     <tr>
       <td>
         <TextField
+          onClick={(event) => (event.target.value = "")}
           required
           value={Object.keys(record)[0]}
           onChange={(event) => {
@@ -31,6 +32,7 @@ const AddSizeAttr = ({ record, setRecords, i, records }) => {
       <td>
         <TextField
           required
+          onClick={(event) => (event.target.value = "")}
           value={record[firstFieldValue]}
           onChange={(event) => {
             setSecondFieldValue(event.target.value);

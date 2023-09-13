@@ -83,7 +83,7 @@ const SizeDetailsDrawer = ({
                     <div className="avatar mr-2">
                       <div className="w-8 rounded">
                         <img
-                          src={`/uploads/images/categories/${category?.categoryImage}`}
+                          src={category?.categoryImage}
                           alt={category?.categoryName}
                         />
                       </div>

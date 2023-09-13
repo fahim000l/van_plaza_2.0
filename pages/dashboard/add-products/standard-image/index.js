@@ -1,29 +1,36 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { Box } from "@mui/system";
 import Typography from "@mui/material/Typography";
 import { Link } from "@mui/material";
 import AddProducts from "@/layouts/AddProducts";
 import { ADD_PRODUCT_CONTEXT } from "@/contexts/AddProductProvider";
+import useBase64 from "@/hooks/useBase64";
 
 const imageBBKey = "0da7b12465383dcb076500d38fa41a41";
 
 const StandardImage = () => {
-  const { standardImage, setStandardImage, setStandardImgFile } =
-    useContext(ADD_PRODUCT_CONTEXT);
+  const { standardImage, setStandardImage } = useContext(ADD_PRODUCT_CONTEXT);
   const fileInputRef = useRef();
+
+  const [convertingFile, setConvertingFile] = useState(null);
+  const { convertedImg } = useBase64(convertingFile);
+
+  useEffect(() => {
+    if (convertedImg) {
+      setStandardImage(convertedImg);
+    }
+  }, [convertedImg]);
 
   const handleFileUpload = (event) => {
     console.log(event.target.files[0]);
-    setStandardImgFile(event.target.files[0]);
-    setStandardImage(URL.createObjectURL(fileInputRef.current.files[0]));
+    setConvertingFile(event.target.files[0]);
   };
 
   const handleDrop = (event) => {
     event.preventDefault();
     console.log(event?.dataTransfer?.files[0]);
-    setStandardImgFile(event?.dataTransfer?.files[0]);
-    setStandardImage(URL.createObjectURL(event?.dataTransfer?.files[0]));
+    setConvertingFile(event?.dataTransfer?.files[0]);
   };
 
   return (

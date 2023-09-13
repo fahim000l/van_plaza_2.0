@@ -7,6 +7,7 @@ import { useFormik } from "formik";
 import AddSizeAttr from "./AddSizeAttr";
 import { toast } from "react-hot-toast";
 import useGetAllSizes from "@/hooks/useGetAllSizes";
+import AutoSelect from "@/components/common_auto-complete";
 
 const AddSizeDrawer = () => {
   const [state, setState] = React.useState({
@@ -37,8 +38,10 @@ const AddSizeDrawer = () => {
       sizeAttributes: [],
     },
     onSubmit: (values) => {
-      setRecords((r) => r.filter((obj) => obj !== {}));
-      values.sizeAttributes = records?.filter((record) => record !== {});
+      setRecords((r) => r.filter((obj) => Object.keys(obj).length > 0));
+      values.sizeAttributes = records?.filter(
+        (record) => Object.keys(record).length > 0
+      );
 
       fetch("/api/store-new-size", {
         method: "POST",
@@ -91,44 +94,16 @@ const AddSizeDrawer = () => {
                     {...Formik.getFieldProps("sizeName")}
                     label="Size Name"
                   />
-                  <Autocomplete
-                    fullWidth
-                    size="small"
+                  <AutoSelect
+                    fullWidth={true}
+                    size={"small"}
+                    options={categories}
+                    globalLabel={"categoryName"}
+                    imgSrc={"categoryImage"}
+                    label={"Select Category"}
                     onChange={(event, newValue) =>
                       Formik.setFieldValue("categoryId", newValue?._id)
                     }
-                    id="country-select-demo"
-                    options={categories}
-                    autoHighlight
-                    getOptionLabel={(option) => option.categoryName}
-                    renderOption={(props, option) => (
-                      <Box
-                        component="li"
-                        sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
-                        {...props}
-                      >
-                        <img
-                          loading="lazy"
-                          width="20"
-                          src={`/uploads/images/categories/${option?.categoryImage}`}
-                          alt=""
-                        />
-                        {option.categoryName}
-                      </Box>
-                    )}
-                    renderInput={(params) => (
-                      <TextField
-                        name="category"
-                        fullWidth
-                        {...params}
-                        className="bg-white my-2"
-                        label="Select Category"
-                        inputProps={{
-                          ...params.inputProps,
-                          autoComplete: "new-password", // disable autocomplete and autofill
-                        }}
-                      />
-                    )}
                   />
                 </div>
                 <div className="divider lg:divider-horizontal" />

@@ -10,6 +10,7 @@ import {
 import { AddPhotoAlternate } from "@mui/icons-material";
 import { toast } from "react-hot-toast";
 import useGetAllCategories from "@/hooks/useGetAllCategories";
+import useBase64 from "@/hooks/useBase64";
 
 const AddCategoryDrawer = () => {
   const [state, setState] = React.useState({
@@ -18,8 +19,8 @@ const AddCategoryDrawer = () => {
     bottom: false,
     right: false,
   });
-  const [addedImage, setAddedImage] = useState("");
   const [addedFile, setAddedFile] = useState(null);
+  const { convertedImg } = useBase64(addedFile);
   const fileInputRef = useRef();
   const { categoriesRefetch } = useGetAllCategories();
 
@@ -36,14 +37,12 @@ const AddCategoryDrawer = () => {
 
   const handleFileUpload = (event) => {
     console.log(event.target.files[0]);
-    setAddedImage(URL.createObjectURL(event.target.files[0]));
     setAddedFile(event.target.files[0]);
   };
 
   const handleDrop = (event) => {
     event.preventDefault();
     console.log(event?.dataTransfer?.files[0]);
-    setAddedImage(URL.createObjectURL(event.target.files[0]));
     setAddedFile(event.target.files[0]);
   };
 
@@ -51,40 +50,29 @@ const AddCategoryDrawer = () => {
     event.preventDefault();
     const form = event.target;
     const categoryName = form.categoryName.value;
-    const formData = new FormData();
-    formData.append("upload", addedFile);
+    const categoryImage = convertedImg;
 
-    fetch("/api/store-category-image-file", {
+    const categoryInfo = {
+      categoryName,
+      categoryImage,
+    };
+
+    fetch("/api/store-new-category", {
       method: "POST",
-      body: formData,
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(categoryInfo),
     })
       .then((res) => res.json())
-      .then((imageData) => {
-        console.log(imageData);
-        if (imageData?.success) {
-          const categoryInfo = {
-            categoryName,
-            categoryImage: imageData?.fileInfo?.newFilename,
-          };
-          fetch("/api/store-new-category", {
-            method: "POST",
-            headers: {
-              "content-type": "application/json",
-            },
-            body: JSON.stringify(categoryInfo),
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              console.log(data);
-              if (data?.acknowledged) {
-                form.reset();
-                setAddedFile(null);
-                setAddedImage("");
-                toggleDrawer("top", false);
-                toast.success("New category added");
-                categoriesRefetch();
-              }
-            });
+      .then((data) => {
+        console.log(data);
+        if (data?.acknowledged) {
+          form.reset();
+          setAddedFile(null);
+          toggleDrawer("top", false);
+          toast.success("New category added");
+          categoriesRefetch();
         }
       });
   };
@@ -123,8 +111,8 @@ const AddCategoryDrawer = () => {
                   },
                 }}
               >
-                {addedImage ? (
-                  <img src={addedImage} alt="" />
+                {convertedImg ? (
+                  <img src={convertedImg} alt="" />
                 ) : (
                   <AddPhotoAlternate
                     sx={{ fontSize: ["100px", "200px", "300px"] }}
@@ -160,7 +148,7 @@ const AddCategoryDrawer = () => {
                   or, Simply drag and drop
                 </Typography>
               </Box>
-              {addedImage && (
+              {convertedImg && (
                 <form
                   onSubmit={handleAddCategory}
                   className="flex justify-center mt-5"

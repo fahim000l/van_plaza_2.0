@@ -19,7 +19,7 @@ import AutoSelect from "@/components/common_auto-complete";
 const StockInTableRow = ({ record, i, setRecords, records }) => {
   const { products } = useGetAllProducts();
   const selectProductRef = useRef(null);
-  const { Formik } = useContext(STOCK_IN_CONTEXT);
+  const { Formik, handleUploadImage } = useContext(STOCK_IN_CONTEXT);
   const [flaw1img, setFlaw1img] = useState("");
   const [flaw2img, setFlaw2img] = useState("");
   const [flaw3img, setFlaw3img] = useState("");
@@ -73,9 +73,7 @@ const StockInTableRow = ({ record, i, setRecords, records }) => {
           <div className="w-8 rounded">
             <img
               src={
-                product
-                  ? `/uploads/images/products/${product?.standardImage}`
-                  : "/common/no_image.png"
+                product ? `${product?.standardImage}` : "/common/no_image.png"
               }
             />
           </div>
@@ -98,15 +96,21 @@ const StockInTableRow = ({ record, i, setRecords, records }) => {
                   type: event.target.files[0].type,
                 }
               );
-              setFlaw1img(URL.createObjectURL(event.target.files[0]));
+              handleUploadImage(fileWithCustomName)
+                .then((res) => res.json())
+                .then((imgData) => {
+                  console.log(imgData);
+                  setFlaw1img(URL.createObjectURL(event.target.files[0]));
 
-              const updatedStockProducts = [...Formik.values.stockProducts];
-              const updatedProduct = {
-                ...updatedStockProducts[i],
-                flaw1: fileWithCustomName,
-              };
-              updatedStockProducts[i] = updatedProduct;
-              Formik.setFieldValue("stockProducts", updatedStockProducts);
+                  const updatedStockProducts = [...Formik.values.stockProducts];
+                  const updatedProduct = {
+                    ...updatedStockProducts[i],
+                    flaw1: imgData?.data?.url,
+                    flaw1_delete_url: imgData?.data?.delete_url,
+                  };
+                  updatedStockProducts[i] = updatedProduct;
+                  Formik.setFieldValue("stockProducts", updatedStockProducts);
+                });
             }}
             ref={flaw1Ref}
             type="file"
@@ -119,7 +123,6 @@ const StockInTableRow = ({ record, i, setRecords, records }) => {
           </div>
           <input
             onChange={(event) => {
-              setFlaw2img(URL.createObjectURL(event.target.files[0]));
               const blob = new Blob([event.target.files[0]], {
                 type: event.target.files[0].type,
               });
@@ -132,13 +135,19 @@ const StockInTableRow = ({ record, i, setRecords, records }) => {
                   type: event.target.files[0].type,
                 }
               );
-              const updatedStockProducts = [...Formik.values.stockProducts];
-              const updatedProduct = {
-                ...updatedStockProducts[i],
-                flaw2: fileWithCustomName,
-              };
-              updatedStockProducts[i] = updatedProduct;
-              Formik.setFieldValue("stockProducts", updatedStockProducts);
+              handleUploadImage(fileWithCustomName)
+                .then((res) => res.json())
+                .then((imgData) => {
+                  setFlaw2img(URL.createObjectURL(event.target.files[0]));
+                  const updatedStockProducts = [...Formik.values.stockProducts];
+                  const updatedProduct = {
+                    ...updatedStockProducts[i],
+                    flaw2: imgData?.data?.url,
+                    flaw2_delete_url: imgData?.data?.delete_url,
+                  };
+                  updatedStockProducts[i] = updatedProduct;
+                  Formik.setFieldValue("stockProducts", updatedStockProducts);
+                });
             }}
             disabled={!product}
             ref={flaw2Ref}
@@ -164,15 +173,20 @@ const StockInTableRow = ({ record, i, setRecords, records }) => {
                   type: event.target.files[0].type,
                 }
               );
-              setFlaw3img(URL.createObjectURL(event.target.files[0]));
-              const updatedStockProducts = [...Formik.values.stockProducts];
-              const updatedProduct = {
-                ...updatedStockProducts[i],
-                flaw3: fileWithCustomName,
-              };
-              updatedStockProducts[i] = updatedProduct;
-              Formik.setFieldValue("stockProducts", updatedStockProducts);
-              console.log(records);
+
+              handleUploadImage(fileWithCustomName)
+                .then((res) => res.json())
+                .then((imgData) => {
+                  setFlaw3img(URL.createObjectURL(event.target.files[0]));
+                  const updatedStockProducts = [...Formik.values.stockProducts];
+                  const updatedProduct = {
+                    ...updatedStockProducts[i],
+                    flaw3: imgData?.data?.url,
+                    flaw3_delete_url: imgData?.data?.delete_url,
+                  };
+                  updatedStockProducts[i] = updatedProduct;
+                  Formik.setFieldValue("stockProducts", updatedStockProducts);
+                });
             }}
             disabled={!product}
             ref={flaw3Ref}
