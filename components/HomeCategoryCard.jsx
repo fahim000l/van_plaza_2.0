@@ -1,7 +1,8 @@
 import * as React from "react";
-import { Box, Card, CardCover, CardContent, Typography } from "@mui/joy";
+import { Box, Card, CardCover, AspectRatio, Typography } from "@mui/joy";
 import LocationOnRoundedIcon from "@mui/icons-material/LocationOnRounded";
 import Link from "next/link";
+import Image from "next/image";
 
 const BoxStyle = {
   perspective: "1000px",
@@ -26,25 +27,16 @@ export default function HomeCategoryCard({ category }) {
   const { categoryName, categoryImage } = category;
 
   return (
-    <Link href={"/categories"} className="cursor-pointer">
-      <Box sx={BoxStyle}>
-        <Card sx={{ minHeight: "180px", width: 220 }}>
-          <CardCover>
-            <img src={categoryImage} alt="" />
-          </CardCover>
-          <CardCover
-            sx={{
-              background:
-                "linear-gradient(to top, rgba(0,0,0,0.4), rgba(0,0,0,0) 200px), linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0) 300px)",
-            }}
-          />
-          <CardContent sx={{ justifyContent: "flex-end" }}>
-            <Typography level="title-lg" textColor="#fff">
-              {categoryName}
-            </Typography>
-          </CardContent>
-        </Card>
-      </Box>
-    </Link>
+    <Card variant="outlined">
+      {/* <AspectRatio> */}
+      <div>
+        <img src={categoryImage} className="w-full h-20 lg:h-40" alt="" />
+      </div>
+      {/* </AspectRatio> */}
+      <div>
+        <Typography level="title-md">{categoryName}</Typography>
+        {/* <Typography level="body-sm">Description of the card.</Typography> */}
+      </div>
+    </Card>
   );
 }

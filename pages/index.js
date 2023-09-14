@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <Main>
       <HomeBanner />
-      <div className="mx-20 my-10">
+      <div className="lg:mx-20 my-10">
         <HomeCategories />
       </div>
     </Main>

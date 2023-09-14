@@ -7,12 +7,12 @@ import {
   AppBar,
   Toolbar,
   Avatar,
-  Menu,
 } from "@mui/material";
 import Link from "next/link";
 import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
 import useStoreUser from "@/hooks/useStoreUser";
 import AuthMenu from "./common_auth-menu";
+import { Menu } from "@mui/icons-material";
 
 const Header = ({ setMobileOpen, navItems }) => {
   const { authUser, sessionData, sessionStatus, authLoader, setAuthLoader } =
@@ -41,43 +41,53 @@ const Header = ({ setMobileOpen, navItems }) => {
   // }, [sessionData]);
 
   return (
-    <AppBar
-      sx={{ backgroundColor: "steelblue", boxShadow: "none" }}
-      component="nav"
-    >
-      <Toolbar>
+    <AppBar sx={{ boxShadow: "none" }} component="nav">
+      <Toolbar
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          backgroundColor: "steelblue",
+        }}
+      >
         <IconButton
-          color="inherit"
           aria-label="open drawer"
           edge="start"
+          className="text-white font-bold"
           onClick={() => setMobileOpen((prevState) => !prevState)}
-          sx={{ mr: 2, display: ["block", "block", "none"] }}
+          sx={{ display: ["block", "block", "none"] }}
         >
           <Menu />
         </IconButton>
         <Typography
           variant="h6"
           component="div"
-          sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+          sx={{
+            color: "white",
+            flexGrow: 1,
+            display: { xs: "none", sm: "block" },
+          }}
         >
           Van Plaza
         </Typography>
-        <Box sx={{ display: { xs: "none", sm: "block" } }}>
-          {navItems.map((item) => (
-            <Link href={item.path} key={item.path}>
-              <Button
-                startIcon={item.icon}
-                sx={{
-                  color: "#fff",
-                  fontWeight: "bold",
-                  textTransform: "none",
-                  mx: "10px",
-                }}
-              >
-                {item.content}
-              </Button>
-            </Link>
-          ))}
+        <Box>
+          <Box sx={{ display: { xs: "none", sm: "block" } }}>
+            {navItems.map((item) => (
+              <Link href={item.path} key={item.path}>
+                <Button
+                  startIcon={item.icon}
+                  sx={{
+                    color: "#fff",
+                    fontWeight: "bold",
+                    textTransform: "none",
+                    mx: "10px",
+                  }}
+                >
+                  {item.content}
+                </Button>
+              </Link>
+            ))}
+          </Box>
           {authUser?.email ? (
             <>
               <IconButton
