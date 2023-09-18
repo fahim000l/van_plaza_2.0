@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { AspectRatio, Card, Typography } from "@mui/joy";
-import { Image } from "@mui/icons-material";
+import { Button, Card, Typography } from "@mui/joy";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import MobileStepper from "@mui/material/MobileStepper";
-import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button";
-import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
-import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import SwipeableViews from "react-swipeable-views";
 import { autoPlay } from "react-swipeable-views-utils";
+import { LoadingButton } from "@mui/lab";
+import { AddShoppingCart } from "@mui/icons-material";
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ sp }) => {
   const [images, setImages] = useState([]);
+  const {
+    sellPrice,
+    products: { [0]: product },
+  } = sp;
 
   useEffect(() => {
     if (product?.standardImage) {
@@ -65,22 +65,8 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <Card variant="outlined">
-      {/* <AspectRatio> */}
-      <Box sx={{ maxWidth: 400, flexGrow: 1 }}>
-        {/* <Paper
-          square
-          elevation={0}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            height: 50,
-            pl: 2,
-            bgcolor: "background.default",
-          }}
-        >
-          <Typography>{images?.[activeStep]?.label}</Typography>
-        </Paper> */}
+    <Card sx={{ padding: [1, 2, 2] }} variant="outlined">
+      <Box sx={{ maxWidth: 400 }}>
         <AutoPlaySwipeableViews
           axis={theme.direction === "rtl" ? "x-reverse" : "x"}
           index={activeStep}
@@ -106,44 +92,21 @@ const ProductCard = ({ product }) => {
             </div>
           ))}
         </AutoPlaySwipeableViews>
-        {/* <MobileStepper
-          steps={maxSteps}
-          position="static"
-          activeStep={activeStep}
-          nextButton={
-            <Button
-              size="small"
-              onClick={handleNext}
-              disabled={activeStep === maxSteps - 1}
-            >
-              Next
-              {theme.direction === "rtl" ? (
-                <KeyboardArrowLeft />
-              ) : (
-                <KeyboardArrowRight />
-              )}
-            </Button>
-          }
-          backButton={
-            <Button
-              size="small"
-              onClick={handleBack}
-              disabled={activeStep === 0}
-            >
-              {theme.direction === "rtl" ? (
-                <KeyboardArrowRight />
-              ) : (
-                <KeyboardArrowLeft />
-              )}
-              Back
-            </Button>
-          }
-        /> */}
       </Box>
-      {/* </AspectRatio> */}
-      <div>
-        <Typography level="title-md">Title</Typography>
-        <Typography level="body-sm">Description of the card.</Typography>
+      <div className="flex flex-col justify-between">
+        <div>
+          <marquee className="font-bold" behavior="" direction="">
+            {product?.productName}
+          </marquee>
+          <p className="font-bold text-[steelblue]">{sellPrice}/-</p>
+        </div>
+        <LoadingButton
+          endIcon={<AddShoppingCart />}
+          className=" bg-[steelblue] text-white hover:bg-[blue] text-xs"
+          size="small"
+        >
+          Add To Cart
+        </LoadingButton>
       </div>
     </Card>
   );

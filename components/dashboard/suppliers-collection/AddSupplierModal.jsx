@@ -25,7 +25,7 @@ const AddSupplierModal = () => {
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
-          if (data?.acknowledged) {
+          if (data?.success) {
             suppliersRefetch();
             toast.success("New Supplier Inserted successfully");
             Formik.resetForm();

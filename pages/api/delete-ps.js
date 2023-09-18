@@ -1,13 +1,13 @@
 import { client, connectMongo } from "@/database/config";
+import products_stocks from "@/database/models/products_stocks";
+import quantities_stock from "@/database/models/quantities_stock";
 import { ObjectId } from "mongodb";
 
 export default async function (req, res) {
-  connectMongo().catch((err) => res.json({ error: "Connection Failed ...!" }));
-
   try {
-    await client.connect();
-    const psCollection = client.db("van_plaza").collection("products_stocks");
-    const qsCollection = client.db("van_plaza").collection("quantities_stock");
+    connectMongo().catch((err) =>
+      res.json({ error: "Connection Failed ...!" })
+    );
 
     if (req.method === "DELETE") {
       if (!req.query.invoiceId || !req.query.productId) {
@@ -20,8 +20,8 @@ export default async function (req, res) {
           ],
         };
 
-        const psResult = await psCollection.deleteOne(query);
-        const qsResult = await qsCollection.deleteMany(query);
+        const psResult = await products_stocks.deleteOne(query);
+        const qsResult = await quantities_stock.deleteMany(query);
         return res.status(200).json({ success: true, psResult, qsResult });
       }
     } else {

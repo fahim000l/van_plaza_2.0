@@ -57,6 +57,7 @@ const InvoiceStockRow = ({
 
   const { suppliers } = useGetAllSuppliers();
   const { supplier } = invoice;
+  console.log(supplier[0]);
 
   const totalPrice = (priceTitle) => {
     return sps_invoice?.reduce((total, newValue) => {
@@ -109,7 +110,8 @@ const InvoiceStockRow = ({
                 size={"small"}
                 options={suppliers}
                 globalLabel={"supplierName"}
-                // value={supplier?.[0]}
+                // defaultValue={supplier[0]}
+                // value={supplier[0]}
               />
               <Chip label={supplier?.[0]?.contactInfo} className="my-1" />
             </p>

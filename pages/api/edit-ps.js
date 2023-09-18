@@ -1,13 +1,11 @@
 import { client, connectMongo } from "@/database/config";
+import products_stocks from "@/database/models/products_stocks";
+import quantities_stock from "@/database/models/quantities_stock";
 import { ObjectId } from "mongodb";
 
 export default async function (req, res) {
-  connectMongo().catch((err) => res.json({ error: "Connection Failed..!" }));
-
   try {
-    await client.connect();
-    const psCollection = client.db("van_plaza").collection("products_stocks");
-    const qsCollection = client.db("van_plaza").collection("quantities_stock");
+    connectMongo().catch((err) => res.json({ error: "Connection Failed..!" }));
 
     if (req.method === "PUT") {
       if (!req.query.invoiceId || !req.query.productId) {
@@ -46,12 +44,12 @@ export default async function (req, res) {
             },
           };
 
-          const psResult = await psCollection.updateOne(
+          const psResult = await products_stocks.updateOne(
             findPs,
             psUpdatingDoc,
             option
           );
-          const qsResult = await qsCollection.updateMany(
+          const qsResult = await quantities_stock.updateMany(
             findQs,
             qsUpdatingDoc,
             option

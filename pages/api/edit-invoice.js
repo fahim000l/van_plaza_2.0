@@ -1,19 +1,12 @@
 import { client, connectMongo } from "@/database/config";
+import invoices from "@/database/models/invoices";
+import products_stocks from "@/database/models/products_stocks";
+import quantities_stock from "@/database/models/quantities_stock";
 import { ObjectId } from "mongodb";
 
 export default async function (req, res) {
-  connectMongo().catch((err) => res.json({ error: "COnnection Failed..!" }));
-
   try {
-    await client.connect();
-    const invoiceCollection = client.db("van_plaza").collection("invoices");
-    const productsStockCollection = client
-      .db("van_plaza")
-      .collection("products_stocks");
-
-    const quantitiesStockCollection = client
-      .db("van_plaza")
-      .collection("quantities_stock");
+    connectMongo().catch((err) => res.json({ error: "COnnection Failed..!" }));
 
     if (req.method === "PUT") {
       if (!req.body) {
@@ -51,23 +44,22 @@ export default async function (req, res) {
             },
           };
 
-          const invoiceResult = await invoiceCollection.updateOne(
+          const invoiceResult = await invoices.updateOne(
             findInvoice,
             invoiceUpdatingDoc,
             option
           );
-          const stockProductsResult = await productsStockCollection.updateMany(
+          const stockProductsResult = await products_stocks.updateMany(
             findStockProducts,
             stockProductsUpdatingDoc,
             option
           );
 
-          const stockQuantityResult =
-            await quantitiesStockCollection.updateMany(
-              findStockQuantity,
-              stockQuantitiesUpdatingDoc,
-              option
-            );
+          const stockQuantityResult = await quantities_stock.updateMany(
+            findStockQuantity,
+            stockQuantitiesUpdatingDoc,
+            option
+          );
 
           return res.status(200).json({
             success: true,

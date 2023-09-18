@@ -14,7 +14,7 @@ export default async function (req, res) {
             from: productCollection?.collectionName,
             localField: "productId",
             foreignField: "_id",
-            as: "productInfo",
+            as: "products",
           },
         },
       ])
