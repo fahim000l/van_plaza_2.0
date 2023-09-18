@@ -8,8 +8,15 @@ import usegetSupplierById from "@/hooks/usegetSupplierById";
 const SupplierIn = () => {
   const { suppliers } = useGetAllSuppliers();
   const { Formik } = useContext(STOCK_IN_CONTEXT);
+  const [supplier, setSupplier] = useState(null);
 
-  const { supplier } = usegetSupplierById(Formik?.values?.supplierId);
+  useEffect(() => {
+    if (Formik?.values?.supplierId) {
+      setSupplier(
+        suppliers?.find((sup) => sup?._id === Formik?.values?.supplierId)
+      );
+    }
+  }, [Formik]);
 
   return (
     <div>

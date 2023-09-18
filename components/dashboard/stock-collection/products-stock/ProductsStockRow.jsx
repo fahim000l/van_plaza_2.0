@@ -7,9 +7,7 @@ import ProductStockInvoiceDrawer from "./ProductStockInvoiceDrawer";
 import useGetQsByProductId from "@/hooks/useGetQsByProductId";
 
 const ProductsStockRow = ({ product }) => {
-  const { sps_product } = useGetPsByProductId(product?._id);
-  const { category } = useGetCategoryById(product?.categoryId);
-  const { qps_product } = useGetQsByProductId(product?._id);
+  const { sps_product, category, qps_product } = product;
 
   if (sps_product?.length > 0) {
     const netPrice = (priceTitle) => {
@@ -51,7 +49,7 @@ const ProductsStockRow = ({ product }) => {
           </div>
         </TableCell>
         <TableCell align="center">
-          <div className="w-full">{category?.categoryName}</div>
+          <div className="w-full">{category[0]?.categoryName}</div>
         </TableCell>
         <TableCell align="center">
           <div className="w-full">

@@ -4,10 +4,10 @@ import SizeDetailsDrawer from "../../dashboard-sizes/SizeDetailsDrawer";
 
 const ProductStockQuantityRow = ({ size, product }) => {
   const { sizeName, _id, sizeAttributes } = size;
+  const { qps_product } = product;
 
-  const { qps_product_size } = useGetQsByProductIdSizeId(
-    product?._id,
-    size?._id
+  const qps_product_size = qps_product?.filter(
+    (qp) => qp?.productId === product?._id && qp?.size === size?._id
   );
 
   if (qps_product_size?.length > 0) {

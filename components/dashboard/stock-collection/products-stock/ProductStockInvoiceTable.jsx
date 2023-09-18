@@ -7,12 +7,6 @@ import React from "react";
 const ProductStockInvoiceTable = ({ sp }) => {
   const { invoice } = useGetInvoiceById(sp?.invoiceId);
 
-  const { supplier } = usegetSupplierById(invoice?.supplierId);
-
-  const { sps_invoice } = useGetPsByInvoiceId(sp?.invoiceId);
-
-  const { qps_invoice } = useGetQsByInvoiceId(sp?.invoiceId);
-
   return (
     <div className="grid card bg-base-300 rounded-box m-5">
       <div className="overflow-x-auto">
@@ -28,33 +22,33 @@ const ProductStockInvoiceTable = ({ sp }) => {
             {/* row 1 */}
             <tr>
               <th>Invoice Id</th>
-              <td>{invoice?._id}</td>
+              <td>{invoice?.[0]?._id}</td>
             </tr>
             {/* row 2 */}
             <tr>
               <th>Supplier Name</th>
-              <td>{supplier?.supplierName}</td>
+              <td>{invoice?.[0]?.supplier?.[0]?.supplierName}</td>
             </tr>
             {/* row 3 */}
             <tr>
               <th>Supplier Contact Info</th>
-              <td>{supplier?.contactInfo}</td>
+              <td>{invoice?.[0]?.supplier?.[0]?.contactInfo}</td>
             </tr>
             <tr>
               <th>Invoice Date</th>
-              <td>{invoice?.date}</td>
+              <td>{invoice?.[0]?.date}</td>
             </tr>
             <tr>
               <th>Trans Id</th>
-              <td>{invoice?.transId}</td>
+              <td>{invoice?.[0]?.transId}</td>
             </tr>
             <tr>
               <th>Total Products</th>
-              <td>{sps_invoice?.length}</td>
+              <td>{invoice?.[0]?.sps_invoice?.length}</td>
             </tr>
             <tr>
               <th>Including Sizes</th>
-              <td>{qps_invoice?.length}</td>
+              <td>{invoice?.[0]?.qps_invoice?.length}</td>
             </tr>
           </tbody>
         </table>

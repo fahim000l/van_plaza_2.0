@@ -24,7 +24,6 @@ const ProductsTableRow = ({
   setDeleteOpen,
 }) => {
   const { categories } = useGetAllCategories();
-  const { category, categoryrefetch } = useGetCategoryById(product?.categoryId);
   const { productsRefetch } = useGetAllProducts();
 
   const Formik = useFormik({
@@ -32,7 +31,7 @@ const ProductsTableRow = ({
       productName: product?.productName,
       buyPrice: product?.buyPrice,
       sellPrice: product?.sellPrice,
-      categoryId: category?._id,
+      categoryId: product?.category[0]?._id,
     },
     onSubmit: (values) => {
       console.log(values);
@@ -48,7 +47,6 @@ const ProductsTableRow = ({
           console.log(data);
           if (data?.modifiedCount > 0) {
             productsRefetch();
-            categoryrefetch();
             setEditingProduct(null);
             toast.success(`Product Id : ${product?._id} modified successfully`);
           }
@@ -73,50 +71,48 @@ const ProductsTableRow = ({
         <Chip className="mt-2" label={product?._id} />
       </TableCell>
       <TableCell align="center">
-        {category && (
-          <Autocomplete
-            disabled={editingProduct !== product?._id}
-            size="small"
-            id="country-select-demo"
-            sx={{ width: 200 }}
-            options={categories}
-            defaultValue={category}
-            onChange={(event, newValue) =>
-              Formik.setFieldValue("categoryId", newValue?._id)
-            }
-            autoHighlight
-            getOptionLabel={(option) => option.categoryName}
-            renderOption={(props, option) => (
-              <Box
-                component="li"
-                sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
-                {...props}
-              >
-                <img
-                  loading="lazy"
-                  width="20"
-                  src={`/uploads/images/categories/${option?.categoryImage}`}
-                  alt=""
-                />
-                {option.categoryName}
-              </Box>
-            )}
-            renderInput={(params) => (
-              <TextField
-                name="category"
-                onChange={() => setSelectedCategory(params)}
-                fullWidth
-                {...params}
-                className="bg-white my-2"
-                label="Select Category"
-                inputProps={{
-                  ...params.inputProps,
-                  autoComplete: "new-password", // disable autocomplete and autofill
-                }}
+        <Autocomplete
+          disabled={editingProduct !== product?._id}
+          size="small"
+          id="country-select-demo"
+          sx={{ width: 200 }}
+          options={categories}
+          defaultValue={product?.category[0]}
+          onChange={(event, newValue) =>
+            Formik.setFieldValue("categoryId", newValue?._id)
+          }
+          autoHighlight
+          getOptionLabel={(option) => option.categoryName}
+          renderOption={(props, option) => (
+            <Box
+              component="li"
+              sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+              {...props}
+            >
+              <img
+                loading="lazy"
+                width="20"
+                src={`/uploads/images/categories/${option?.categoryImage}`}
+                alt=""
               />
-            )}
-          />
-        )}
+              {option.categoryName}
+            </Box>
+          )}
+          renderInput={(params) => (
+            <TextField
+              name="category"
+              onChange={() => setSelectedCategory(params)}
+              fullWidth
+              {...params}
+              className="bg-white my-2"
+              label="Select Category"
+              inputProps={{
+                ...params.inputProps,
+                autoComplete: "new-password", // disable autocomplete and autofill
+              }}
+            />
+          )}
+        />
       </TableCell>
       <TableCell align="center">
         <TextField

@@ -23,10 +23,9 @@ const SizeTableRow = ({
   setDeletingSize,
   setDeleteOpen,
 }) => {
-  const { sizeName, categoryId, sizeAttributes, _id } = size;
+  const { sizeName, categoryId, sizeAttributes, _id, category } = size;
 
   const { categories } = useGetAllCategories();
-  const { category } = useGetCategoryById(categoryId);
   const { sizesRefetch } = useGetAllSizes();
 
   const Formik = useFormik({
@@ -77,7 +76,7 @@ const SizeTableRow = ({
             id="country-select-demo"
             sx={{ width: 300 }}
             options={categories}
-            defaultValue={category}
+            defaultValue={category[0]}
             onChange={(event, newValue) =>
               Formik.setFieldValue("categoryId", newValue?._id)
             }

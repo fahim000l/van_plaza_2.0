@@ -20,6 +20,7 @@ const StockInTableRow = ({ record, i, setRecords, records }) => {
   const { products } = useGetAllProducts();
   const selectProductRef = useRef(null);
   const { Formik, handleUploadImage } = useContext(STOCK_IN_CONTEXT);
+  const [product, setProduct] = useState(null);
   const [flaw1img, setFlaw1img] = useState("");
   const [flaw2img, setFlaw2img] = useState("");
   const [flaw3img, setFlaw3img] = useState("");
@@ -27,9 +28,16 @@ const StockInTableRow = ({ record, i, setRecords, records }) => {
   const flaw1Ref = useRef();
   const flaw2Ref = useRef();
   const flaw3Ref = useRef();
-  const { product, productRefetch } = useGetProductById(
-    Formik.values.stockProducts[i]?.productId
-  );
+
+  useEffect(() => {
+    if (Formik.values.stockProducts[i]?.productId) {
+      setProduct(
+        products?.find(
+          (pd) => pd?._id === Formik.values.stockProducts[i]?.productId
+        )
+      );
+    }
+  }, [Formik]);
 
   return (
     <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
@@ -245,7 +253,7 @@ const StockInTableRow = ({ record, i, setRecords, records }) => {
             updatedStockProducts[i] = "";
 
             Formik.setFieldValue("stockProducts", updatedStockProducts);
-            productRefetch();
+            setProduct(null);
           }}
           size="small"
           className="bg-info text-primary"

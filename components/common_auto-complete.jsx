@@ -18,9 +18,12 @@ const AutoSelect = ({
   size,
   ref,
   fullWidth,
+  placeholder,
+  freeSolo,
 }) => {
   return (
     <Autocomplete
+      freeSolo={freeSolo}
       fullWidth={fullWidth}
       ref={ref}
       defaultValue={defaultValue}
@@ -52,6 +55,7 @@ const AutoSelect = ({
           name="category"
           fullWidth
           {...params}
+          placeholder={placeholder}
           className="bg-white my-2"
           label={label}
           inputProps={{

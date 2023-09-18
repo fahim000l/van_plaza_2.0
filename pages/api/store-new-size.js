@@ -1,18 +1,17 @@
 import { client, connectMongo } from "@/database/config";
+import sizes from "@/database/models/sizes";
 
 export default async function (req, res) {
-  connectMongo().catch((err) => res.json({ error: "Connection Failed...!" }));
   try {
-    await client.connect();
-    const sizeCollection = client.db("van_plaza").collection("sizes");
+    connectMongo().catch((err) => res.json({ error: "Connection Failed...!" }));
 
     if (req.method === "POST") {
       if (!req.body) {
         return res.status(404).json({ error: "Invalid Body" });
       } else {
         const sizeInfo = req.body;
-        const confirmation = await sizeCollection.insertOne(sizeInfo);
-        return res.status(200).json(confirmation);
+        const insertedSize = await sizes.create(sizeInfo);
+        return res.status(200).json({ success: true, insertedSize });
       }
     } else {
       return res.status(500).json({

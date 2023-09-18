@@ -20,14 +20,11 @@ const InvoiceStockProductsRow = ({
   setEditingProduct,
   setDeletingProduct,
   setDeleteOpen,
+  sps_invoice,
+  qps_invoice,
 }) => {
   const { _id, productId, transId, buyPrice, sellPrice, invoiceId } = sp;
-
-  const { sps_invoice, sps_invoice_refetch } = useGetPsByInvoiceId(invoiceId);
   const { invoicesRefetch } = useGetAllInvoices();
-
-  const { qps_product_invoice, qps_product_invoice_refetch } =
-    useGetQsByProductIdInvoiceId(productId, invoiceId);
 
   const Formik = useFormik({
     initialValues: {
@@ -49,8 +46,6 @@ const InvoiceStockProductsRow = ({
         .then((data) => {
           console.log(data);
           if (data?.success) {
-            sps_invoice_refetch();
-            qps_product_invoice_refetch();
             invoicesRefetch();
             setEditingProduct("");
             toast.success(
@@ -60,9 +55,12 @@ const InvoiceStockProductsRow = ({
         });
     },
   });
-  const { product } = useGetProductById(Formik?.values?.productId);
+  const { product } = sp;
   const { products } = useGetAllProducts();
-  const { category } = useGetCategoryById(product?.categoryId);
+
+  const qps_product_invoice = qps_invoice?.filter(
+    (qp) => qp?.productId === sp?.productId
+  );
 
   const totalQuantity = () => {
     return qps_product_invoice?.reduce((total, newValue) => {
@@ -78,7 +76,7 @@ const InvoiceStockProductsRow = ({
           <div className="flex items-center b-r-2 border-[blue] border-solid">
             <div className="avatar mx-2">
               <div className="w-10 rounded">
-                <img src={product?.standardImage} />
+                <img src={product?.[0]?.standardImage} />
               </div>
             </div>
             <div>
@@ -90,12 +88,15 @@ const InvoiceStockProductsRow = ({
                 size={"small"}
                 className={"w-60 my-1"}
                 options={products}
-                value={product}
+                value={product?.[0]}
                 imgType={"products"}
                 imgSrc={"standardImage"}
                 globalLabel={"productName"}
               />
-              <Chip className="my-1 w-full" label={category?.categoryName} />
+              <Chip
+                className="my-1 w-full"
+                label={product?.[0]?.category?.[0]?.categoryName}
+              />
             </div>
           </div>
         )}
@@ -230,7 +231,7 @@ const InvoiceStockProductsRow = ({
         </div>
       </td>
       <td>
-        <InvoiceStockQuantityDrawer sp={sp} />
+        <InvoiceStockQuantityDrawer qps_invoice={qps_invoice} sp={sp} />
       </td>
       <td className="sticky right-0 bg-white z-[300]">
         <div className="flex justify-between items-center">

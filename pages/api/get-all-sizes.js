@@ -1,14 +1,20 @@
 import { client, connectMongo } from "@/database/config";
+import sizes from "@/database/models/sizes";
 
 export default async function (req, res) {
-  connectMongo().catch((err) => res.json({ error: "Connection Failed...!" }));
   try {
-    await client.connect();
-    const sizeCollection = client.db("van_plaza").collection("sizes");
-
-    const query = {};
-    const sizes = await sizeCollection.find(query).toArray();
-    return res.status(200).json(sizes);
+    connectMongo().catch((err) => res.json({ error: "Connection Failed...!" }));
+    const allSizes = await sizes.aggregate([
+      {
+        $lookup: {
+          from: "categories",
+          localField: "categoryId",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+    ]);
+    return res.status(200).json(allSizes);
   } finally {
   }
 }

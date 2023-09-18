@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const uri = `${process.env.DB_URL}`;
 console.log(uri);
@@ -9,7 +11,6 @@ console.log(uri);
 //     deprecationErrors: true,
 //   },
 // });
-
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -23,9 +24,11 @@ const connectMongo = async () => {
     // console.log(
     //   "Pinged your deployment. You successfully connected to MongoDB!"
     // );
+    await mongoose.connect(uri);
+    console.log("MongoDB Connection extublished...!");
 
-    await client.connect();
-    console.log("Connected to the local server");
+    // await client.connect();
+    // console.log("Connected to the local server");
   } finally {
     // Ensures that the client will close when you finish/error
   }

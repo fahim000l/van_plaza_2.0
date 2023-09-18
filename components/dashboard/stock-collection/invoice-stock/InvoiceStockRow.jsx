@@ -24,10 +24,8 @@ const InvoiceStockRow = ({
   setDeletingInvoice,
   setDeleteOpen,
 }) => {
-  const { _id, supplierId, date, transId } = invoice;
+  const { _id, supplierId, date, transId, sps_invoice, qps_invoice } = invoice;
   const { invoicesRefetch } = useGetAllInvoices();
-  const { sps_invoice, sps_invoice_refetch } = useGetPsByInvoiceId(_id);
-  const { qps_invoice, qps_invoice_refetch } = useGetQsByInvoiceId(_id);
 
   const Formik = useFormik({
     initialValues: {
@@ -51,8 +49,6 @@ const InvoiceStockRow = ({
           if (data?.success) {
             setEditingInvoice("");
             invoicesRefetch();
-            sps_invoice_refetch();
-            qps_invoice_refetch();
             toast.success(`Invoice Id : ${_id} modified successfully`);
           }
         });
@@ -60,7 +56,7 @@ const InvoiceStockRow = ({
   });
 
   const { suppliers } = useGetAllSuppliers();
-  const { supplier } = usegetSupplierById(Formik?.values?.supplierId);
+  const { supplier } = invoice;
 
   const totalPrice = (priceTitle) => {
     return sps_invoice?.reduce((total, newValue) => {
@@ -113,9 +109,9 @@ const InvoiceStockRow = ({
                 size={"small"}
                 options={suppliers}
                 globalLabel={"supplierName"}
-                value={supplier}
+                // value={supplier?.[0]}
               />
-              <Chip label={supplier?.contactInfo} className="my-1" />
+              <Chip label={supplier?.[0]?.contactInfo} className="my-1" />
             </p>
           )}
         </div>
@@ -232,7 +228,10 @@ const InvoiceStockRow = ({
         </div>
       </TableCell>
       <TableCell align="center">
-        <InvoiceStockProductsDrawer sps_invoice={sps_invoice} />
+        <InvoiceStockProductsDrawer
+          qps_invoice={qps_invoice}
+          sps_invoice={sps_invoice}
+        />
       </TableCell>
       <TableCell className="sticky right-0 bg-white z-[300]" align="center">
         <div className="flex justify-between items-center">

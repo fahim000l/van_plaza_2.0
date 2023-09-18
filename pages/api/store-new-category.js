@@ -1,19 +1,19 @@
 import { client, connectMongo } from "@/database/config";
+import categories from "@/database/models/categories";
 
 export default async function (req, res) {
-  connectMongo().catch((err) => res.json({ error: "Connection Failed...!" }));
-
   try {
-    await client.connect();
-    const categoryCollection = client.db("van_plaza").collection("categories");
+    await connectMongo().catch((err) =>
+      res.json({ error: "Connection Failed...!" })
+    );
 
     if (req.method === "POST") {
       if (!req.body) {
         return res.status(404).json({ error: "Invalid body" });
       } else {
         const categoryInfo = req.body;
-        const confirmation = await categoryCollection.insertOne(categoryInfo);
-        res.status(200).json(confirmation);
+        const insertedCategory = await categories.create(categoryInfo);
+        res.status(200).json({ success: true, insertedCategory });
       }
     } else {
       return res.status(500).json({

@@ -53,7 +53,7 @@ const AddSizeDrawer = () => {
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
-          if (data?.acknowledged) {
+          if (data?.success) {
             sizesRefetch();
             toast.success("New Size inserted successfully");
             Formik.resetForm();

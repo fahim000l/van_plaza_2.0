@@ -65,7 +65,7 @@ const AddProductForm = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        if (data?.acknowledged) {
+        if (data?.success) {
           form.reset();
           setSelectedCategory(null);
           setRegularImage("");

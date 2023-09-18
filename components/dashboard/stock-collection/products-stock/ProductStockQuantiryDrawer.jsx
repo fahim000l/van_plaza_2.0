@@ -37,9 +37,9 @@ export default function ProductStockQuantiryDrawer({ product }) {
     setState({ ...state, [anchor]: open });
   };
 
-  const { sizes_category } = useGetSizesByCategory(product?.categoryId);
+  // const { sizes_category } = useGetSizesByCategory(product?.categoryId);
 
-  const { qps_product } = useGetQsByProductId(product?._id);
+  const { qps_product, sizes_category } = product;
 
   return (
     <div>

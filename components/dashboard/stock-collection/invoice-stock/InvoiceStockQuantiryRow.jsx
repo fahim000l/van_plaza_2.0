@@ -15,13 +15,17 @@ const InvoiceStockQuantiryRow = ({
   sp,
   editingQuantity,
   setEditingQuantity,
+  qps_product_invoice,
 }) => {
   const { sizeName, _id, sizeAttributes } = size;
 
-  const { qp_invoice_product_size, qp_invoice_product_size_refetch } =
-    useGetQsByInvoiceIdProductIdSizeId(sp?.invoiceId, sp?.productId, _id);
+  const qp_invoice_product_size = qps_product_invoice?.find(
+    (qp) => qp?.size === _id
+  );
+
+  // const { qp_invoice_product_size, qp_invoice_product_size_refetch } =
+  //   useGetQsByInvoiceIdProductIdSizeId(sp?.invoiceId, sp?.productId, _id);
   const { invoicesRefetch } = useGetAllInvoices();
-  const { sps_invoice_refetch } = useGetPsByInvoiceId(sp?.invoiceId);
 
   const Formik = useFormik({
     initialValues: {
@@ -44,9 +48,7 @@ const InvoiceStockQuantiryRow = ({
         .then((data) => {
           console.log(data);
           if (data?.success) {
-            qp_invoice_product_size_refetch();
             invoicesRefetch();
-            sps_invoice_refetch();
             setEditingQuantity("");
             toast.success("Quantity Modified successfully");
           }

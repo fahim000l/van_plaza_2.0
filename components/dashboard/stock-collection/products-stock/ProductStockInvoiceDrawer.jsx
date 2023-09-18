@@ -35,7 +35,7 @@ export default function ProductStockInvoiceDrawer({ product }) {
     setState({ ...state, [anchor]: open });
   };
 
-  const { sps_product } = useGetPsByProductId(product?._id);
+  const { sps_product } = product;
 
   return (
     <div>

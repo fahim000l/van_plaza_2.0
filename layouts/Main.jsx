@@ -20,8 +20,9 @@ import { FaTshirt, FaPhone } from "react-icons/fa";
 import { Home, Mail } from "@mui/icons-material";
 import MenuDrawer from "@/components/common_menu-drawer";
 import Link from "next/link";
-import { PersonAdd, Settings, Logout } from "@mui/icons-material";
+import { PersonAdd, Settings, Logout, Shop2 } from "@mui/icons-material";
 import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
+import BottomNav from "@/components/main_bottom_nav";
 
 const drawerWidth = 240;
 const navItems = [
@@ -31,9 +32,9 @@ const navItems = [
     icon: <Home />,
   },
   {
-    path: "/clothings",
-    content: "Clothings",
-    icon: <FaTshirt />,
+    path: "/shop",
+    content: "Shop",
+    icon: <Shop2 />,
   },
   {
     path: "/contact-us",
@@ -75,7 +76,7 @@ function Main({ window, children }) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box>
       <CssBaseline />
       <Header setMobileOpen={setMobileOpen} navItems={navItems} />
       <nav>
@@ -129,6 +130,7 @@ function Main({ window, children }) {
         <Toolbar />
         {children}
       </div>
+      <BottomNav />
     </Box>
   );
 }

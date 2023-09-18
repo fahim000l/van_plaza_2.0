@@ -5,8 +5,12 @@ import InvoiceStockProductsRow from "./InvoiceStockProductsRow";
 import DeleteConfirmationDialog from "@/components/common_dlt_confirmation-dialog";
 import useGetPsByInvoiceId from "@/hooks/useGetPsByInvoiceId";
 import toast from "react-hot-toast";
+import useGetAllInvoices from "@/hooks/useGetAllInvoices";
 
-export default function InvoiceStockProductsDrawer({ sps_invoice }) {
+export default function InvoiceStockProductsDrawer({
+  sps_invoice,
+  qps_invoice,
+}) {
   const [state, setState] = React.useState({
     top: false,
     left: false,
@@ -42,9 +46,7 @@ export default function InvoiceStockProductsDrawer({ sps_invoice }) {
   const [editindProduct, setEditingProduct] = React.useState("");
   const [deletingProduct, setDeletingProduct] = React.useState(null);
   const [isDeleteOpen, setDeleteOpen] = React.useState(false);
-  const { sps_invoice_refetch } = useGetPsByInvoiceId(
-    deletingProduct?.invoiceId
-  );
+  const { invoicesRefetch } = useGetAllInvoices();
 
   const handleDeletePs = () => {
     fetch(
@@ -57,7 +59,7 @@ export default function InvoiceStockProductsDrawer({ sps_invoice }) {
       .then((data) => {
         console.log(data);
         if (data?.success) {
-          sps_invoice_refetch();
+          invoicesRefetch();
           toast.success("Product Removed from stock successfully.");
           setDeletingProduct(null);
           setDeleteOpen(false);
@@ -124,6 +126,8 @@ export default function InvoiceStockProductsDrawer({ sps_invoice }) {
                         setDeletingProduct={setDeletingProduct}
                         setDeleteOpen={setDeleteOpen}
                         sp={sp}
+                        sps_invoice={sps_invoice}
+                        qps_invoice={qps_invoice}
                         key={sp?._id}
                         i={i}
                       />

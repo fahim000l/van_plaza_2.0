@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -7,18 +7,40 @@ import {
   AppBar,
   Toolbar,
   Avatar,
+  TextField,
+  Backdrop,
 } from "@mui/material";
 import Link from "next/link";
 import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
 import useStoreUser from "@/hooks/useStoreUser";
 import AuthMenu from "./common_auth-menu";
-import { Menu } from "@mui/icons-material";
+import { Menu, Search, ShoppingCart, Backspace } from "@mui/icons-material";
+import useGetAllCategories from "@/hooks/useGetAllCategories";
+import useGetAllProducts from "@/hooks/useGetAllProducts";
 
 const Header = ({ setMobileOpen, navItems }) => {
   const { authUser, sessionData, sessionStatus, authLoader, setAuthLoader } =
     useContext(AUTH_CONTEXT);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const { categories } = useGetAllCategories();
+  const { products } = useGetAllProducts();
+  const [searchItems, setSearchItems] = useState([]);
+  const [backDropOpen, setBackDropOpen] = React.useState(false);
+  const backDropInput = useRef();
+
+  const handleSearch = (event) => {
+    if (event.target.value) {
+      setSearchItems([
+        ...categories?.filter((category) =>
+          category?.categoryName
+            ?.toLowerCase()
+            ?.includes(event.target.value.toLowerCase())
+        ),
+      ]);
+    } else setSearchItems([]);
+  };
+
   // const [storingUser, setStoringUser] = useState(null);
 
   // const { dbConfirmation } = useStoreUser(storingUser);
@@ -41,7 +63,11 @@ const Header = ({ setMobileOpen, navItems }) => {
   // }, [sessionData]);
 
   return (
-    <AppBar sx={{ boxShadow: "none" }} component="nav">
+    <AppBar
+      className="flex justify-between"
+      sx={{ boxShadow: "none" }}
+      component="nav"
+    >
       <Toolbar
         sx={{
           display: "flex",
@@ -64,30 +90,102 @@ const Header = ({ setMobileOpen, navItems }) => {
           component="div"
           sx={{
             color: "white",
+            width: "20%",
             flexGrow: 1,
             display: { xs: "none", sm: "block" },
           }}
         >
           Van Plaza
         </Typography>
-        <Box>
-          <Box sx={{ display: { xs: "none", sm: "block" } }}>
-            {navItems.map((item) => (
-              <Link href={item.path} key={item.path}>
-                <Button
-                  startIcon={item.icon}
+        <div className="lg:w-[50%] w-full">
+          <TextField
+            onClick={() => {
+              backDropInput.current.click();
+              setBackDropOpen(true);
+            }}
+            InputProps={{
+              startAdornment: (
+                <IconButton>
+                  <Search />
+                </IconButton>
+              ),
+            }}
+            placeholder="Search Category"
+            size="small"
+            className="bg-white rounded-lg  lg:w-full"
+          />
+          <Backdrop
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "start",
+              color: "#fff",
+              zIndex: (theme) => theme.zIndex.drawer + 1,
+            }}
+            open={backDropOpen}
+          >
+            <div className="flex items-start mt-2 w-full">
+              <TextField
+                onChange={handleSearch}
+                ref={backDropInput}
+                InputProps={{
+                  startAdornment: (
+                    <IconButton>
+                      <Search />
+                    </IconButton>
+                  ),
+                }}
+                placeholder="Search Category"
+                size="small"
+                className="bg-white rounded-lg lg:w-full"
+              />
+              <IconButton
+                onClick={() => setBackDropOpen(false)}
+                className="text-white"
+              >
+                <Backspace />
+              </IconButton>
+            </div>
+            <div className="bg-white text-black w-full">
+              {searchItems?.map((item, i) => (
+                <Box
+                  key={i}
                   sx={{
-                    color: "#fff",
-                    fontWeight: "bold",
-                    textTransform: "none",
-                    mx: "10px",
+                    "& > img": { mr: 2, flexShrink: 0 },
+                    display: "flex",
+                    padding: 1,
                   }}
+                  // {...props}
                 >
-                  {item.content}
-                </Button>
-              </Link>
-            ))}
-          </Box>
+                  <img
+                    loading="lazy"
+                    width="20"
+                    src={item?.categoryImage || item?.standardImage}
+                    alt=""
+                  />
+                  {item?.categoryName || item?.productName}
+                </Box>
+              ))}
+            </div>
+          </Backdrop>
+        </div>
+        <Box sx={{ width: "35%", display: { xs: "none", sm: "block" } }}>
+          {navItems.map((item) => (
+            <Link href={item.path} key={item.path}>
+              <Button
+                startIcon={item.icon}
+                sx={{
+                  color: "#fff",
+                  fontWeight: "bold",
+                  textTransform: "none",
+                  mx: "10px",
+                }}
+              >
+                {item.content}
+              </Button>
+            </Link>
+          ))}
           {authUser?.email ? (
             <>
               <IconButton
@@ -122,6 +220,9 @@ const Header = ({ setMobileOpen, navItems }) => {
             </Link>
           )}
         </Box>
+        <IconButton className="text-white">
+          <ShoppingCart />
+        </IconButton>
       </Toolbar>
     </AppBar>
   );
