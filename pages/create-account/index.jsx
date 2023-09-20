@@ -55,7 +55,7 @@ const signup = () => {
       .then((fileData) => {
         console.log(fileData);
         if (fileData.success) {
-          values["profilePic"] = fileData.fileInfo.newFilename;
+          values["profilePic"] = fileData?.fileInfo?.newFilename || "";
           console.log(values);
           setStoringUser(values);
         }

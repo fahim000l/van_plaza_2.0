@@ -6,6 +6,7 @@ import { Chip } from "@mui/material";
 import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
 import toast from "react-hot-toast";
 import useGetcartByUser from "@/hooks/useGetcartByUser";
+import useGetCartsByQpId from "@/hooks/useGetCartsByQpId";
 
 const SizeSelectModal = ({ selectedSp, setSelectedProduct }) => {
   const { authUser } = useContext(AUTH_CONTEXT);
@@ -20,6 +21,7 @@ const SizeSelectModal = ({ selectedSp, setSelectedProduct }) => {
 
   const [selectedQp, setSelectedQp] = useState(qps[0]);
   const { carts_user_refetch } = useGetcartByUser(authUser?.email);
+  const { cartsRefetch } = useGetCartsByQpId();
 
   const handleAddToCart = () => {
     const cartInfo = {
@@ -40,6 +42,7 @@ const SizeSelectModal = ({ selectedSp, setSelectedProduct }) => {
         console.log(data);
         if (data.success) {
           carts_user_refetch();
+          cartsRefetch();
           toast.success("Product Added to the cart");
         }
       });
@@ -69,17 +72,21 @@ const SizeSelectModal = ({ selectedSp, setSelectedProduct }) => {
           <div className="mt-2 mb-2">
             <p className="font-bold mb-2">Select the size you want</p>
             <div className="grid grid-cols-4 gap-5 ">
-              {qps?.map((qp) => (
-                <button
-                  onClick={() => setSelectedQp(qp)}
-                  className={`btn btn-primary ${
-                    selectedQp !== qp && "btn-outline"
-                  } btn-sm`}
-                  key={qp?._id}
-                >
-                  {qp.sizes[0].sizeName}
-                </button>
-              ))}
+              {qps?.map((qp) => {
+                if (qp?.quantity > 0) {
+                  return (
+                    <button
+                      onClick={() => setSelectedQp(qp)}
+                      className={`btn btn-primary ${
+                        selectedQp !== qp && "btn-outline"
+                      } btn-sm`}
+                      key={qp?._id}
+                    >
+                      {qp.sizes[0].sizeName}
+                    </button>
+                  );
+                }
+              })}
             </div>
           </div>
           <Divider />
