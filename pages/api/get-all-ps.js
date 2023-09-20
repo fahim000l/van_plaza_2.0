@@ -17,17 +17,10 @@ export default async function (req, res) {
       {
         $lookup: {
           from: "quantities_stocks",
-          localField: "productId",
-          foreignField: "productId",
+          localField: "_id",
+          foreignField: "psId",
           as: "qps",
           pipeline: [
-            {
-              $match: {
-                $expr: {
-                  $eq: ["$invoiceId", "$$ROOT.invoiceId"],
-                },
-              },
-            },
             {
               $lookup: {
                 from: "sizes",

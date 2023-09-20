@@ -6,6 +6,10 @@ const quantities_stockSchema = new Schema(
       type: Schema.ObjectId,
       required: true,
     },
+    psId: {
+      type: Schema.ObjectId,
+      required: true,
+    },
     quantity: {
       type: String,
       required: true,

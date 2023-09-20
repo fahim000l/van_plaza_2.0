@@ -17,6 +17,7 @@ import AuthMenu from "./common_auth-menu";
 import { Menu, Search, ShoppingCart, Backspace } from "@mui/icons-material";
 import useGetAllCategories from "@/hooks/useGetAllCategories";
 import useGetAllProducts from "@/hooks/useGetAllProducts";
+import CartDrawer from "./CartDrawer";
 
 const Header = ({ setMobileOpen, navItems }) => {
   const { authUser, sessionData, sessionStatus, authLoader, setAuthLoader } =
@@ -220,9 +221,10 @@ const Header = ({ setMobileOpen, navItems }) => {
             </Link>
           )}
         </Box>
-        <IconButton className="text-white">
+        <CartDrawer />
+        {/* <IconButton className="text-white">
           <ShoppingCart />
-        </IconButton>
+        </IconButton> */}
       </Toolbar>
     </AppBar>
   );

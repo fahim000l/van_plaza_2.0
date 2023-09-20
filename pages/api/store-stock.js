@@ -23,6 +23,17 @@ export default async function (req, res) {
           quantityData?.forEach((qd) => (qd.invoiceId = invoiceId));
 
           const insertPs = await products_stocks.insertMany(productsData);
+          insertPs?.forEach((pd) => {
+            const psId = pd?._id;
+            quantityData?.forEach((qd) => {
+              if (
+                qd?.invoiceId === pd?.invoiceId &&
+                qd?.productId === pd?.productId.toString()
+              ) {
+                qd.psId = psId;
+              }
+            });
+          });
 
           if (insertPs[0]?._id) {
             const insertQs = await quantities_stock.insertMany(quantityData);
