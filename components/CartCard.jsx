@@ -14,6 +14,7 @@ import { Add, Remove, Delete } from "@mui/icons-material";
 import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
 import useGetcartByUser from "@/hooks/useGetcartByUser";
 import useGetCartsByQpId from "@/hooks/useGetCartsByQpId";
+import { LoadingButton } from "@mui/lab";
 
 const CartCard = ({ carts_user, cart, i, setDeletingCart, setDeleteOpen }) => {
   const { authUser } = useContext(AUTH_CONTEXT);
@@ -42,6 +43,7 @@ const CartCard = ({ carts_user, cart, i, setDeletingCart, setDeleteOpen }) => {
   const { carts_user_refetch } = useGetcartByUser(authUser?.email);
   const { carts, cartsRefetch } = useGetCartsByQpId(qps?.[0]?._id);
   const [totalQuantity, setTotalQuantity] = useState(0);
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     if (carts) {
@@ -50,13 +52,11 @@ const CartCard = ({ carts_user, cart, i, setDeletingCart, setDeleteOpen }) => {
           return total + parseInt(newValue?.quantity);
         }, 0)
       );
-      console.log(carts);
-      console.log(totalQuantity);
-      console.log(qpQuantity);
     }
   }, [carts]);
 
   const handleIncrease = () => {
+    setLoader(true);
     const cartInfo = {
       qpId: qps?.[0]?._id,
       user: authUser?.email,
@@ -75,11 +75,13 @@ const CartCard = ({ carts_user, cart, i, setDeletingCart, setDeleteOpen }) => {
         if (data?.success) {
           cartsRefetch();
           carts_user_refetch();
+          setLoader(false);
         }
       });
   };
 
   const handleDecrease = () => {
+    setLoader(true);
     const cartInfo = {
       qpId: qps?.[0]?._id,
       user: authUser?.email,
@@ -98,6 +100,7 @@ const CartCard = ({ carts_user, cart, i, setDeletingCart, setDeleteOpen }) => {
         if (data?.success) {
           cartsRefetch();
           carts_user_refetch();
+          setLoader(false);
         }
       });
   };
@@ -127,11 +130,12 @@ const CartCard = ({ carts_user, cart, i, setDeletingCart, setDeleteOpen }) => {
               <div className="flex lg:flex-row flex-col-reverse items-center lg:space-x-10">
                 <div className="flex items-center">
                   <IconButton
-                    disabled={parseInt(qpQuantity) === parseInt(totalQuantity)}
+                    disabled={
+                      parseInt(qpQuantity) === parseInt(totalQuantity) || loader
+                    }
                     onClick={handleIncrease}
-                    className="bg-[green] text-white"
-                    size="sm"
-                    variant="solid"
+                    className="bg-[green] hover:bg-green-800 hover:text-white text-white"
+                    size="small"
                     color="success"
                   >
                     <Add />
@@ -142,12 +146,11 @@ const CartCard = ({ carts_user, cart, i, setDeletingCart, setDeleteOpen }) => {
                     label={quantity}
                   />
                   <IconButton
-                    disabled={parseInt(quantity) === 1}
+                    disabled={parseInt(quantity) === 1 || loader}
                     onClick={handleDecrease}
-                    className="bg-[red] text-white"
-                    size="sm"
-                    variant="solid"
-                    color="danger"
+                    className="bg-[red] hover:bg-red-800 hover:text-white text-white"
+                    size="small"
+                    color="error"
                   >
                     <Remove />
                   </IconButton>

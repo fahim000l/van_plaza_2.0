@@ -1,5 +1,5 @@
 import { Divider } from "@mui/joy";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AddShoppingCart } from "@mui/icons-material";
 import { Button } from "@mui/joy";
 import { Chip } from "@mui/material";
@@ -7,6 +7,7 @@ import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
 import toast from "react-hot-toast";
 import useGetcartByUser from "@/hooks/useGetcartByUser";
 import useGetCartsByQpId from "@/hooks/useGetCartsByQpId";
+import { LoadingButton } from "@mui/lab";
 
 const SizeSelectModal = ({ selectedSp, setSelectedProduct }) => {
   const { authUser } = useContext(AUTH_CONTEXT);
@@ -21,9 +22,22 @@ const SizeSelectModal = ({ selectedSp, setSelectedProduct }) => {
 
   const [selectedQp, setSelectedQp] = useState(qps[0]);
   const { carts_user_refetch } = useGetcartByUser(authUser?.email);
-  const { cartsRefetch } = useGetCartsByQpId();
+  const { cartsRefetch, carts } = useGetCartsByQpId(selectedQp?._id);
+  const [totalQuantity, setTotalQuantity] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (carts) {
+      setTotalQuantity(
+        carts?.reduce((total, newValue) => {
+          return total + parseInt(newValue?.quantity);
+        }, 0)
+      );
+    }
+  }, [carts]);
 
   const handleAddToCart = () => {
+    setLoading(true);
     const cartInfo = {
       qpId: selectedQp?._id,
       user: authUser?.email,
@@ -44,6 +58,7 @@ const SizeSelectModal = ({ selectedSp, setSelectedProduct }) => {
           carts_user_refetch();
           cartsRefetch();
           toast.success("Product Added to the cart");
+          setLoading(false);
         }
       });
   };
@@ -90,7 +105,9 @@ const SizeSelectModal = ({ selectedSp, setSelectedProduct }) => {
             </div>
           </div>
           <Divider />
-          <Button
+          <LoadingButton
+            loading={loading}
+            disabled={parseInt(selectedQp.quantity) === parseInt(totalQuantity)}
             onClick={handleAddToCart}
             fullWidth
             endDecorator={<AddShoppingCart />}
@@ -98,7 +115,7 @@ const SizeSelectModal = ({ selectedSp, setSelectedProduct }) => {
             size="sm"
           >
             Add To Cart
-          </Button>
+          </LoadingButton>
         </div>
         <label
           onClick={() => setSelectedProduct(null)}
