@@ -29,6 +29,16 @@ export default async function (req, res) {
                   localField: "productId",
                   foreignField: "_id",
                   as: "products",
+                  pipeline: [
+                    {
+                      $lookup: {
+                        from: "categories",
+                        localField: "categoryId",
+                        foreignField: "_id",
+                        as: "categories",
+                      },
+                    },
+                  ],
                 },
               },
               {
@@ -37,6 +47,14 @@ export default async function (req, res) {
                   localField: "psId",
                   foreignField: "_id",
                   as: "sps",
+                },
+              },
+              {
+                $lookup: {
+                  from: "sizes",
+                  localField: "size",
+                  foreignField: "_id",
+                  as: "sizes",
                 },
               },
             ],

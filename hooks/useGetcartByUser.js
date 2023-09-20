@@ -12,6 +12,8 @@ const useGetcartByUser = (user) => {
         return await fetch(`/api/get-carts-by-user?user=${user}`).then((res) =>
           res.json()
         );
+      } else {
+        return [];
       }
     },
   });

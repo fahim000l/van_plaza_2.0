@@ -5,6 +5,7 @@ import { Button } from "@mui/joy";
 import { Chip } from "@mui/material";
 import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
 import toast from "react-hot-toast";
+import useGetcartByUser from "@/hooks/useGetcartByUser";
 
 const SizeSelectModal = ({ selectedSp, setSelectedProduct }) => {
   const { authUser } = useContext(AUTH_CONTEXT);
@@ -18,6 +19,7 @@ const SizeSelectModal = ({ selectedSp, setSelectedProduct }) => {
   } = selectedSp;
 
   const [selectedQp, setSelectedQp] = useState(qps[0]);
+  const { carts_user_refetch } = useGetcartByUser(authUser?.email);
 
   const handleAddToCart = () => {
     const cartInfo = {
@@ -37,6 +39,7 @@ const SizeSelectModal = ({ selectedSp, setSelectedProduct }) => {
       .then((data) => {
         console.log(data);
         if (data.success) {
+          carts_user_refetch();
           toast.success("Product Added to the cart");
         }
       });

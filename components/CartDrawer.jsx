@@ -42,24 +42,6 @@ export default function CartDrawer() {
     setState({ ...state, [anchor]: open });
   };
 
-  const data = [
-    {
-      src: "https://images.unsplash.com/photo-1502657877623-f66bf489d236",
-      title: "Night view",
-      description: "4.21M views",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1527549993586-dff825b37782",
-      title: "Lake view",
-      description: "4.74M views",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1532614338840-ab30cf10ed36",
-      title: "Mountain view",
-      description: "3.98M views",
-    },
-  ];
-
   const { authUser } = React.useContext(AUTH_CONTEXT);
 
   const { carts_user } = useGetcartByUser(authUser?.email);
@@ -85,13 +67,21 @@ export default function CartDrawer() {
             open={state[anchor]}
             onClose={toggleDrawer(anchor, false)}
           >
-            <Card variant="outlined" sx={{ width: 300, p: 0 }}>
-              <List sx={{ py: "var(--ListDivider-gap)" }}>
-                {carts_user?.map((cart) => (
-                  <CartCard key={cart?._id} cart={cart} />
-                ))}
-              </List>
-            </Card>
+            <div className="grid card bg-base-300 rounded-box place-items-center p-5 m-5">
+              {" "}
+              <Card variant="outlined" sx={{ width: 300, p: 0 }}>
+                <List sx={{ py: "var(--ListDivider-gap)" }}>
+                  {carts_user?.map((cart, i) => (
+                    <CartCard
+                      key={cart?._id}
+                      carts_user={carts_user}
+                      cart={cart}
+                      i={i}
+                    />
+                  ))}
+                </List>
+              </Card>
+            </div>
           </Drawer>
         </React.Fragment>
       ))}

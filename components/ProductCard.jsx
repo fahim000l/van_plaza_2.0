@@ -85,7 +85,7 @@ const ProductCard = ({ sp, setSelectedProduct }) => {
             enableMouseEvents
           >
             {images?.map((step, index) => (
-              <div key={step.label}>
+              <div key={index}>
                 {Math.abs(activeStep - index) <= 2 ? (
                   <Box
                     component="img"
