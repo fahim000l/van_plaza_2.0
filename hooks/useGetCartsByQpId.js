@@ -16,6 +16,7 @@ const useGetCartsByQpId = (qpId) => {
         return [];
       }
     },
+    refetchInterval: 500,
   });
 
   return { carts, cartsRefetch, cartsLoading };

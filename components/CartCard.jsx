@@ -52,6 +52,9 @@ const CartCard = ({ carts_user, cart, i, setDeletingCart, setDeleteOpen }) => {
           return total + parseInt(newValue?.quantity);
         }, 0)
       );
+
+      cartsRefetch();
+      carts_user_refetch();
     }
   }, [carts]);
 
