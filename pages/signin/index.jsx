@@ -28,14 +28,18 @@ const signin = () => {
   const { data: sessionData } = useSession();
   const [loading, setLoading] = useState(false);
   const { push } = useRouter();
-
+  // "/dashboard/stock-collection/products-stock"
   const handleGoogleSignIn = async () => {
     const confirmation = await signIn("google", {
-      callbackUrl: "/",
+      callbackUrl:
+        sessionData?.user?.role === "admin"
+          ? "/dashboard/stock-collection/products-stock"
+          : "/",
     });
 
-    if (confirmation.ok) {
-      console.log(sessionData?.user);
+    if (confirmation?.status === 200) {
+      console.log(confirmation);
+      push(confirmation?.url);
     }
   };
 
@@ -49,7 +53,7 @@ const signin = () => {
     });
 
     console.log(confirmation);
-    if (confirmation.status === 200) {
+    if (confirmation?.status === 200) {
       setLoading(false);
       push(confirmation.url);
     }

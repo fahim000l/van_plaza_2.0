@@ -9,6 +9,42 @@ export default NextAuth({
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      profile: async (userProfile) => {
+        await connectMongo().catch((err) =>
+          res.json({ error: "Connection Failed...!" })
+        );
+
+        await client.connect();
+        const usersCollection = client.db("van_plaza").collection("users");
+
+        const requiredUser = await usersCollection.findOne({
+          email: userProfile?.email,
+        });
+
+        if (requiredUser) {
+          return {
+            ...userProfile,
+            image: requiredUser?.profilePic,
+            id: requiredUser?._id?.toString(),
+            role: requiredUser?.role || "user",
+          };
+        } else {
+          const confirmation = await usersCollection.insertOne({
+            email: userProfile?.email,
+            userName: userProfile?.name,
+            profilePic: userProfile?.picture,
+          });
+
+          if (confirmation) {
+            return {
+              ...userProfile,
+              image: userProfile?.picture,
+              id: userProfile?.sub?.toString(),
+              role: userProfile?.role || "user",
+            };
+          }
+        }
+      },
     }),
     CredentialsProvider({
       name: "Credentials",
@@ -47,4 +83,14 @@ export default NextAuth({
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
+  callbacks: {
+    jwt: async ({ token, user }) => {
+      if (user) token.role = user?.role;
+      return token;
+    },
+    session: async ({ session, token }) => {
+      if (session?.user) session.user.role = token?.role;
+      return session;
+    },
+  },
 });
