@@ -31,14 +31,12 @@ const signin = () => {
   // "/dashboard/stock-collection/products-stock"
   const handleGoogleSignIn = async () => {
     const confirmation = await signIn("google", {
-      callbackUrl:
-        sessionData?.user?.role === "admin"
-          ? "/dashboard/stock-collection/products-stock"
-          : "/",
+      callbackUrl: "/shop",
     });
 
     if (confirmation?.status === 200) {
       console.log(confirmation);
+      const logedInUser = sessionData?.user;
       push(confirmation?.url);
     }
   };
@@ -49,7 +47,7 @@ const signin = () => {
       redirect: false,
       email: value.email,
       password: value.password,
-      callbackUrl: "/",
+      callbackUrl: "/shop",
     });
 
     console.log(confirmation);

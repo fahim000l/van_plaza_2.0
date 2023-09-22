@@ -6,12 +6,15 @@ import SwipeableViews from "react-swipeable-views";
 import { autoPlay } from "react-swipeable-views-utils";
 import { LoadingButton } from "@mui/lab";
 import { AddShoppingCart } from "@mui/icons-material";
+import { useRouter } from "next/router";
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 const ProductCard = ({ sp, setSelectedProduct }) => {
   const [images, setImages] = useState([]);
+  const { push } = useRouter();
   const {
+    _id,
     sellPrice,
     products: { [0]: product },
   } = sp;
@@ -69,13 +72,26 @@ const ProductCard = ({ sp, setSelectedProduct }) => {
 
     if (!isButtonClicked) {
       console.log({ success: true });
+    } else {
+      sizeSelectModal.current.click();
     }
   };
 
   const sizeSelectModal = useRef();
 
   return (
-    <div onClick={handleMainDivClick} className="cursor-pointer">
+    <div
+      onClick={(e) => {
+        if (e?.target?.id === "addToCartBtn") {
+          sizeSelectModal.current.click();
+          console.log(e.target);
+        } else {
+          console.log(e.target);
+          push(`/shop/${_id}`);
+        }
+      }}
+      className="cursor-pointer"
+    >
       <Card sx={{ padding: [1, 2, 2] }} variant="outlined">
         <Box sx={{ maxWidth: 400 }}>
           <AutoPlaySwipeableViews
@@ -120,9 +136,9 @@ const ProductCard = ({ sp, setSelectedProduct }) => {
             Size Select Modal
           </label>
           <Button
-            onClick={() => sizeSelectModal.current.click()}
+            id="addToCartBtn"
             endDecorator={<AddShoppingCart />}
-            className="bg-[steelblue] text-white hover:bg-[blue] text-xs addToCartBtn"
+            className="bg-[steelblue] text-white hover:bg-[blue] text-xs"
             size="sm"
           >
             Add To Cart
