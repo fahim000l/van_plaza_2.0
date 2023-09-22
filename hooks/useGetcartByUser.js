@@ -16,6 +16,7 @@ const useGetcartByUser = (user) => {
         return [];
       }
     },
+    refetchInterval: 500,
   });
 
   return { carts_user, carts_user_refetch, carts_user_loading };
