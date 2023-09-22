@@ -42,27 +42,6 @@ const Header = ({ setMobileOpen, navItems }) => {
     } else setSearchItems([]);
   };
 
-  // const [storingUser, setStoringUser] = useState(null);
-
-  // const { dbConfirmation } = useStoreUser(storingUser);
-
-  // useEffect(() => {
-  //   if (dbConfirmation) {
-  //     setStoringUser(null);
-  //   }
-  // }, [dbConfirmation]);
-
-  // useEffect(() => {
-  //   if (sessionData?.user) {
-  //     console.log(sessionData?.user);
-  //     setStoringUser({
-  //       email: sessionData?.user?.email,
-  //       userName: sessionData?.user?.name,
-  //       profilePic: sessionData?.user?.image,
-  //     });
-  //   }
-  // }, [sessionData]);
-
   return (
     <AppBar
       className="flex justify-between"
@@ -93,12 +72,12 @@ const Header = ({ setMobileOpen, navItems }) => {
             color: "white",
             width: "20%",
             flexGrow: 1,
-            display: { xs: "none", sm: "block" },
+            display: ["none", "none", "block"],
           }}
         >
           Van Plaza
         </Typography>
-        <div className="lg:w-[50%] w-full">
+        <div className="lg:w-[35%] md:w-full w-full">
           <TextField
             onClick={() => {
               backDropInput.current.click();
@@ -113,7 +92,7 @@ const Header = ({ setMobileOpen, navItems }) => {
             }}
             placeholder="Search Category"
             size="small"
-            className="bg-white rounded-lg  lg:w-full"
+            className="bg-white rounded-lg w-full"
           />
           <Backdrop
             sx={{
@@ -139,7 +118,7 @@ const Header = ({ setMobileOpen, navItems }) => {
                 }}
                 placeholder="Search Category"
                 size="small"
-                className="bg-white rounded-lg lg:w-full"
+                className="bg-white rounded-lg w-full"
               />
               <IconButton
                 onClick={() => setBackDropOpen(false)}
@@ -171,7 +150,7 @@ const Header = ({ setMobileOpen, navItems }) => {
             </div>
           </Backdrop>
         </div>
-        <Box sx={{ width: "35%", display: { xs: "none", sm: "block" } }}>
+        <Box sx={{ display: ["none", "none", "flex"], alignItems: "center" }}>
           {navItems.map((item) => (
             <Link href={item.path} key={item.path}>
               <Button
@@ -188,7 +167,7 @@ const Header = ({ setMobileOpen, navItems }) => {
             </Link>
           ))}
           {authUser?.email ? (
-            <>
+            <div className="flex items-center">
               <IconButton
                 id="basic-button"
                 aria-controls={open ? "basic-menu" : undefined}
@@ -206,7 +185,7 @@ const Header = ({ setMobileOpen, navItems }) => {
                 setAnchorEl={setAnchorEl}
                 open={open}
               />
-            </>
+            </div>
           ) : (
             <Link href={"/signin"}>
               <Button
@@ -221,7 +200,11 @@ const Header = ({ setMobileOpen, navItems }) => {
             </Link>
           )}
         </Box>
-        <CartDrawer />
+        {authUser?.email && (
+          <IconButton>
+            <CartDrawer />
+          </IconButton>
+        )}
         {/* <IconButton className="text-white">
           <ShoppingCart />
         </IconButton> */}

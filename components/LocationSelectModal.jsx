@@ -24,7 +24,7 @@ const LocationSelectModal = () => {
         className="modal-toggle"
       />
       <div className="modal modal-bottom">
-        <div className="modal-box">
+        <div className="modal-box p-0">
           {!isLoaded ? <p>Loading...</p> : <Map />}
         </div>
         <label className="modal-backdrop" htmlFor="locationSelectModal">
@@ -43,13 +43,13 @@ function Map() {
 
   return (
     <>
-      <div>
+      <div className="w-full">
         <PlacesAutoComplete selectedPlace={selectedPlace} />
       </div>
       <GoogleMap
         zoom={10}
         center={center}
-        mapContainerClassName="w-full h-[60vh]"
+        mapContainerClassName="w-full h-[50vh]"
       >
         <Marker icon={<LocationOn />} position={center} />
       </GoogleMap>
@@ -71,7 +71,7 @@ function PlacesAutoComplete({ selectedPlace }) {
       <ComboboxInput
         value={value}
         disabled={!ready}
-        className="input input-border"
+        className="input input-border w-full"
         placeholder="Search Your Location"
         onChange={(event) => setValue(event.target.value)}
       />
