@@ -10,8 +10,6 @@ import SizeSelectModal from "@/components/SizeSelectModal";
 const OnSaleProductDetails = () => {
   const { query } = useRouter();
 
-  const results = useGetPsById(query?.psId);
-
   const {
     ps,
     ps: {
@@ -32,7 +30,7 @@ const OnSaleProductDetails = () => {
         } = {},
       } = {},
     } = {},
-  } = results;
+  } = useGetPsById(query?.psId);
 
   const [mainImage, setMainImage] = useState(standardImage);
   const sizeSelectModal = useRef();
@@ -76,13 +74,21 @@ const OnSaleProductDetails = () => {
                   <img src={img?.src} className="h-40 rounded-lg" />
                   <div className="flex justify-between my-2">
                     <a
-                      href={`#slide${i - 1}`}
+                      href={
+                        i === 0
+                          ? `#slide${imagesArray?.length - 1}`
+                          : `#slide${i - 1}`
+                      }
                       className="btn btn-circle btn-sm"
                     >
                       ❮
                     </a>
                     <a
-                      href={`#slide${i + 1}`}
+                      href={
+                        i === imagesArray?.length - 1
+                          ? `#slide${0}`
+                          : `#slide${i + 1}`
+                      }
                       className="btn btn-circle btn-sm"
                     >
                       ❯
@@ -159,7 +165,7 @@ const OnSaleProductDetails = () => {
                   {sellPrice} /-
                 </p>
                 <label
-                  onClick={() => setSelectedProduct(results?.ps)}
+                  onClick={() => setSelectedProduct(ps[0])}
                   ref={sizeSelectModal}
                   hidden
                   htmlFor="sizeSelectModal"
