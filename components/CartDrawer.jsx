@@ -10,6 +10,7 @@ import {
   ListItemIcon,
   ListItemText,
   IconButton,
+  Chip,
 } from "@mui/material";
 import { Inbox, ShoppingCart, Mail } from "@mui/icons-material";
 import useGetcartByUser from "@/hooks/useGetcartByUser";
@@ -123,9 +124,21 @@ export default function CartDrawer() {
             />
             <div className="sticky bottom-0 z-[200] bg-[steelblue]">
               <Divider />
-              <div className="grid card bg-base-300 rounded-box lg:p-5 lg:m-5 p-2 m-2">
-                <p>Sub Total : {calCulateSubTotalPrice()} /-</p>
-                <p>Total Products : {calculateTotalProducts()}</p>
+              <div className="bg-base-300 rounded-box lg:p-5 lg:m-5 p-2 m-2">
+                <p className="flex items-center my-2 font-bold justify-between">
+                  <span>Sub Total :</span>{" "}
+                  <Chip label={`${calCulateSubTotalPrice()} /-`} />{" "}
+                </p>
+                <p className="flex items-center my-2 font-bold justify-between">
+                  <span>Total Products :</span>{" "}
+                  <Chip label={`${calculateTotalProducts()}`} />
+                </p>
+                <Button
+                  variant="contained"
+                  className="bg-[steelblue] text-white"
+                >
+                  Check Out ({carts_user?.length})
+                </Button>
               </div>
             </div>
           </Drawer>
