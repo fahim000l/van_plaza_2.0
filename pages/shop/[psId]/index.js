@@ -13,6 +13,7 @@ const OnSaleProductDetails = () => {
   const results = useGetPsById(query?.psId);
 
   const {
+    ps,
     ps: {
       [0]: {
         qps = [],
@@ -43,12 +44,55 @@ const OnSaleProductDetails = () => {
     }
   }, [standardImage]);
 
+  const [imagesArray, setImagesArray] = useState([]);
+
+  useEffect(() => {
+    if (ps) {
+      const imgToAdd = [
+        { src: standardImage, tag: "Product Featuring Image" },
+        { src: regularImage, tag: "Product Featuring Image" },
+        { src: detailedImage, tag: "Product Featuring Image" },
+        { src: flaw1, tag: "Defect Image" },
+        { src: flaw2, tag: "Defect Image" },
+        { src: flaw3, tag: "Defect Image" },
+      ].filter((img) => Boolean(img.src) === true);
+
+      setImagesArray((imgs) => [...imgs, ...imgToAdd]);
+    }
+  }, [ps, standardImage, regularImage, detailedImage, flaw1, flaw2, flaw3]);
+
   return (
     <Main>
       <div className="flex bg-[steelblue] rounded-box m-2 p-1 md:m-5 lg:m-10 md:p-5 lg:p-10">
         <div className="flex flex-col w-full">
-          <div className="flex lg:flex-row flex-col my-2 space-x-2 w-full">
-            <div className="lg:w-[40%] mb-2 lg:mb-0">
+          <div className="flex lg:flex-row flex-col space-x-2 w-full">
+            <div className="carousel lg:hidden h-64">
+              {imagesArray?.map((img, i) => (
+                <div
+                  id={`slide${i}`}
+                  className="carousel-item flex flex-col w-full"
+                >
+                  <p className="text-center font-bold text-white">{img?.tag}</p>
+                  <img src={img?.src} className="h-40 rounded-lg" />
+                  <div className="flex justify-between my-2">
+                    <a
+                      href={`#slide${i - 1}`}
+                      className="btn btn-circle btn-sm"
+                    >
+                      ❮
+                    </a>
+                    <a
+                      href={`#slide${i + 1}`}
+                      className="btn btn-circle btn-sm"
+                    >
+                      ❯
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="lg:w-[40%] hidden lg:inline mb-2 lg:mb-0">
               <div className="rounded-lg">
                 <p className="text-white font-bold">Product Featuring Images</p>
                 <div className="flex space-x-5">
