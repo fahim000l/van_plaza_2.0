@@ -50,7 +50,7 @@ export default async function (req, res) {
             from: "quantities_stocks",
             localField: "_id",
             foreignField: "psId",
-            as: "quantities",
+            as: "qps",
             pipeline: [
               {
                 $lookup: {

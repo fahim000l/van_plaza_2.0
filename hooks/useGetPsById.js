@@ -6,7 +6,7 @@ const useGetPsById = (psId) => {
     refetch: psRefetch,
     isLoading: psLoading,
   } = useQuery({
-    queryKey: [],
+    queryKey: ["/api/get-ps-by-id", psId],
     queryFn: async () => {
       if (psId) {
         return await fetch(`/api/get-ps-by-id?psId=${psId}`).then((res) =>
