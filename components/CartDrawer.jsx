@@ -62,6 +62,22 @@ export default function CartDrawer() {
       });
   };
 
+  const calCulateSubTotalPrice = () => {
+    return carts_user?.reduce((total, newValue) => {
+      return (
+        total +
+        parseFloat(newValue?.qps?.[0]?.sps?.[0].sellPrice) *
+          parseFloat(newValue?.quantity)
+      );
+    }, 0);
+  };
+
+  const calculateTotalProducts = () => {
+    return carts_user?.reduce((total, newValue) => {
+      return total + parseInt(newValue?.quantity);
+    }, 0);
+  };
+
   return (
     <div>
       {["right"].map((anchor) => (
@@ -70,7 +86,7 @@ export default function CartDrawer() {
             onClick={toggleDrawer(anchor, true)}
             className="text-white"
           >
-            <Badge badgeContent={carts_user?.length}>
+            <Badge badgeContent={calculateTotalProducts()}>
               <ShoppingCart />
             </Badge>
           </IconButton>
@@ -80,9 +96,10 @@ export default function CartDrawer() {
             onClose={toggleDrawer(anchor, false)}
             className="w-full"
           >
-            <div className="grid card bg-base-300 rounded-box place-items-center lg:p-5 lg:m-5">
+            <div className="grid card bg-base-300 rounded-box place-items-center lg:p-5 lg:m-5 p-2">
               {" "}
-              <Card variant="outlined" sx={{ p: 0 }}>
+              <Divider />
+              <Card variant="outlined" sx={{ p: 0, marginTop: 2 }}>
                 <List sx={{ py: "var(--ListDivider-gap)" }}>
                   {carts_user?.map((cart, i) => (
                     <CartCard
@@ -104,6 +121,13 @@ export default function CartDrawer() {
               open={isDeleteOpen}
               setOpen={setDeleteOpen}
             />
+            <div className="sticky bottom-0 z-[200] bg-[steelblue]">
+              <Divider />
+              <div className="grid card bg-base-300 rounded-box lg:p-5 lg:m-5 p-2 m-2">
+                <p>Sub Total : {calCulateSubTotalPrice()} /-</p>
+                <p>Total Products : {calculateTotalProducts()}</p>
+              </div>
+            </div>
           </Drawer>
         </React.Fragment>
       ))}

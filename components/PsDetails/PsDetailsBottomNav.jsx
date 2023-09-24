@@ -25,7 +25,7 @@ const PsDetailsBottomNav = ({ sizeSelectModal }) => {
   const { push } = useRouter();
 
   return (
-    <div className="btm-nav z-[200]">
+    <div className="btm-nav z-[200] lg:hidden">
       <button onClick={() => push("/shop")} className="active">
         <Shop2 />
         <span className="btm-nav-label">Shop</span>

@@ -23,6 +23,9 @@ const CartCard = ({ carts_user, cart, i, setDeletingCart, setDeleteOpen }) => {
     qps,
     qps: {
       [0]: {
+        sps: {
+          [0]: { sellPrice },
+        },
         products: {
           [0]: {
             productName,
@@ -109,73 +112,72 @@ const CartCard = ({ carts_user, cart, i, setDeletingCart, setDeleteOpen }) => {
   };
 
   return (
-    <div className="p-2 w-full">
-      <ListItem sx={{ width: "100%" }}>
-        <ListItemButton sx={{ gap: 2, width: "100%" }}>
-          {/* <AspectRatio sx={{ flexBasis: 120 }}> */}
-          <div className="avatar">
-            <div className="w-16 rounded">
-              <img src={standardImage} alt={productName} />
-            </div>
-          </div>
-          {/* </AspectRatio> */}
-          <ListItemContent sx={{ width: "100%" }}>
-            <div className="flex lg:space-x-10 items-start lg:items-center">
-              <div className="lg:flex w-full lg:items-center lg:space-x-10">
-                <div>
-                  <Typography fontWeight="md">{productName}</Typography>
-                  <Typography level="body-sm">Size : {sizeName}</Typography>
-                </div>
-                <div className="flex justify-between items-center lg:space-x-10">
-                  <Chip color="primary" label={categoryName} />
-                </div>
+    <div className="p-1 w-full shadow-lg">
+      <ListItem sx={{ width: "100%", gap: 1 }}>
+        {/* <ListItemButton sx={{ gap: 1, width: "100%" }}> */}
+        <img
+          className="w-20 h-20 rounded-lg"
+          src={standardImage}
+          alt={productName}
+        />
+        <ListItemContent sx={{ width: "100%" }}>
+          <div className="flex lg:space-x-10 items-start lg:items-center">
+            <div className="lg:flex w-full lg:items-center lg:space-x-10">
+              <div>
+                <Typography fontWeight="md">{productName}</Typography>
+                <Typography level="body-sm">Size : {sizeName}</Typography>
               </div>
-              <div className="flex lg:flex-row flex-col-reverse items-center lg:space-x-10">
-                <div className="flex items-center">
-                  <IconButton
-                    disabled={
-                      parseInt(qpQuantity) === parseInt(totalQuantity) || loader
-                    }
-                    onClick={handleIncrease}
-                    className="bg-[green] hover:bg-green-800 hover:text-white text-white"
-                    size="small"
-                    color="success"
-                  >
-                    <Add />
-                  </IconButton>
-                  <Chip
-                    className="mx-2 my-2"
-                    color="primary"
-                    label={quantity}
-                  />
-                  <IconButton
-                    disabled={parseInt(quantity) === 1 || loader}
-                    onClick={handleDecrease}
-                    className="bg-[red] hover:bg-red-800 hover:text-white text-white"
-                    size="small"
-                    color="error"
-                  >
-                    <Remove />
-                  </IconButton>
-                </div>
+              <p className="font-bold text-[steelblue]">{sellPrice}/-</p>
+              <Chip size="small" color="primary" label={categoryName} />
+            </div>
+            <div className="flex lg:flex-row flex-col-reverse items-center lg:space-x-10">
+              <div className="flex items-center">
                 <IconButton
-                  onClick={() => {
-                    setDeleteOpen(true);
-                    setDeletingCart(cart);
-                  }}
-                  size="sm"
-                  variant="solid"
-                  color="danger"
-                  className="bg-[#691414] text-white ml-auto"
+                  disabled={
+                    parseInt(qpQuantity) === parseInt(totalQuantity) || loader
+                  }
+                  onClick={handleIncrease}
+                  className="bg-[green] hover:bg-green-800 hover:text-white text-white"
+                  size="small"
+                  color="success"
                 >
-                  <Delete />
+                  <Add />
+                </IconButton>
+                <Chip
+                  size="small"
+                  className="mx-2 my-2"
+                  color="primary"
+                  label={quantity}
+                />
+                <IconButton
+                  disabled={parseInt(quantity) === 1 || loader}
+                  onClick={handleDecrease}
+                  className="bg-[red] hover:bg-red-800 hover:text-white text-white"
+                  size="small"
+                  color="error"
+                >
+                  <Remove />
                 </IconButton>
               </div>
+
+              <IconButton
+                onClick={() => {
+                  setDeleteOpen(true);
+                  setDeletingCart(cart);
+                }}
+                size="sm"
+                variant="solid"
+                color="danger"
+                className="bg-[#691414] text-white ml-auto"
+              >
+                <Delete />
+              </IconButton>
             </div>
-          </ListItemContent>
-        </ListItemButton>
+          </div>
+        </ListItemContent>
+        {/* </ListItemButton> */}
       </ListItem>
-      {i !== carts_user.length - 1 && <ListDivider />}
+      {/* {i !== carts_user.length - 1 && <ListDivider />} */}
     </div>
   );
 };
