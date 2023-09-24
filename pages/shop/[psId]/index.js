@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import { AddShoppingCartSharp } from "@mui/icons-material";
 import SizeSelectModal from "@/components/SizeSelectModal";
+import PsDetailsBottomNav from "@/components/PsDetails/PsDetailsBottomNav";
 
 const OnSaleProductDetails = () => {
   const { query } = useRouter();
@@ -61,7 +62,7 @@ const OnSaleProductDetails = () => {
 
   return (
     <Main>
-      <div className="flex bg-[steelblue] rounded-box m-2 p-1 md:m-5 lg:m-10 md:p-5 lg:p-10">
+      <div className="flex bg-[steelblue] rounded-box my-5 mx-2 p-1 md:m-5 lg:m-10 md:p-5 lg:p-10">
         <div className="flex flex-col w-full">
           <div className="flex lg:flex-row flex-col space-x-2 w-full">
             <div className="carousel lg:hidden h-64">
@@ -175,7 +176,7 @@ const OnSaleProductDetails = () => {
                 <Button
                   onClick={() => sizeSelectModal.current.click()}
                   variant="contained"
-                  className="bg-[steelblue] text-white"
+                  className="bg-[steelblue] text-white hidden lg:inline"
                   endIcon={<AddShoppingCartSharp />}
                 >
                   Add to Cart
@@ -226,6 +227,7 @@ const OnSaleProductDetails = () => {
           </div>
         </div>
       </div>
+      <PsDetailsBottomNav sizeSelectModal={sizeSelectModal} />
       {selectedProduct && (
         <SizeSelectModal
           setSelectedProduct={setSelectedProduct}
