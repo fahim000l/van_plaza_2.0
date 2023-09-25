@@ -20,6 +20,7 @@ import CartCard from "./CartCard";
 import toast from "react-hot-toast";
 import useGetCartsByQpId from "@/hooks/useGetCartsByQpId";
 import DeleteConfirmationDialog from "./common_dlt_confirmation-dialog";
+import Link from "next/link";
 
 export default function CartDrawer() {
   const [state, setState] = React.useState({
@@ -142,12 +143,14 @@ export default function CartDrawer() {
                   <span>Total Products :</span>{" "}
                   <Chip label={`${calculateTotalProducts()}`} />
                 </p>
-                <Button
-                  variant="contained"
-                  className="bg-[steelblue] text-white"
-                >
-                  Check Out ({carts_user?.length})
-                </Button>
+                <Link href={"/checkout"}>
+                  <Button
+                    variant="contained"
+                    className="bg-[steelblue] text-white"
+                  >
+                    Check Out ({carts_user?.length})
+                  </Button>
+                </Link>
               </div>
             </div>
           </Drawer>
