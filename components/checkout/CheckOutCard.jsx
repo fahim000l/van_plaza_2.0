@@ -21,8 +21,8 @@ const CheckOutCard = ({ cart }) => {
   } = cart;
 
   return (
-    <div className="space-y-2 p-10 card rounded-box shadow-xl">
-      <div className="flex items-center justify-between">
+    <div className="space-y-2 lg:p-5 p-2 card rounded-box shadow-xl">
+      <div className="lg:flex items-center justify-between">
         <div className="flex space-x-2 items-center">
           <img className="w-12 h-12 rounded-lg" src={standardImage} alt="" />
           <div>
@@ -33,15 +33,12 @@ const CheckOutCard = ({ cart }) => {
         <div className="flex space-x-2 items-center">
           <span>Qty : </span> <span>{cartQuantity}</span>
         </div>
-        <IconButton className="bg-red-200 text-red-500">
-          <Delete />
-        </IconButton>
         <div className="flex space-x-2 items-center text-[steelblue] font-bold">
           {sellPrice}/-
         </div>
       </div>
       <Divider />
-      <div className="font-bold">
+      <div className="font-bold lg:text-end">
         {cartQuantity} item(s). Subtotal :{" "}
         <span className="text-[steelblue] font-bold">
           {parseFloat(sellPrice) * parseInt(cartQuantity)}/-

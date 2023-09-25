@@ -16,7 +16,7 @@ import { useRouter } from "next/router";
 const BottomNav = () => {
   const [value, setValue] = useState("/");
   const { authUser } = useContext(AUTH_CONTEXT);
-  const { push } = useRouter();
+  const { push, pathname } = useRouter();
 
   return (
     <div className="sticky bottom-0 lg:hidden">
