@@ -1,6 +1,4 @@
 import { client, connectMongo } from "@/database/config";
-import { ElectricScooterSharp } from "@mui/icons-material";
-import productsStock from "../dashboard/stock-collection/products-stock";
 import invoices from "@/database/models/invoices";
 import products_stocks from "@/database/models/products_stocks";
 import quantities_stock from "@/database/models/quantities_stock";

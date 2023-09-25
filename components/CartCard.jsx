@@ -19,7 +19,7 @@ import { LoadingButton } from "@mui/lab";
 const CartCard = ({ carts_user, cart, i, setDeletingCart, setDeleteOpen }) => {
   const { authUser } = useContext(AUTH_CONTEXT);
   const {
-    quantity,
+    quantity: cartQuantity,
     qps,
     qps: {
       [0]: {
@@ -44,7 +44,7 @@ const CartCard = ({ carts_user, cart, i, setDeletingCart, setDeleteOpen }) => {
   } = cart;
 
   const { carts_user_refetch } = useGetcartByUser(authUser?.email);
-  const { carts, cartsRefetch } = useGetCartsByQpId(qps?.[0]?._id);
+  const { carts, cartsRefetch } = useGetCartsByQpId(cart?.qps?.[0]?._id);
   const [totalQuantity, setTotalQuantity] = useState(0);
   const [loader, setLoader] = useState(false);
 
@@ -55,9 +55,6 @@ const CartCard = ({ carts_user, cart, i, setDeletingCart, setDeleteOpen }) => {
           return total + parseInt(newValue?.quantity);
         }, 0)
       );
-
-      cartsRefetch();
-      carts_user_refetch();
     }
   }, [carts]);
 
@@ -147,10 +144,10 @@ const CartCard = ({ carts_user, cart, i, setDeletingCart, setDeleteOpen }) => {
                   size="small"
                   className="mx-2 my-2"
                   color="primary"
-                  label={quantity}
+                  label={cartQuantity}
                 />
                 <IconButton
-                  disabled={parseInt(quantity) === 1 || loader}
+                  disabled={parseInt(cartQuantity) === 1 || loader}
                   onClick={handleDecrease}
                   className="bg-[red] hover:bg-red-800 hover:text-white text-white"
                   size="small"

@@ -10,6 +10,10 @@ const quantities_stockSchema = new Schema(
       type: Schema.ObjectId,
       required: true,
     },
+    categoryId: {
+      type: Schema.ObjectId,
+      required: true,
+    },
     quantity: {
       type: String,
       required: true,

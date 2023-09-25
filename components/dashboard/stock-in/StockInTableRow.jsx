@@ -60,6 +60,7 @@ const StockInTableRow = ({ record, i, setRecords, records }) => {
               ...updatedStockProducts[i],
               productId: newValue?._id,
               transId: Formik.values.transId,
+              categoryId: newValue?.categoryId,
               buyPrice: newValue?.buyPrice,
               sellPrice: newValue?.sellPrice,
               quantities: [],

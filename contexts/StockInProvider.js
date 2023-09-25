@@ -78,6 +78,10 @@ const StockInProvider = ({ children }) => {
     );
   };
 
+  useEffect(() => {
+    console.log(Formik.values);
+  }, [Formik]);
+
   const stockInInfo = { Formik, stockInLoader, handleUploadImage };
   return (
     <STOCK_IN_CONTEXT.Provider value={stockInInfo}>

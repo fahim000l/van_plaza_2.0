@@ -6,6 +6,10 @@ const products_stocksSchema = new Schema(
       type: Schema.ObjectId,
       required: true,
     },
+    categoryId: {
+      type: Schema.ObjectId,
+      required: true,
+    },
     transId: {
       type: String,
       required: true,

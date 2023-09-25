@@ -79,11 +79,20 @@ export default function CartDrawer() {
     }, 0);
   };
 
+  React.useEffect(() => {
+    if (carts_user) {
+      if (carts_user?.length === 0) {
+        toggleDrawer("right", false);
+      }
+    }
+  }, [carts_user]);
+
   return (
     <div>
       {["right"].map((anchor) => (
         <React.Fragment key={anchor}>
           <IconButton
+            disabled={carts_user?.length === 0}
             onClick={toggleDrawer(anchor, true)}
             className="text-white"
           >

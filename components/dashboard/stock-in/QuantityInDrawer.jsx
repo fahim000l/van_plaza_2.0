@@ -91,6 +91,8 @@ export default function QuantityInDrawer({ disabled, product, i }) {
                                 size: size?._id,
                                 quantity: event.target.value,
                                 transId: Formik.values.transId,
+                                categoryId:
+                                  Formik.values.stockProducts[i].categoryId,
                                 productId:
                                   Formik.values.stockProducts[i].productId,
                               };

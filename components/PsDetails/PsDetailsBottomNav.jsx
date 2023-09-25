@@ -36,7 +36,7 @@ const PsDetailsBottomNav = ({ sizeSelectModal }) => {
           //   variant="contained"
           //   size="sm"
           htmlFor="sizeSelectModal"
-          className="btn btn-primary"
+          className="btn btn-primary btn-sm normal-case"
         >
           Add to Cart
         </label>
