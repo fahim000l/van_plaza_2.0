@@ -115,7 +115,7 @@ function Map() {
       </div>
       <GoogleMap
         zoom={10}
-        center={center}
+        center={selectedPlace || center}
         mapContainerClassName="w-full h-[50vh]"
       >
         <Marker icon={<LocationOn />} position={selectedPlace || center} />
