@@ -4,9 +4,11 @@ import Image from "next/image";
 import React, { useRef } from "react";
 import { ArrowRight, LocationOn } from "@mui/icons-material";
 import LocationSelectModal from "./LocationSelectModal";
+import SetLocationModal from "./SetLocationModal";
 
 const HomeBanner = () => {
   const locationSelectModal = useRef();
+  const setLocationModal = useRef();
 
   return (
     <Box
@@ -70,6 +72,13 @@ const HomeBanner = () => {
       >
         Location Select Modal
       </label>
+      <label
+        ref={setLocationModal}
+        htmlFor="setLocationModal"
+        className="btn hidden"
+      >
+        Set Location modal
+      </label>
       <Button
         onClick={() => locationSelectModal.current.click()}
         className="hover:bg-white bg-white hover:text-black text-black w-[95%] lg:w-[80%] mx-auto normal-case font-bold"
@@ -77,7 +86,8 @@ const HomeBanner = () => {
       >
         | Select Your Location
       </Button>
-      <LocationSelectModal />
+      <LocationSelectModal setLocationModal={setLocationModal} />
+      <SetLocationModal />
     </Box>
   );
 };
