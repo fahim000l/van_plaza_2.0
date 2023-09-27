@@ -71,7 +71,7 @@ import {
   ComboboxPopover,
 } from "@reach/combobox";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { LocationOn, ArrowRight, EditLocationAlt } from "@mui/icons-material";
 import { Divider, List, ListItemButton } from "@mui/joy";
 import {
@@ -88,8 +88,10 @@ import { postCodes } from "@/bangladeshGeojson/bd-postcodes";
 import { divisions } from "@/bangladeshGeojson/bd-divisions";
 import { districts } from "@/bangladeshGeojson/bd-districts";
 import AutoSelect from "./common_auto-complete";
+import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
+import toast from "react-hot-toast";
 
-const LocationSelectModal = ({ setLocationModal }) => {
+const LocationSelectModal = () => {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY,
     libraries: ["places"],
@@ -122,6 +124,7 @@ function Map() {
   const center = useMemo(() => ({ lat: 44, lng: -80 }), []);
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [editing, setEditing] = useState(false);
+  const { authUser } = useContext(AUTH_CONTEXT);
 
   return (
     <div className="flex flex-col lg:flex-col-reverse">
@@ -143,6 +146,11 @@ function Map() {
                     lat: parseFloat(selectedPlace?.lat),
                     lng: parseFloat(selectedPlace?.lng),
                   }
+                : authUser?.location
+                ? {
+                    lat: authUser?.location?.[0]?.Address?.lat,
+                    lng: authUser?.location?.[0]?.Address?.lng,
+                  }
                 : center
             }
             mapContainerClassName="w-full h-[50vh]"
@@ -154,6 +162,11 @@ function Map() {
                   ? {
                       lat: parseFloat(selectedPlace?.lat),
                       lng: parseFloat(selectedPlace?.lng),
+                    }
+                  : authUser?.location
+                  ? {
+                      lat: authUser?.location?.[0]?.Address?.lat,
+                      lng: authUser?.location?.[0]?.Address?.lng,
                     }
                   : center
               }
@@ -177,15 +190,36 @@ function Map() {
 }
 
 function EditLocation({ setSelectedPlace, selectedPlace, setEditing }) {
+  const { authUser } = useContext(AUTH_CONTEXT);
   const [selectedLocation, setSelectedLocation] = useState({
     Region: "",
     City: "",
     Area: "",
     Address: "",
     LandMark: "",
+    def: true,
   });
   const [activeStep, setActiveStep] = useState(0);
-  const [backDropOpen, setBackDropOpen] = useState(false);
+
+  const handleSetLocation = () => {
+    console.log(selectedLocation);
+
+    fetch(`/api/store-user-location?email=${authUser?.email}`, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(selectedLocation),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data?.success) {
+          toast.success("Location set successfully");
+          setEditing(false);
+        }
+      });
+  };
 
   useEffect(() => {
     setSelectedLocation((s) => {
@@ -564,7 +598,7 @@ function EditLocation({ setSelectedPlace, selectedPlace, setEditing }) {
           !selectedLocation?.LandMark ||
           !selectedLocation?.Region
         }
-        onClick={() => setEditing(false)}
+        onClick={handleSetLocation}
         fullWidth
         className="bg-[steelblue] text-white font-bold normal-case sticky bottom-0"
       >

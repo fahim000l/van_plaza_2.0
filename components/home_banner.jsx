@@ -1,14 +1,14 @@
 import { Box, Button, Typography } from "@mui/material";
 import BannerImage from "../public/home/BannerImage.png";
 import Image from "next/image";
-import React, { useRef } from "react";
+import React, { useContext, useRef } from "react";
 import { ArrowRight, LocationOn } from "@mui/icons-material";
 import LocationSelectModal from "./LocationSelectModal";
-import SetLocationModal from "./SetLocationModal";
+import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
 
 const HomeBanner = () => {
   const locationSelectModal = useRef();
-  const setLocationModal = useRef();
+  const { authUser } = useContext(AUTH_CONTEXT);
 
   return (
     <Box
@@ -72,22 +72,14 @@ const HomeBanner = () => {
       >
         Location Select Modal
       </label>
-      <label
-        ref={setLocationModal}
-        htmlFor="setLocationModal"
-        className="btn hidden"
-      >
-        Set Location modal
-      </label>
       <Button
         onClick={() => locationSelectModal.current.click()}
         className="hover:bg-white bg-white hover:text-black text-black w-[95%] lg:w-[80%] mx-auto normal-case font-bold"
         startIcon={<LocationOn className="text-[steelblue]" />}
       >
-        | Select Your Location
+        | {authUser?.location?.[0]?.Address?.address || "Select Your Location"}
       </Button>
-      <LocationSelectModal setLocationModal={setLocationModal} />
-      <SetLocationModal />
+      <LocationSelectModal />
     </Box>
   );
 };
