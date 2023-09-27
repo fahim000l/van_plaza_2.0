@@ -83,9 +83,9 @@ import {
   StepContent,
 } from "@mui/material";
 import { useFormik } from "formik";
-import { postCodes } from "@/bangladesh-geojson/bd-postcodes";
-import { divisions } from "@/bangladesh-geojson/bd-divisions";
-import { districts } from "@/bangladesh-geojson/bd-districts";
+import { postCodes } from "@/bangladeshGeojson/bd-postcodes";
+import { divisions } from "@/bangladeshGeojson/bd-divisions";
+import { districts } from "@/bangladeshGeojson/bd-districts";
 import AutoSelect from "./common_auto-complete";
 
 const LocationSelectModal = ({ setLocationModal }) => {
