@@ -81,6 +81,7 @@ import {
   Step,
   StepLabel,
   StepContent,
+  TextField,
 } from "@mui/material";
 import { useFormik } from "formik";
 import { postCodes } from "@/bangladeshGeojson/bd-postcodes";
@@ -93,6 +94,8 @@ const LocationSelectModal = ({ setLocationModal }) => {
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY,
     libraries: ["places"],
   });
+
+  console.log(process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY);
 
   return (
     <div>
@@ -123,23 +126,36 @@ function Map() {
   return (
     <div className="flex flex-col lg:flex-col-reverse">
       {editing ? (
-        <EditLocation
-          selectedPlace={selectedPlace}
-          setSelectedPlace={setSelectedPlace}
-        />
+        <div>
+          <EditLocation
+            setEditing={setEditing}
+            selectedPlace={selectedPlace}
+            setSelectedPlace={setSelectedPlace}
+          />
+        </div>
       ) : (
         <>
           <GoogleMap
             zoom={15}
             center={
-              { lat: selectedPlace?.lat, lng: selectedPlace?.lng } || center
+              selectedPlace
+                ? {
+                    lat: parseFloat(selectedPlace?.lat),
+                    lng: parseFloat(selectedPlace?.lng),
+                  }
+                : center
             }
             mapContainerClassName="w-full h-[50vh]"
           >
             <Marker
               icon={<LocationOn />}
               position={
-                { lat: selectedPlace?.lat, lng: selectedPlace?.lng } || center
+                selectedPlace
+                  ? {
+                      lat: parseFloat(selectedPlace?.lat),
+                      lng: parseFloat(selectedPlace?.lng),
+                    }
+                  : center
               }
             />
           </GoogleMap>
@@ -160,7 +176,7 @@ function Map() {
   );
 }
 
-function EditLocation({ setSelectedPlace, selectedPlace }) {
+function EditLocation({ setSelectedPlace, selectedPlace, setEditing }) {
   const [selectedLocation, setSelectedLocation] = useState({
     Region: "",
     City: "",
@@ -169,47 +185,29 @@ function EditLocation({ setSelectedPlace, selectedPlace }) {
     LandMark: "",
   });
   const [activeStep, setActiveStep] = useState(0);
+  const [backDropOpen, setBackDropOpen] = useState(false);
 
   useEffect(() => {
     setSelectedLocation((s) => {
       const newObj = { ...s };
-      newObj.Address = selectedPlace?.address;
+      newObj.Address = selectedPlace;
       return newObj;
     });
-    if (selectedLocation?.Address) {
-      setActiveStep(4);
-    }
-  }, [selectedPlace, selectedLocation]);
+  }, [selectedPlace]);
 
   return (
-    <div className="p-5 bg-base-200">
-      <Stepper
-        activeStep={activeStep}
-        orientation="vertical"
-        className="bg-white rounded-lg p-2 w-full"
+    <div>
+      <div
+        className={`p-5 bg-base-200 flex flex-col ${
+          activeStep === 3 && "flex-col-reverse"
+        }`}
       >
-        {activeStep === 0 ? (
-          <Step className="w-full">
-            <StepLabel className="flex items-center justify-between font-bold w-full">
-              <span className="font-bold text-black">Region</span>{" "}
-              <span className="ml-5">
-                {
-                  divisions?.divisions?.find(
-                    (div) => div?.id == selectedLocation.Region
-                  )?.name
-                }
-              </span>
-            </StepLabel>
-            <StepContent className="text-opacity-50">
-              Selecting bellow...
-            </StepContent>
-          </Step>
-        ) : activeStep === 1 ? (
-          <Stepper
-            activeStep={activeStep}
-            orientation="vertical"
-            className="bg-white rounded-lg p-2 w-full"
-          >
+        <Stepper
+          activeStep={activeStep}
+          orientation="vertical"
+          className="bg-white rounded-lg p-2 w-full"
+        >
+          {activeStep === 0 ? (
             <Step className="w-full">
               <StepLabel className="flex items-center justify-between font-bold w-full">
                 <span className="font-bold text-black">Region</span>{" "}
@@ -225,225 +223,358 @@ function EditLocation({ setSelectedPlace, selectedPlace }) {
                 Selecting bellow...
               </StepContent>
             </Step>
-            <Step className="w-full">
-              <StepLabel className="flex items-center justify-between font-bold w-full">
-                <span className="font-bold">City</span>{" "}
-                <span className="ml-5">
-                  {
-                    districts?.districts?.find(
-                      (dis) => dis?.id == selectedLocation.City
-                    )?.name
-                  }
-                </span>
-              </StepLabel>
-              <StepContent className="text-opacity-50">
-                Selecting bellow...
-              </StepContent>
-            </Step>
-          </Stepper>
-        ) : activeStep === 2 ? (
-          <Stepper
-            activeStep={activeStep}
-            orientation="vertical"
-            className="bg-white rounded-lg p-2 w-full"
-          >
-            <Step className="w-full">
-              <StepLabel className="flex items-center justify-between font-bold w-full">
-                <span className="font-bold text-black">Region</span>{" "}
-                <span className="ml-5">
-                  {
-                    divisions?.divisions?.find(
-                      (div) => div?.id == selectedLocation.Region
-                    )?.name
-                  }
-                </span>
-              </StepLabel>
-              <StepContent className="text-opacity-50">
-                Selecting bellow...
-              </StepContent>
-            </Step>
-            <Step className="w-full">
-              <StepLabel className="flex items-center justify-between font-bold w-full">
-                <span className="font-bold">City</span>{" "}
-                <span className="ml-5">
-                  {
-                    districts?.districts?.find(
-                      (dis) => dis?.id == selectedLocation.City
-                    )?.name
-                  }
-                </span>
-              </StepLabel>
-              <StepContent className="text-opacity-50">
-                Selecting bellow...
-              </StepContent>
-            </Step>
-            <Step className="w-full">
-              <StepLabel className="flex items-center justify-between font-bold w-full">
-                <span className="font-bold">Area</span>{" "}
-                <span className="ml-5">
-                  {
-                    postCodes?.postcodes?.find(
-                      (dis) => dis?.postCode == selectedLocation.Area
-                    )?.upazila
-                  }{" "}
-                  -{" "}
-                  {
-                    postCodes?.postcodes?.find(
-                      (dis) => dis?.postCode == selectedLocation.Area
-                    )?.postOffice
-                  }
-                </span>
-              </StepLabel>
-              <StepContent className="text-opacity-50">
-                Selecting bellow...
-              </StepContent>
-            </Step>
-          </Stepper>
-        ) : (
-          <Stepper
-            activeStep={activeStep}
-            orientation="vertical"
-            className="bg-white rounded-lg p-2 w-full"
-          >
-            <Step className="w-full">
-              <StepLabel className="flex items-center justify-between font-bold w-full">
-                <span className="font-bold text-black">Region</span>{" "}
-                <span className="ml-5">
-                  {
-                    divisions?.divisions?.find(
-                      (div) => div?.id == selectedLocation.Region
-                    )?.name
-                  }
-                </span>
-              </StepLabel>
-              <StepContent className="text-opacity-50">
-                Selecting bellow...
-              </StepContent>
-            </Step>
-            <Step className="w-full">
-              <StepLabel className="flex items-center justify-between font-bold w-full">
-                <span className="font-bold">City</span>{" "}
-                <span className="ml-5">
-                  {
-                    districts?.districts?.find(
-                      (dis) => dis?.id == selectedLocation.City
-                    )?.name
-                  }
-                </span>
-              </StepLabel>
-              <StepContent className="text-opacity-50">
-                Selecting bellow...
-              </StepContent>
-            </Step>
-            <Step className="w-full">
-              <StepLabel className="flex items-center justify-between font-bold w-full">
-                <span className="font-bold">Area</span>{" "}
-                <span className="ml-5">
-                  {
-                    postCodes?.postcodes?.find(
-                      (dis) => dis?.postCode == selectedLocation.Area
-                    )?.upazila
-                  }{" "}
-                  -{" "}
-                  {
-                    postCodes?.postcodes?.find(
-                      (dis) => dis?.postCode == selectedLocation.Area
-                    )?.postOffice
-                  }
-                </span>
-              </StepLabel>
-              <StepContent className="text-opacity-50">
-                Selecting bellow...
-              </StepContent>
-            </Step>
-            <Step className="w-full">
-              <StepLabel className="flex items-center justify-between font-bold w-full">
-                <span className="font-bold">Address</span>{" "}
-                <span className="ml-5">{selectedLocation?.Address}</span>
-              </StepLabel>
-              <StepContent className="text-opacity-50">
-                Selecting bellow...
-              </StepContent>
-            </Step>
-          </Stepper>
-        )}
-      </Stepper>
+          ) : activeStep === 1 ? (
+            <Stepper
+              activeStep={activeStep}
+              orientation="vertical"
+              className="bg-white rounded-lg p-2 w-full"
+            >
+              <Step className="w-full">
+                <StepLabel className="flex items-center justify-between font-bold w-full">
+                  <span className="font-bold text-black">Region</span>{" "}
+                  <span className="ml-5">
+                    {
+                      divisions?.divisions?.find(
+                        (div) => div?.id == selectedLocation.Region
+                      )?.name
+                    }
+                  </span>
+                </StepLabel>
+                <StepContent className="text-opacity-50">
+                  Selecting bellow...
+                </StepContent>
+              </Step>
+              <Step className="w-full">
+                <StepLabel className="flex items-center justify-between font-bold w-full">
+                  <span className="font-bold">City</span>{" "}
+                  <span className="ml-5">
+                    {
+                      districts?.districts?.find(
+                        (dis) => dis?.id == selectedLocation.City
+                      )?.name
+                    }
+                  </span>
+                </StepLabel>
+                <StepContent className="text-opacity-50">
+                  Selecting bellow...
+                </StepContent>
+              </Step>
+            </Stepper>
+          ) : activeStep === 2 ? (
+            <Stepper
+              activeStep={activeStep}
+              orientation="vertical"
+              className="bg-white rounded-lg p-2 w-full"
+            >
+              <Step className="w-full">
+                <StepLabel className="flex items-center justify-between font-bold w-full">
+                  <span className="font-bold text-black">Region</span>{" "}
+                  <span className="ml-5">
+                    {
+                      divisions?.divisions?.find(
+                        (div) => div?.id == selectedLocation.Region
+                      )?.name
+                    }
+                  </span>
+                </StepLabel>
+                <StepContent className="text-opacity-50">
+                  Selecting bellow...
+                </StepContent>
+              </Step>
+              <Step className="w-full">
+                <StepLabel className="flex items-center justify-between font-bold w-full">
+                  <span className="font-bold">City</span>{" "}
+                  <span className="ml-5">
+                    {
+                      districts?.districts?.find(
+                        (dis) => dis?.id == selectedLocation.City
+                      )?.name
+                    }
+                  </span>
+                </StepLabel>
+                <StepContent className="text-opacity-50">
+                  Selecting bellow...
+                </StepContent>
+              </Step>
+              <Step className="w-full">
+                <StepLabel className="flex items-center justify-between font-bold w-full">
+                  <span className="font-bold">Area</span>{" "}
+                  <span className="ml-5">
+                    {
+                      postCodes?.postcodes?.find(
+                        (dis) => dis?.postCode == selectedLocation.Area
+                      )?.upazila
+                    }{" "}
+                    -{" "}
+                    {
+                      postCodes?.postcodes?.find(
+                        (dis) => dis?.postCode == selectedLocation.Area
+                      )?.postOffice
+                    }
+                  </span>
+                </StepLabel>
+                <StepContent className="text-opacity-50">
+                  Selecting bellow...
+                </StepContent>
+              </Step>
+            </Stepper>
+          ) : activeStep === 3 ? (
+            <Stepper
+              activeStep={activeStep}
+              orientation="vertical"
+              className="bg-white rounded-lg p-2 w-full"
+            >
+              <Step className="w-full">
+                <StepLabel className="flex items-center justify-between font-bold w-full">
+                  <span className="font-bold text-black">Region</span>{" "}
+                  <span className="ml-5">
+                    {
+                      divisions?.divisions?.find(
+                        (div) => div?.id == selectedLocation.Region
+                      )?.name
+                    }
+                  </span>
+                </StepLabel>
+                <StepContent className="text-opacity-50">
+                  Selecting bellow...
+                </StepContent>
+              </Step>
+              <Step className="w-full">
+                <StepLabel className="flex items-center justify-between font-bold w-full">
+                  <span className="font-bold">City</span>{" "}
+                  <span className="ml-5">
+                    {
+                      districts?.districts?.find(
+                        (dis) => dis?.id == selectedLocation.City
+                      )?.name
+                    }
+                  </span>
+                </StepLabel>
+                <StepContent className="text-opacity-50">
+                  Selecting bellow...
+                </StepContent>
+              </Step>
+              <Step className="w-full">
+                <StepLabel className="flex items-center justify-between font-bold w-full">
+                  <span className="font-bold">Area</span>{" "}
+                  <span className="ml-5">
+                    {
+                      postCodes?.postcodes?.find(
+                        (dis) => dis?.postCode == selectedLocation.Area
+                      )?.upazila
+                    }{" "}
+                    -{" "}
+                    {
+                      postCodes?.postcodes?.find(
+                        (dis) => dis?.postCode == selectedLocation.Area
+                      )?.postOffice
+                    }
+                  </span>
+                </StepLabel>
+                <StepContent className="text-opacity-50">
+                  Selecting bellow...
+                </StepContent>
+              </Step>
+              <Step className="w-full">
+                <StepLabel className="flex items-center justify-between font-bold w-full">
+                  <span className="font-bold">Address</span>{" "}
+                  <span className="ml-5">
+                    {selectedLocation?.Address?.address}
+                  </span>
+                </StepLabel>
+                <StepContent className="text-opacity-50">
+                  Selecting above...
+                </StepContent>
+              </Step>
+            </Stepper>
+          ) : (
+            <Stepper
+              activeStep={activeStep}
+              orientation="vertical"
+              className="bg-white rounded-lg p-2 w-full"
+            >
+              <Step className="w-full">
+                <StepLabel className="flex items-center justify-between font-bold w-full">
+                  <span className="font-bold text-black">Region</span>{" "}
+                  <span className="ml-5">
+                    {
+                      divisions?.divisions?.find(
+                        (div) => div?.id == selectedLocation.Region
+                      )?.name
+                    }
+                  </span>
+                </StepLabel>
+                <StepContent className="text-opacity-50">
+                  Selecting bellow...
+                </StepContent>
+              </Step>
+              <Step className="w-full">
+                <StepLabel className="flex items-center justify-between font-bold w-full">
+                  <span className="font-bold">City</span>{" "}
+                  <span className="ml-5">
+                    {
+                      districts?.districts?.find(
+                        (dis) => dis?.id == selectedLocation.City
+                      )?.name
+                    }
+                  </span>
+                </StepLabel>
+                <StepContent className="text-opacity-50">
+                  Selecting bellow...
+                </StepContent>
+              </Step>
+              <Step className="w-full">
+                <StepLabel className="flex items-center justify-between font-bold w-full">
+                  <span className="font-bold">Area</span>{" "}
+                  <span className="ml-5">
+                    {
+                      postCodes?.postcodes?.find(
+                        (dis) => dis?.postCode == selectedLocation.Area
+                      )?.upazila
+                    }{" "}
+                    -{" "}
+                    {
+                      postCodes?.postcodes?.find(
+                        (dis) => dis?.postCode == selectedLocation.Area
+                      )?.postOffice
+                    }
+                  </span>
+                </StepLabel>
+                <StepContent className="text-opacity-50">
+                  Selecting bellow...
+                </StepContent>
+              </Step>
+              <Step className="w-full">
+                <StepLabel className="flex items-center justify-between font-bold w-full">
+                  <span className="font-bold">Address</span>{" "}
+                  <span className="ml-5">
+                    {selectedLocation?.Address?.address}
+                  </span>
+                </StepLabel>
+                <StepContent className="text-opacity-50">
+                  Selecting above...
+                </StepContent>
+              </Step>
+              <Step className="w-full">
+                <StepLabel className="flex items-center justify-between font-bold w-full">
+                  <span className="font-bold">Land Mark</span>{" "}
+                  <span className="ml-5">{selectedLocation?.LandMark}</span>
+                </StepLabel>
+                <StepContent className="text-opacity-50">
+                  Selecting bellow...
+                </StepContent>
+              </Step>
+            </Stepper>
+          )}
+        </Stepper>
 
-      <p className="my-2 font-bold">Select {selectedLocation.Region}</p>
-      <List className="bg-white rounded-lg p-2 w-full">
-        {activeStep === 0 ? (
-          divisions?.divisions?.map(({ id, name }) => {
-            return (
-              <ListItemButton
-                onClick={() => {
-                  setSelectedLocation((s) => {
-                    const newObj = { ...s };
-                    newObj.Region = id;
-                    return newObj;
-                  });
-                  setActiveStep(1);
-                }}
-                key={id}
-              >
-                {name}
-              </ListItemButton>
-            );
-          })
-        ) : activeStep === 1 ? (
-          districts?.districts?.map(({ division_id, name, id }) => {
-            if (division_id === selectedLocation?.Region) {
+        <p className="my-2 font-bold">
+          Select {Object?.keys(selectedLocation)[activeStep]}
+        </p>
+        <List className="bg-white rounded-lg p-2 w-full">
+          {activeStep === 0 ? (
+            divisions?.divisions?.map(({ id, name }) => {
               return (
                 <ListItemButton
                   onClick={() => {
                     setSelectedLocation((s) => {
                       const newObj = { ...s };
-                      newObj.City = id;
+                      newObj.Region = id;
                       return newObj;
                     });
-                    setActiveStep(2);
+                    setActiveStep(1);
                   }}
                   key={id}
                 >
                   {name}
                 </ListItemButton>
               );
-            }
-          })
-        ) : activeStep === 2 ? (
-          postCodes?.postcodes.map(
-            ({ division_id, district_id, upazila, postOffice, postCode }) => {
-              if (
-                division_id === selectedLocation?.Region &&
-                district_id === selectedLocation?.City
-              ) {
+            })
+          ) : activeStep === 1 ? (
+            districts?.districts?.map(({ division_id, name, id }) => {
+              if (division_id === selectedLocation?.Region) {
                 return (
                   <ListItemButton
                     onClick={() => {
                       setSelectedLocation((s) => {
                         const newObj = { ...s };
-                        newObj.Area = postCode;
+                        newObj.City = id;
                         return newObj;
                       });
-                      setActiveStep(3);
+                      setActiveStep(2);
                     }}
-                    key={postCode}
+                    key={id}
                   >
-                    {upazila} - {postOffice}
+                    {name}
                   </ListItemButton>
                 );
               }
-            }
-          )
-        ) : (
-          <PlacesAutoComplete setSelectedPlace={setSelectedPlace} />
-        )}
-        <ListItemButton></ListItemButton>
-      </List>
+            })
+          ) : activeStep === 2 ? (
+            postCodes?.postcodes.map(
+              ({ division_id, district_id, upazila, postOffice, postCode }) => {
+                if (
+                  division_id === selectedLocation?.Region &&
+                  district_id === selectedLocation?.City
+                ) {
+                  return (
+                    <ListItemButton
+                      onClick={() => {
+                        setSelectedLocation((s) => {
+                          const newObj = { ...s };
+                          newObj.Area = postCode;
+                          return newObj;
+                        });
+                        setActiveStep(3);
+                      }}
+                      key={postCode}
+                    >
+                      {upazila} - {postOffice}
+                    </ListItemButton>
+                  );
+                }
+              }
+            )
+          ) : activeStep === 3 ? (
+            <PlacesAutoComplete
+              setActiveStep={setActiveStep}
+              setSelectedPlace={setSelectedPlace}
+            />
+          ) : (
+            <TextField
+              size="small"
+              onChange={(e) => {
+                setSelectedLocation((s) => {
+                  const newObj = { ...s };
+                  newObj.LandMark = e.target.value;
+                  return newObj;
+                });
+              }}
+              placeholder="Eg : Near the Orchid Hotel"
+            />
+          )}
+          <ListItemButton></ListItemButton>
+        </List>
+      </div>
+      <Button
+        disabled={
+          !selectedLocation?.Address ||
+          !selectedLocation?.Area ||
+          !selectedLocation?.City ||
+          !selectedLocation?.LandMark ||
+          !selectedLocation?.Region
+        }
+        onClick={() => setEditing(false)}
+        fullWidth
+        className="bg-[steelblue] text-white font-bold normal-case sticky bottom-0"
+      >
+        Confirm
+      </Button>
     </div>
   );
 }
 
-function PlacesAutoComplete({ setSelectedPlace }) {
+function PlacesAutoComplete({ setSelectedPlace, setActiveStep }) {
   const [places, setPlaces] = useState(null);
   const [query, setQuery] = useState("");
 
@@ -497,13 +628,15 @@ function PlacesAutoComplete({ setSelectedPlace }) {
     <AutoSelect
       inputOnchange={(e) => setQuery(e.target.value)}
       globalLabel={"address"}
-      onChange={(event, newValue) =>
+      placeholder={"Search your address"}
+      onChange={(event, newValue) => {
         setSelectedPlace({
           lat: parseFloat(newValue?.latitude),
           lng: parseFloat(newValue?.longitude),
           address: newValue?.address,
-        })
-      }
+        });
+        setActiveStep(4);
+      }}
       size={"small"}
       options={places}
     />
