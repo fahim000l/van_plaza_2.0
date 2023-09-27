@@ -24,23 +24,19 @@ const AuthMenu = ({ anchorEl, setAnchorEl, open }) => {
         "aria-labelledby": "basic-button",
       }}
     >
-      <MenuItem onClick={() => setAnchorEl(null)}>
-        <ListItemIcon sx={{ mr: 2 }}>
-          <Avatar
-            alt={authUser?.userName}
-            src={`/uploads/images/users/${authUser?.profilePic}`}
-          />
-        </ListItemIcon>
-        Profile
-      </MenuItem>
+      <Link href={"/profile"}>
+        <MenuItem onClick={() => setAnchorEl(null)}>
+          <ListItemIcon sx={{ mr: 2 }}>
+            <Avatar alt={authUser?.userName} src={authUser?.profilePic} />
+          </ListItemIcon>
+          Profile
+        </MenuItem>
+      </Link>
       {authUser?.role === "admin" && (
         <Link href={"/dashboard/stock-in"}>
           <MenuItem onClick={() => setAnchorEl(null)}>
             <ListItemIcon sx={{ mr: 2 }}>
-              <Avatar
-                alt={authUser?.userName}
-                src={`/uploads/images/users/${authUser?.profilePic}`}
-              />
+              <Avatar alt={authUser?.userName} src={authUser?.profilePic} />
             </ListItemIcon>
             Dashboard
           </MenuItem>

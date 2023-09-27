@@ -4,7 +4,7 @@ import React, { useContext } from "react";
 import { Avatar, Chip, Divider, Button, IconButton } from "@mui/material";
 import useGetcartByUser from "@/hooks/useGetcartByUser";
 import CheckOutCard from "@/components/checkout/CheckOutCard";
-import { Edit } from "@mui/icons-material";
+import { Edit, ArrowRight } from "@mui/icons-material";
 import CheckOutFooter from "@/components/checkout/CheckOutFooter";
 
 const CheckOutPage = () => {
@@ -30,9 +30,9 @@ const CheckOutPage = () => {
           <div className="space-y-2 lg:p-5 p-2 rounded-box shadow-xl">
             <div className="flex justify-between items-center">
               <p className="mr-2 font-bold">Delever to :</p>{" "}
-              <IconButton className="bg-blue-200 text-blue-500">
+              {/* <IconButton className="bg-blue-200 text-blue-500">
                 <Edit />
-              </IconButton>
+              </IconButton> */}
             </div>
             <div className="flex items-center cursor-pointer">
               {" "}
@@ -44,20 +44,24 @@ const CheckOutPage = () => {
             <Divider />
             <div className="flex space-x-2 cursor-pointer">
               {" "}
-              <Chip size="small" color="info" label={"Home"} />{" "}
-              <span>217, SheikMujib road, agrabad Chittagong</span>
-            </div>
-            <Divider />
-            <div className="flex space-x-2 cursor-pointer">
-              {" "}
               <Chip size="small" color="info" label={"Email"} />{" "}
               <span>{authUser?.email}</span>
             </div>
             <Divider />
             <div className="flex space-x-2 cursor-pointer">
               {" "}
+              <Chip size="small" color="info" label={"Home"} />{" "}
+              <span className="flex justify-between w-full">
+                {authUser?.location?.[0]?.Address?.address} <ArrowRight />{" "}
+              </span>
+            </div>
+            <Divider />
+            <div className="flex space-x-2 cursor-pointer">
+              {" "}
               <Chip size="small" color="info" label={"Contact"} />{" "}
-              <span>01726834600</span>
+              <span className="flex justify-between w-full">
+                01726834600 <ArrowRight />
+              </span>
             </div>
           </div>
           {carts_user?.map((cart) => (
