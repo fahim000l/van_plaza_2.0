@@ -1,11 +1,10 @@
 import { connectMongo, client } from "@/database/config";
+import users from "@/database/models/users";
 import { hash } from "bcrypt";
 
 export default async function handler(req, res) {
-  connectMongo().catch((err) => res.json({ error: "Connection Failed...!" }));
   try {
-    await client.connect();
-    const userCollection = client.db("van_plaza").collection("users");
+    connectMongo().catch((err) => res.json({ error: "Connection Failed...!" }));
 
     if (req.method === "POST") {
       if (!req.body) {
@@ -14,7 +13,7 @@ export default async function handler(req, res) {
         const userInfo = req.body;
 
         const query = { email: userInfo?.email };
-        const isExist = await userCollection.findOne(query);
+        const isExist = await users.findOne(query);
         if (isExist) {
           return res.status(422).json({ message: "User already exists" });
         } else {
@@ -33,7 +32,7 @@ export default async function handler(req, res) {
               profilePic: userInfo?.profilePic,
             };
           }
-          const confirmation = await userCollection.insertOne(userData);
+          const confirmation = await users.create(userData);
           return res.status(200).json(confirmation);
         }
       }

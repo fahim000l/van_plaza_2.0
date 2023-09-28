@@ -3,6 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { client, connectMongo } from "@/database/config";
 import { compare } from "bcrypt";
+import users from "@/database/models/users";
 
 export default NextAuth({
   providers: [
@@ -14,10 +15,7 @@ export default NextAuth({
           res.json({ error: "Connection Failed...!" })
         );
 
-        await client.connect();
-        const usersCollection = client.db("van_plaza").collection("users");
-
-        const requiredUser = await usersCollection.findOne({
+        const requiredUser = await users.findOne({
           email: userProfile?.email,
         });
 
@@ -29,7 +27,7 @@ export default NextAuth({
             role: requiredUser?.role || "user",
           };
         } else {
-          const confirmation = await usersCollection.insertOne({
+          const confirmation = await users.create({
             email: userProfile?.email,
             userName: userProfile?.name,
             profilePic: userProfile?.picture,
@@ -49,15 +47,12 @@ export default NextAuth({
     CredentialsProvider({
       name: "Credentials",
       async authorize(credentials, req) {
-        connectMongo().catch((err) =>
-          res.json({ error: "Connection Failed...!" })
-        );
-
         try {
-          await client.connect();
-          const usersCollection = client.db("van_plaza").collection("users");
+          connectMongo().catch((err) =>
+            res.json({ error: "Connection Failed...!" })
+          );
 
-          const isExist = await usersCollection.findOne({
+          const isExist = await users.findOne({
             email: credentials.email,
           });
 

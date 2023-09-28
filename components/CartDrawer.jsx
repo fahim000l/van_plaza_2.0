@@ -41,9 +41,10 @@ export default function CartDrawer() {
     setState({ ...state, [anchor]: open });
   };
 
-  const { authUser } = React.useContext(AUTH_CONTEXT);
-
-  const { carts_user, carts_user_refetch } = useGetcartByUser(authUser?.email);
+  const {
+    authUser,
+    authUser: { carts },
+  } = React.useContext(AUTH_CONTEXT);
   const [deletingCart, setDeletingCart] = React.useState(null);
   const [isDeleteOpen, setDeleteOpen] = React.useState(false);
   const { cartsRefetch } = useGetCartsByQpId(deletingCart?.qps?.[0]?._id);
@@ -65,7 +66,7 @@ export default function CartDrawer() {
   };
 
   const calCulateSubTotalPrice = () => {
-    return carts_user?.reduce((total, newValue) => {
+    return carts?.reduce((total, newValue) => {
       return (
         total +
         parseFloat(newValue?.qps?.[0]?.sps?.[0].sellPrice) *
@@ -75,25 +76,25 @@ export default function CartDrawer() {
   };
 
   const calculateTotalProducts = () => {
-    return carts_user?.reduce((total, newValue) => {
+    return carts?.reduce((total, newValue) => {
       return total + parseInt(newValue?.quantity);
     }, 0);
   };
 
   React.useEffect(() => {
-    if (carts_user) {
-      if (carts_user?.length === 0) {
+    if (carts) {
+      if (carts?.length === 0) {
         toggleDrawer("right", false);
       }
     }
-  }, [carts_user]);
+  }, [carts]);
 
   return (
     <div>
       {["right"].map((anchor) => (
         <React.Fragment key={anchor}>
           <IconButton
-            disabled={carts_user?.length === 0}
+            disabled={carts?.length === 0}
             onClick={toggleDrawer(anchor, true)}
             className="text-white"
           >
@@ -112,12 +113,12 @@ export default function CartDrawer() {
               <Divider />
               <Card variant="outlined" sx={{ p: 0, marginTop: 2 }}>
                 <List sx={{ py: "var(--ListDivider-gap)" }}>
-                  {carts_user?.map((cart, i) => (
+                  {carts?.map((cart, i) => (
                     <CartCard
                       setDeleteOpen={setDeleteOpen}
                       setDeletingCart={setDeletingCart}
                       key={cart?._id}
-                      carts_user={carts_user}
+                      carts_user={carts}
                       cart={cart}
                       i={i}
                     />
@@ -148,7 +149,7 @@ export default function CartDrawer() {
                     variant="contained"
                     className="bg-[steelblue] text-white"
                   >
-                    Check Out ({carts_user?.length})
+                    Check Out ({carts?.length})
                   </Button>
                 </Link>
               </div>

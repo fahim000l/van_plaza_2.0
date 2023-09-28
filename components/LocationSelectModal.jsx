@@ -90,6 +90,7 @@ import { districts } from "@/bangladeshGeojson/bd-districts";
 import AutoSelect from "./common_auto-complete";
 import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
 import toast from "react-hot-toast";
+import { useRouter } from "next/router";
 
 const LocationSelectModal = () => {
   const { isLoaded } = useLoadScript({
@@ -126,6 +127,10 @@ function Map() {
   const [editing, setEditing] = useState(false);
   const { authUser } = useContext(AUTH_CONTEXT);
 
+  const authUserDefaultLocation = authUser?.locations?.find(
+    (loc) => loc?.def === true
+  );
+
   return (
     <div className="flex flex-col lg:flex-col-reverse">
       {editing ? (
@@ -148,8 +153,8 @@ function Map() {
                   }
                 : authUser?.location
                 ? {
-                    lat: authUser?.location?.[0]?.Address?.lat,
-                    lng: authUser?.location?.[0]?.Address?.lng,
+                    lat: authUserDefaultLocation?.Address?.lat,
+                    lng: authUserDefaultLocation?.Address?.lng,
                   }
                 : center
             }
@@ -163,10 +168,10 @@ function Map() {
                       lat: parseFloat(selectedPlace?.lat),
                       lng: parseFloat(selectedPlace?.lng),
                     }
-                  : authUser?.location
+                  : authUser?.locations
                   ? {
-                      lat: authUser?.location?.[0]?.Address?.lat,
-                      lng: authUser?.location?.[0]?.Address?.lng,
+                      lat: authUserDefaultLocation?.Address?.lat,
+                      lng: authUserDefaultLocation?.Address?.lng,
                     }
                   : center
               }
@@ -191,20 +196,21 @@ function Map() {
 
 function EditLocation({ setSelectedPlace, selectedPlace, setEditing }) {
   const { authUser } = useContext(AUTH_CONTEXT);
+  const { pathname } = useRouter();
   const [selectedLocation, setSelectedLocation] = useState({
     Region: "",
     City: "",
     Area: "",
     Address: "",
     LandMark: "",
-    def: true,
+    def: pathname === "/" && true,
   });
   const [activeStep, setActiveStep] = useState(0);
 
   const handleSetLocation = () => {
     console.log(selectedLocation);
 
-    fetch(`/api/store-user-location?email=${authUser?.email}`, {
+    fetch(`/api/store-user-default-location?email=${authUser?.email}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",

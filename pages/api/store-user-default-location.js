@@ -1,13 +1,11 @@
 import { client, connectMongo } from "@/database/config";
+import locations from "@/database/models/locations";
 
 export default async function (req, res) {
   try {
     await connectMongo().catch((err) =>
       res.json({ error: "Connection Failed...!" })
     );
-    await client.connect();
-
-    const usersCollection = client.db("van_plaza").collection("users");
 
     if (req.method === "PUT") {
       if (!req.query.email) {
@@ -16,17 +14,21 @@ export default async function (req, res) {
         if (!req.body) {
           return res.status(404).json({ error: "Invalid Body" });
         } else {
-          const findUser = { email: req.query.email };
+          const findLocation = { user: req.query.email, def: true };
           const option = { upsert: true };
 
           const updatingDoc = {
-            $push: {
-              location: req.body,
+            $set: {
+              Region: req.body?.Region,
+              City: req.body?.City,
+              Area: req.body?.Area,
+              Address: req.body?.Address,
+              LandMark: req.body?.LandMark,
             },
           };
 
-          const result = await usersCollection?.updateOne(
-            findUser,
+          const result = await locations.updateOne(
+            findLocation,
             updatingDoc,
             option
           );

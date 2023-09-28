@@ -175,10 +175,7 @@ const Header = ({ setMobileOpen, navItems }) => {
                 aria-expanded={open ? "true" : undefined}
                 onClick={(event) => setAnchorEl(event.currentTarget)}
               >
-                <Avatar
-                  alt={authUser?.userName}
-                  src={`/uploads/images/users/${authUser?.profilePic}`}
-                />
+                <Avatar alt={authUser?.userName} src={authUser?.profilePic} />
               </IconButton>
               <AuthMenu
                 anchorEl={anchorEl}

@@ -23,6 +23,7 @@ import useStoreUser from "@/hooks/useStoreUser";
 import Swal from "sweetalert2";
 import { useRouter } from "next/router";
 import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
+import useBase64 from "@/hooks/useBase64";
 
 const signup = () => {
   const { authLoader, setAuthLoader } = useContext(AUTH_CONTEXT);
@@ -30,8 +31,8 @@ const signup = () => {
   const [cPassShow, setCPassShow] = useState(false);
   const [storingUser, setStoringUser] = useState(null);
   const { dbConfirmation } = useStoreUser(storingUser);
-  const [uploadingImage, setUploadingImage] = useState("");
   const [uploadingFile, setUploadingFile] = useState(null);
+  const { convertedImg } = useBase64(uploadingFile);
   const hiddenInputRef = useRef();
   const { push } = useRouter();
 
@@ -45,21 +46,10 @@ const signup = () => {
 
   const handleSubmit = (values) => {
     setAuthLoader(true);
-    const formData = new FormData();
-    formData.append("upload", uploadingFile);
-    fetch("/api/store-user-image-file", {
-      method: "POST",
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((fileData) => {
-        console.log(fileData);
-        if (fileData.success) {
-          values["profilePic"] = fileData?.fileInfo?.newFilename || "";
-          console.log(values);
-          setStoringUser(values);
-        }
-      });
+    if (convertedImg) {
+      values["profilePic"] = convertedImg;
+    }
+    setStoringUser(values);
   };
 
   const Formik = useFormik({
@@ -176,7 +166,7 @@ const signup = () => {
           </div>
           <div className="lg:w-[50%] text-center">
             <Avatar
-              src={uploadingImage}
+              src={convertedImg}
               sx={{
                 width: 250,
                 height: 250,
@@ -189,7 +179,6 @@ const signup = () => {
             </Avatar>
             <input
               onChange={(event) => {
-                setUploadingImage(URL.createObjectURL(event.target.files[0]));
                 setUploadingFile(event.target.files[0]);
               }}
               className="hidden"

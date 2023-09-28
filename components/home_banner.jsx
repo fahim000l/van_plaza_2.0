@@ -10,7 +10,9 @@ const HomeBanner = () => {
   const locationSelectModal = useRef();
   const { authUser } = useContext(AUTH_CONTEXT);
 
-  const authUserLocation = authUser?.location?.[0]?.Address?.address;
+  const authUserDefaultLocation = authUser?.locations?.find(
+    (loc) => loc?.def == true
+  );
 
   return (
     <Box
@@ -79,7 +81,9 @@ const HomeBanner = () => {
         className="hover:bg-white bg-white hover:text-black text-black w-[95%] lg:w-[80%] mx-auto normal-case font-bold text-xs"
         startIcon={<LocationOn className="text-[steelblue]" />}
       >
-        | {authUserLocation?.split(",")[0] || "Select Your Location"}
+        |{" "}
+        {authUserDefaultLocation?.Address?.address.split(",")[0] ||
+          "Select Your Location"}
       </Button>
       <LocationSelectModal />
     </Box>

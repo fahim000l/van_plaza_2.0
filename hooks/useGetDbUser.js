@@ -16,6 +16,7 @@ const useGetDbUser = (userEmail) => {
 
       return null;
     },
+    refetchInterval: 500,
   });
 
   return { dbUser, dbUserRefetch, dbUserLoading };
