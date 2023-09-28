@@ -32,7 +32,7 @@ const AddressBook = () => {
           Add new Location
         </Button>
       </div>
-      <div className="flex space-x-2 items-start">
+      <div className="flex flex-col lg:flex-row space-x-2 items-start">
         {locations?.map((location) => (
           <LocationCard
             setSelectedAssressBook={setSelectedAssressBook}
