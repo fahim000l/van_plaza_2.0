@@ -92,24 +92,33 @@ import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 
-const LocationSelectModal = () => {
+const LocationSelectModal = ({
+  selectedAddressBook,
+  setSelectedAssressBook,
+}) => {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY,
     libraries: ["places"],
   });
 
-  console.log(process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY);
-
   return (
     <div>
       <input
+        onClick={() => setSelectedAssressBook(null)}
         type="checkbox"
         id="locationSelectModal"
         className="modal-toggle"
       />
       <div className="modal modal-bottom">
         <div className="modal-box p-0">
-          {!isLoaded ? <p>Loading...</p> : <Map />}
+          {!isLoaded ? (
+            <p>Loading...</p>
+          ) : (
+            <Map
+              selectedAddressBook={selectedAddressBook}
+              setSelectedAssressBook={setSelectedAssressBook}
+            />
+          )}
         </div>
         <label className="modal-backdrop" htmlFor="locationSelectModal">
           Close
@@ -121,7 +130,7 @@ const LocationSelectModal = () => {
 
 export default LocationSelectModal;
 
-function Map() {
+function Map({ selectedAddressBook, setSelectedAssressBook }) {
   const center = useMemo(() => ({ lat: 44, lng: -80 }), []);
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [editing, setEditing] = useState(false);
@@ -136,9 +145,11 @@ function Map() {
       {editing ? (
         <div>
           <EditLocation
+            selectedAddressBook={selectedAddressBook}
             setEditing={setEditing}
             selectedPlace={selectedPlace}
             setSelectedPlace={setSelectedPlace}
+            setSelectedAssressBook={setSelectedAssressBook}
           />
         </div>
       ) : (
@@ -151,7 +162,12 @@ function Map() {
                     lat: parseFloat(selectedPlace?.lat),
                     lng: parseFloat(selectedPlace?.lng),
                   }
-                : authUser?.location
+                : selectedAddressBook
+                ? {
+                    lat: selectedAddressBook?.Address?.lat,
+                    lng: selectedAddressBook?.Address?.lng,
+                  }
+                : authUser?.locations
                 ? {
                     lat: authUserDefaultLocation?.Address?.lat,
                     lng: authUserDefaultLocation?.Address?.lng,
@@ -167,6 +183,11 @@ function Map() {
                   ? {
                       lat: parseFloat(selectedPlace?.lat),
                       lng: parseFloat(selectedPlace?.lng),
+                    }
+                  : selectedAddressBook
+                  ? {
+                      lat: selectedAddressBook?.Address?.lat,
+                      lng: selectedAddressBook?.Address?.lng,
                     }
                   : authUser?.locations
                   ? {
@@ -185,7 +206,7 @@ function Map() {
               fullWidth
               className="bg-white text-black hover:bg-white"
             >
-              Chane Location
+              {selectedAddressBook ? "Chane Location" : "Add New Location"}
             </Button>
           </div>
         </>
@@ -194,37 +215,79 @@ function Map() {
   );
 }
 
-function EditLocation({ setSelectedPlace, selectedPlace, setEditing }) {
+function EditLocation({
+  setSelectedPlace,
+  selectedPlace,
+  setEditing,
+  selectedAddressBook,
+  setSelectedAssressBook,
+}) {
   const { authUser } = useContext(AUTH_CONTEXT);
   const { pathname } = useRouter();
+  console.log(pathname);
   const [selectedLocation, setSelectedLocation] = useState({
     Region: "",
     City: "",
     Area: "",
     Address: "",
     LandMark: "",
-    def: pathname === "/" && true,
+    def: pathname === "/" ? true : false,
   });
   const [activeStep, setActiveStep] = useState(0);
 
   const handleSetLocation = () => {
     console.log(selectedLocation);
 
-    fetch(`/api/store-user-default-location?email=${authUser?.email}`, {
-      method: "PUT",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(selectedLocation),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        if (data?.success) {
-          toast.success("Location set successfully");
-          setEditing(false);
-        }
-      });
+    if (pathname === "/") {
+      fetch(`/api/store-user-default-location?email=${authUser?.email}`, {
+        method: "PUT",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(selectedLocation),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          if (data?.success) {
+            toast.success("Location set successfully");
+            setEditing(false);
+          }
+        });
+    } else if (selectedAddressBook) {
+      fetch(`/api/edit-location?locationId=${selectedAddressBook?._id}`, {
+        method: "PUT",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(selectedLocation),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          if (data?.success) {
+            toast.success("Location set successfully");
+            setEditing(false);
+            setSelectedAssressBook(null);
+          }
+        });
+    } else {
+      fetch(`/api/store-location?user=${authUser?.email}`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(selectedLocation),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          if (data?.success) {
+            toast.success("Location set successfully");
+            setEditing(false);
+          }
+        });
+    }
   };
 
   useEffect(() => {

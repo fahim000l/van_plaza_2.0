@@ -6,7 +6,7 @@ const PersonalProfile = () => {
   const { authUser } = useContext(AUTH_CONTEXT);
 
   return (
-    <div className="grid card bg-[steelblue] text-white rounded-box p-5">
+    <div className="grid card bg-[steelblue] text-white rounded-box p-5 my-2">
       <p className="font-bold mb-5">Personal Profile</p>
       <div className="flex space-x-2 items-start">
         <Avatar
