@@ -17,7 +17,7 @@ const LocationCard = ({ location, setSelectedAssressBook }) => {
   const locationSelectModalLabel = useRef();
 
   return (
-    <div className="card w-96 bg-base-100 shadow-xl">
+    <div className="card lg:w-96 h-auto bg-base-100 shadow-xl my-2 lg:my-0">
       <label
         // onClick={() => setSelectedAssressBook(location)}
         ref={locationSelectModalLabel}
@@ -35,7 +35,7 @@ const LocationCard = ({ location, setSelectedAssressBook }) => {
       >
         <div className="flex items-start">
           <LocationOn sx={{ color: "steelblue" }} />
-          <div>
+          <div className="text-xs lg:text-sm">
             <h2 className="font-bold text-[steelblue]">{address}</h2>
 
             {def === true && (
