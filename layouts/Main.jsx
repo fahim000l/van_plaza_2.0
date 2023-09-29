@@ -129,8 +129,8 @@ function Main({ window, children }) {
       <div className="w-full place-items-center h-[100vh]">
         <Toolbar />
         {children}
-        <BottomNav />
       </div>
+      <BottomNav />
     </Box>
   );
 }
