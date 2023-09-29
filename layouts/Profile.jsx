@@ -10,7 +10,7 @@ const Profile = ({ children }) => {
         <input id="profileDrawer" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content">
           {/* Page content here */}
-          <div className="lg:p-10 p-2">{children}</div>
+          <div className="lg:p-10 p-2 h-[100vh]">{children}</div>
           <BottomNav />
         </div>
         <div className="drawer-side">

@@ -104,7 +104,13 @@ const LocationSelectModal = ({
   return (
     <div>
       <input
-        onClick={() => setSelectedAssressBook(null)}
+        onClick={() => {
+          if (selectedAddressBook) {
+            setSelectedAssressBook(null);
+          } else {
+            console.log("Not Selected");
+          }
+        }}
         type="checkbox"
         id="locationSelectModal"
         className="modal-toggle"
@@ -135,6 +141,7 @@ function Map({ selectedAddressBook, setSelectedAssressBook }) {
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [editing, setEditing] = useState(false);
   const { authUser } = useContext(AUTH_CONTEXT);
+  const { pathname } = useRouter();
 
   const authUserDefaultLocation = authUser?.locations?.find(
     (loc) => loc?.def === true
@@ -167,7 +174,7 @@ function Map({ selectedAddressBook, setSelectedAssressBook }) {
                     lat: selectedAddressBook?.Address?.lat,
                     lng: selectedAddressBook?.Address?.lng,
                   }
-                : authUser?.locations
+                : authUser?.locations?.length > 0
                 ? {
                     lat: authUserDefaultLocation?.Address?.lat,
                     lng: authUserDefaultLocation?.Address?.lng,
@@ -189,7 +196,7 @@ function Map({ selectedAddressBook, setSelectedAssressBook }) {
                       lat: selectedAddressBook?.Address?.lat,
                       lng: selectedAddressBook?.Address?.lng,
                     }
-                  : authUser?.locations
+                  : authUser?.locations?.length > 0
                   ? {
                       lat: authUserDefaultLocation?.Address?.lat,
                       lng: authUserDefaultLocation?.Address?.lng,
@@ -206,7 +213,13 @@ function Map({ selectedAddressBook, setSelectedAssressBook }) {
               fullWidth
               className="bg-white text-black hover:bg-white"
             >
-              {selectedAddressBook ? "Chane Location" : "Add New Location"}
+              {pathname === "/"
+                ? authUser?.locations?.length === 0
+                  ? "Set a Default Delevery Location"
+                  : "Change Your Default Delevery Location"
+                : selectedAddressBook
+                ? "Chane Location"
+                : "Add New Location"}
             </Button>
           </div>
         </>

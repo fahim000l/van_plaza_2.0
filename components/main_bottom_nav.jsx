@@ -19,7 +19,10 @@ const BottomNav = () => {
   const { push, pathname } = useRouter();
 
   return (
-    <div className="sticky bottom-0 lg:hidden">
+    <div
+      // className="btm-nav"
+      className="sticky bottom-0 lg:hidden"
+    >
       <Divider />
       <BottomNavigation
         showLabels

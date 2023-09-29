@@ -126,11 +126,11 @@ function Main({ window, children }) {
           </Box>
         </Drawer>
       </nav>
-      <div className="w-full place-items-center">
+      <div className="w-full place-items-center h-[100vh]">
         <Toolbar />
         {children}
+        <BottomNav />
       </div>
-      <BottomNav />
     </Box>
   );
 }
