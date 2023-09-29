@@ -4,7 +4,9 @@ import LocationCard from "./LocationCard";
 import LocationSelectModal from "../LocationSelectModal";
 import { Button } from "@mui/material";
 import toast from "react-hot-toast";
+import { AddLocation } from "@mui/icons-material";
 import DeleteConfirmationDialog from "../common_dlt_confirmation-dialog";
+import { IconButton } from "@mui/joy";
 
 const AddressBook = () => {
   const { authUser } = useContext(AUTH_CONTEXT);
@@ -42,11 +44,19 @@ const AddressBook = () => {
           locationSelectModal
         </label>
         <p className="font-bold text-white">Address Book</p>
+        <IconButton
+          onClick={() => locationSelectLabel.current.click()}
+          size="sm"
+          className="lg:hidden bg-white text-[steelblue]"
+        >
+          <AddLocation />
+        </IconButton>
         <Button
           size="small"
+          startIcon={<AddLocation />}
           disabled={locations?.length === 3}
           onClick={() => locationSelectLabel.current.click()}
-          className="hover:bg-white bg-white text-[steelblue] hover:text-[steelblue]"
+          className="hover:bg-white bg-white text-[steelblue] hidden lg:flex hover:text-[steelblue]"
         >
           Add new Location
         </Button>

@@ -42,7 +42,6 @@ export default function CartDrawer() {
   };
 
   const {
-    authUser,
     authUser: { carts },
   } = React.useContext(AUTH_CONTEXT);
   const [deletingCart, setDeletingCart] = React.useState(null);
@@ -57,8 +56,8 @@ export default function CartDrawer() {
       .then((data) => {
         console.log(data);
         if (data?.success) {
-          carts_user_refetch();
           cartsRefetch();
+          setDeleteOpen(false);
           toast.success("Cart Removed Successfully");
           setDeleteOpen(false);
         }
@@ -108,9 +107,8 @@ export default function CartDrawer() {
             onClose={toggleDrawer(anchor, false)}
             className="w-full"
           >
-            <div className="grid card bg-base-300 rounded-box place-items-center lg:p-5 lg:m-5 p-2">
+            <div className="grid card bg-base-300 rounded-box lg:p-5 lg:m-5 p-2 h-full">
               {" "}
-              <Divider />
               <Card variant="outlined" sx={{ p: 0, marginTop: 2 }}>
                 <List sx={{ py: "var(--ListDivider-gap)" }}>
                   {carts?.map((cart, i) => (
