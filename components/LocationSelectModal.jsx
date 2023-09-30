@@ -83,7 +83,12 @@ export default function LocationSelectModal({
               "Select Your Location"}
           </Button>
           <Drawer
-            sx={{ width: "100%" }}
+            sx={{
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                height: "100vh",
+              },
+            }}
             anchor={anchor}
             open={state[anchor]}
             onClose={toggleDrawer(anchor, false)}
