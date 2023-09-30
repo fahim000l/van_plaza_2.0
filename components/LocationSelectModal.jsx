@@ -97,6 +97,8 @@ export default function LocationSelectModal({
               <p>Loading...</p>
             ) : (
               <Map
+                toggleDrawer={toggleDrawer}
+                anchor={anchor}
                 selectedAddressBook={selectedAddressBook}
                 setSelectedAssressBook={setSelectedAssressBook}
               />
@@ -152,7 +154,12 @@ export default function LocationSelectModal({
 
 // export default LocationSelectModal;
 
-function Map({ selectedAddressBook, setSelectedAssressBook }) {
+function Map({
+  selectedAddressBook,
+  setSelectedAssressBook,
+  toggleDrawer,
+  anchor,
+}) {
   const center = useMemo(() => ({ lat: 44, lng: -80 }), []);
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [editing, setEditing] = useState(false);
@@ -168,6 +175,8 @@ function Map({ selectedAddressBook, setSelectedAssressBook }) {
       {editing ? (
         <div>
           <EditLocation
+            toggleDrawer={toggleDrawer}
+            anchor={anchor}
             selectedAddressBook={selectedAddressBook}
             setEditing={setEditing}
             selectedPlace={selectedPlace}
@@ -197,7 +206,7 @@ function Map({ selectedAddressBook, setSelectedAssressBook }) {
                   }
                 : center
             }
-            mapContainerClassName="w-full h-[50vh]"
+            mapContainerClassName="w-full h-[100vh]"
           >
             <Marker
               icon={<LocationOn />}
@@ -221,7 +230,7 @@ function Map({ selectedAddressBook, setSelectedAssressBook }) {
               }
             />
           </GoogleMap>
-          <div className="w-full">
+          <div className="w-full sticky bottom-0">
             <Button
               onClick={() => setEditing(true)}
               startIcon={<EditLocationAlt />}
@@ -237,6 +246,13 @@ function Map({ selectedAddressBook, setSelectedAssressBook }) {
                 ? "Chane Location"
                 : "Add New Location"}
             </Button>
+            <Button
+              onClick={toggleDrawer(anchor, false)}
+              fullWidth
+              className="bg-red-500 hover:bg-red-500 text-white hover:text-white"
+            >
+              Cancel
+            </Button>
           </div>
         </>
       )}
@@ -250,6 +266,8 @@ function EditLocation({
   setEditing,
   selectedAddressBook,
   setSelectedAssressBook,
+  toggleDrawer,
+  anchor,
 }) {
   const { authUser } = useContext(AUTH_CONTEXT);
   const { pathname } = useRouter();
@@ -688,20 +706,29 @@ function EditLocation({
           <ListItemButton></ListItemButton>
         </List>
       </div>
-      <Button
-        disabled={
-          !selectedLocation?.Address ||
-          !selectedLocation?.Area ||
-          !selectedLocation?.City ||
-          !selectedLocation?.LandMark ||
-          !selectedLocation?.Region
-        }
-        onClick={handleSetLocation}
-        fullWidth
-        className="bg-[steelblue] text-white font-bold normal-case sticky bottom-0"
-      >
-        Confirm
-      </Button>
+      <div className="sticky bottom-0">
+        <Button
+          disabled={
+            !selectedLocation?.Address ||
+            !selectedLocation?.Area ||
+            !selectedLocation?.City ||
+            !selectedLocation?.LandMark ||
+            !selectedLocation?.Region
+          }
+          onClick={handleSetLocation}
+          fullWidth
+          className="bg-[steelblue] text-white font-bold normal-case"
+        >
+          Confirm
+        </Button>
+        <Button
+          onClick={toggleDrawer(anchor, false)}
+          fullWidth
+          className="bg-red-500 hover:bg-red-500 text-white hover:text-white"
+        >
+          Cancel
+        </Button>
+      </div>
     </div>
   );
 }
