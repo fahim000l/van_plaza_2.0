@@ -1,68 +1,11 @@
-// import React, { useEffect, useRef, useState } from "react";
-// import * as maptilersdk from "@maptiler/sdk";
-// import { Country, State, City, ICity } from "country-state-city";
-// import { divisions } from "@/bangladesh-geojson/bd-divisions";
-// import { districts } from "@/bangladesh-geojson/bd-districts";
-// import { upoZilas } from "@/bangladesh-geojson/bd-upazilas";
-// import { postCodes } from "@/bangladesh-geojson/bd-postcodes";
-// import AutoSelect from "./common_auto-complete";
-
-// const LocationSelectModal = () => {
-//   console.log(divisions);
-//   console.log(districts?.districts?.filter((dis) => dis?.division_id === "2"));
-//   console.log(upoZilas?.upazilas?.filter((upo) => upo?.district_id === "43"));
-//   console.log(
-//     postCodes?.postcodes?.filter((post) => post?.upazila === "Chittagong Sadar")
-//   );
-
-//   const [places, setPlaces] = useState(null);
-//   const [query, setQuery] = useState("");
-
-//   useEffect(() => {
-//     if (query) {
-//       fetch(
-//         `https://barikoi.xyz/v1/api/search/verify/autocomplete/bkoi_b98a765d5bf3797e9d766f55da7ff932774f2886d7059c6b889be5aa2e547b12/place?q=House%${query}`
-//       )
-//         .then((res) => res.json())
-//         .then((data) => {
-//           console.log(data);
-//           setPlaces(data?.places);
-//         });
-//     } else {
-//       setPlaces(null);
-//     }
-//   }, [query]);
-
-//   return (
-//     <div>
-//       <input
-//         type="checkbox"
-//         id="locationSelectModal"
-//         className="modal-toggle"
-//       />
-//       <div className="modal modal-bottom">
-//         <div className="modal-box p-0">
-//           <input
-//             onChange={(e) => setQuery(e.target.value)}
-//             type="text"
-//             className="input input-border"
-//           />
-//           <div>
-//             {places?.map((place) => (
-//               <p>{place?.address}</p>
-//             ))}
-//           </div>
-//         </div>
-//         <label className="modal-backdrop" htmlFor="locationSelectModal">
-//           Close
-//         </label>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default LocationSelectModal;
-
+// import * as React from "react";
+import Box from "@mui/material/Box";
+import Drawer from "@mui/material/Drawer";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import MailIcon from "@mui/icons-material/Mail";
 import {
   Combobox,
   ComboboxInput,
@@ -92,49 +35,117 @@ import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 
-const LocationSelectModal = ({
+export default function LocationSelectModal({
   selectedAddressBook,
   setSelectedAssressBook,
-}) => {
+}) {
+  const [state, setState] = React.useState({
+    top: false,
+    left: false,
+    bottom: false,
+    right: false,
+  });
+
+  const toggleDrawer = (anchor, open) => (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+
+    setState({ ...state, [anchor]: open });
+  };
+
+  const { authUser } = React.useContext(AUTH_CONTEXT);
+
+  const authUserDefaultLocation = authUser?.locations?.find(
+    (loc) => loc?.def == true
+  );
+
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY,
     libraries: ["places"],
   });
 
   return (
-    <div>
-      <input
-        onClick={() => {
-          if (selectedAddressBook) {
-            setSelectedAssressBook(null);
-          } else {
-            console.log("Not Selected");
-          }
-        }}
-        type="checkbox"
-        id="locationSelectModal"
-        className="modal-toggle"
-      />
-      <div className="modal modal-bottom">
-        <div className="modal-box p-0">
-          {!isLoaded ? (
-            <p>Loading...</p>
-          ) : (
-            <Map
-              selectedAddressBook={selectedAddressBook}
-              setSelectedAssressBook={setSelectedAssressBook}
-            />
-          )}
-        </div>
-        <label className="modal-backdrop" htmlFor="locationSelectModal">
-          Close
-        </label>
-      </div>
+    <div className="w-[95%] lg:w-[80%]">
+      {["bottom"].map((anchor) => (
+        <React.Fragment key={anchor}>
+          <Button
+            fullWidth
+            onClick={toggleDrawer(anchor, true)}
+            className="hover:bg-white bg-white hover:text-black text-black mx-auto normal-case font-bold text-xs"
+            startIcon={<LocationOn className="text-[steelblue]" />}
+          >
+            |{" "}
+            {authUserDefaultLocation?.Address?.address.split(",")[0] ||
+              "Select Your Location"}
+          </Button>
+          <Drawer
+            sx={{ width: "100%" }}
+            anchor={anchor}
+            open={state[anchor]}
+            onClose={toggleDrawer(anchor, false)}
+          >
+            {!isLoaded ? (
+              <p>Loading...</p>
+            ) : (
+              <Map
+                selectedAddressBook={selectedAddressBook}
+                setSelectedAssressBook={setSelectedAssressBook}
+              />
+            )}
+          </Drawer>
+        </React.Fragment>
+      ))}
     </div>
   );
-};
+}
 
-export default LocationSelectModal;
+// const LocationSelectModal = ({
+//   selectedAddressBook,
+//   setSelectedAssressBook,
+// }) => {
+//   const { isLoaded } = useLoadScript({
+//     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY,
+//     libraries: ["places"],
+//   });
+
+//   return (
+//     <div>
+//       <input
+//         onClick={() => {
+//           if (selectedAddressBook) {
+//             setSelectedAssressBook(null);
+//           } else {
+//             console.log("Not Selected");
+//           }
+//         }}
+//         type="checkbox"
+//         id="locationSelectModal"
+//         className="modal-toggle"
+//       />
+//       <div className="modal modal-bottom h-[100vh]">
+//         <div className="modal-box p-0">
+//           {!isLoaded ? (
+//             <p>Loading...</p>
+//           ) : (
+//             <Map
+//               selectedAddressBook={selectedAddressBook}
+//               setSelectedAssressBook={setSelectedAssressBook}
+//             />
+//           )}
+//         </div>
+//         <label className="modal-backdrop" htmlFor="locationSelectModal">
+//           Close
+//         </label>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default LocationSelectModal;
 
 function Map({ selectedAddressBook, setSelectedAssressBook }) {
   const center = useMemo(() => ({ lat: 44, lng: -80 }), []);
@@ -216,7 +227,7 @@ function Map({ selectedAddressBook, setSelectedAssressBook }) {
               {pathname === "/"
                 ? authUser?.locations?.length === 0
                   ? "Set a Default Delevery Location"
-                  : "Change Your Default Delevery Location"
+                  : "Change Default Location"
                 : selectedAddressBook
                 ? "Chane Location"
                 : "Add New Location"}

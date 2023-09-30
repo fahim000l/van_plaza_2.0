@@ -76,7 +76,7 @@ const HomeBanner = () => {
       >
         Location Select Modal
       </label>
-      <Button
+      {/* <Button
         onClick={() => locationSelectModal.current.click()}
         className="hover:bg-white bg-white hover:text-black text-black w-[95%] lg:w-[80%] mx-auto normal-case font-bold text-xs"
         startIcon={<LocationOn className="text-[steelblue]" />}
@@ -84,7 +84,7 @@ const HomeBanner = () => {
         |{" "}
         {authUserDefaultLocation?.Address?.address.split(",")[0] ||
           "Select Your Location"}
-      </Button>
+      </Button> */}
       <LocationSelectModal />
     </Box>
   );
