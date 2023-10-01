@@ -13,6 +13,9 @@ const usersSchema = new Schema(
     profilePic: {
       type: String,
     },
+    phone: {
+      type: String,
+    },
     role: {
       type: String,
     },

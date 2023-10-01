@@ -14,6 +14,24 @@ const HomeBanner = () => {
     (loc) => loc?.def == true
   );
 
+  const [state, setState] = React.useState({
+    top: false,
+    left: false,
+    bottom: false,
+    right: false,
+  });
+
+  const toggleDrawer = (anchor, open) => (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+
+    setState({ ...state, [anchor]: open });
+  };
+
   return (
     <Box
       sx={{
@@ -85,7 +103,22 @@ const HomeBanner = () => {
         {authUserDefaultLocation?.Address?.address.split(",")[0] ||
           "Select Your Location"}
       </Button> */}
-      <LocationSelectModal />
+      <LocationSelectModal
+        state={state}
+        toggleDrawer={toggleDrawer}
+        content={
+          <Button
+            fullWidth
+            onClick={toggleDrawer("bottom", true)}
+            className="hover:bg-white bg-white hover:text-black text-black mx-auto normal-case font-bold text-xs"
+            startIcon={<LocationOn className="text-[steelblue]" />}
+          >
+            |{" "}
+            {authUserDefaultLocation?.Address?.address.split(",")[0] ||
+              "Select Your Location"}
+          </Button>
+        }
+      />
     </Box>
   );
 };

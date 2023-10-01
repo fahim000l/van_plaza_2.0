@@ -37,6 +37,24 @@ const AddressBook = () => {
       });
   };
 
+  const [state, setState] = React.useState({
+    top: false,
+    left: false,
+    bottom: false,
+    right: false,
+  });
+
+  const toggleDrawer = (anchor, open) => (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+
+    setState({ ...state, [anchor]: open });
+  };
+
   return (
     <div className="grid card bg-[steelblue] rounded-box p-5 my-2">
       <div className="flex justify-between mb-5">
@@ -44,22 +62,30 @@ const AddressBook = () => {
           locationSelectModal
         </label>
         <p className="font-bold text-white">Address Book</p>
-        <IconButton
-          onClick={() => locationSelectLabel.current.click()}
-          size="sm"
-          className="lg:hidden bg-white text-[steelblue]"
-        >
-          <AddLocation />
-        </IconButton>
-        <Button
-          size="small"
-          startIcon={<AddLocation />}
-          disabled={locations?.length === 3}
-          onClick={() => locationSelectLabel.current.click()}
-          className="hover:bg-white bg-white text-[steelblue] hidden lg:flex hover:text-[steelblue]"
-        >
-          Add new Location
-        </Button>
+        <LocationSelectModal
+          state={state}
+          toggleDrawer={toggleDrawer}
+          content={
+            <div className="w-full flex items-end justify-end">
+              <IconButton
+                onClick={toggleDrawer("bottom", true)}
+                size="sm"
+                className="lg:hidden bg-white text-[steelblue]"
+              >
+                <AddLocation />
+              </IconButton>
+              <Button
+                size="small"
+                startIcon={<AddLocation />}
+                disabled={locations?.length === 3}
+                onClick={toggleDrawer("bottom", true)}
+                className="hover:bg-white bg-white text-[steelblue] hidden lg:flex hover:text-[steelblue]"
+              >
+                Add new Location
+              </Button>
+            </div>
+          }
+        />
       </div>
       <div className="grid lg:grid-cols-3 grid-cols-1 gap-2">
         {locations?.map((location) => (
@@ -72,10 +98,6 @@ const AddressBook = () => {
           />
         ))}
       </div>
-      <LocationSelectModal
-        setSelectedAssressBook={setSelectedAssressBook}
-        selectedAddressBook={selectedAddressBook}
-      />
       <DeleteConfirmationDialog
         actionFunction={handleDeleteLocation}
         confirmMessage={"Are you sure to delete this location ?"}

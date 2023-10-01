@@ -11,6 +11,8 @@ const CheckOutPage = () => {
   const { authUser } = useContext(AUTH_CONTEXT);
   const { carts_user } = useGetcartByUser(authUser?.email);
 
+  const defaultLocation = authUser?.locations?.find((loc) => loc?.def === true);
+
   const calculateItemsTotal = () => {
     return carts_user?.reduce((total, newValue) => {
       return (
@@ -52,7 +54,7 @@ const CheckOutPage = () => {
               {" "}
               <Chip size="small" color="info" label={"Home"} />{" "}
               <span className="flex justify-between w-full">
-                {authUser?.location?.[0]?.Address?.address} <ArrowRight />{" "}
+                {defaultLocation?.Address?.address} <ArrowRight />{" "}
               </span>
             </div>
             <Divider />

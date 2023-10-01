@@ -6,6 +6,7 @@ import { postCodes } from "@/bangladeshGeojson/bd-postcodes";
 import { IconButton } from "@mui/material";
 import { Button } from "@mui/joy";
 import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
+import LocationSelectModal from "../LocationSelectModal";
 
 const LocationCard = ({
   location,
@@ -38,6 +39,24 @@ const LocationCard = ({
       });
   };
 
+  const [state, setState] = React.useState({
+    top: false,
+    left: false,
+    bottom: false,
+    right: false,
+  });
+
+  const toggleDrawer = (anchor, open) => (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+
+    setState({ ...state, [anchor]: open });
+  };
+
   return (
     <div className="card h-auto bg-base-100 shadow-xl my-2 lg:my-0">
       <label
@@ -51,37 +70,56 @@ const LocationCard = ({
       <div className="card-body p-2 cursor-pointer">
         <div className="flex items-start">
           <LocationOn sx={{ color: "steelblue" }} />
-          <div
-            onClick={() => {
-              locationSelectModalLabel.current.click();
-              setSelectedAssressBook(location);
-            }}
-            className="text-xs lg:text-sm"
-          >
-            <h2 className="font-bold text-[steelblue]">{address}</h2>
+          <LocationSelectModal
+            selectedAddressBook={location}
+            state={state}
+            toggleDrawer={toggleDrawer}
+            content={
+              <div
+                // onClick={() => {
+                //   // locationSelectModalLabel.current.click();
+                //   // setSelectedAssressBook(location);
+                //   toggleDrawer("bottom", true);
+                // }}
+                onClick={toggleDrawer("bottom", true)}
+                className="text-xs lg:text-sm"
+              >
+                <h2 className="font-bold text-[steelblue]">{address}</h2>
 
-            {def === true && (
-              <span className="text-center font-bold text-green-500">
-                || Default Delevery Location
-              </span>
-            )}
-            <div>
-              <div className="space-x-2">
-                {divisions?.divisions?.find((div) => div?.id === Region)?.name}{" "}
-                -{districts?.districts?.find((dis) => dis?.id === City)?.name} -
-                {
-                  postCodes?.postcodes?.find((post) => post?.postCode === Area)
-                    ?.upazila
-                }
-                -
-                {
-                  postCodes?.postcodes?.find((post) => post?.postCode === Area)
-                    ?.postOffice
-                }
-                -{LandMark}
+                {def === true && (
+                  <span className="text-center font-bold text-green-500">
+                    || Default Delevery Location
+                  </span>
+                )}
+                <div>
+                  <div className="space-x-2">
+                    {
+                      divisions?.divisions?.find((div) => div?.id === Region)
+                        ?.name
+                    }{" "}
+                    -
+                    {
+                      districts?.districts?.find((dis) => dis?.id === City)
+                        ?.name
+                    }{" "}
+                    -
+                    {
+                      postCodes?.postcodes?.find(
+                        (post) => post?.postCode === Area
+                      )?.upazila
+                    }
+                    -
+                    {
+                      postCodes?.postcodes?.find(
+                        (post) => post?.postCode === Area
+                      )?.postOffice
+                    }
+                    -{LandMark}
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+            }
+          />
 
           <div>
             <IconButton

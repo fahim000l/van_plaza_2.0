@@ -34,29 +34,15 @@ import AutoSelect from "./common_auto-complete";
 import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
+import usePlacesAutocomplete from "use-places-autocomplete";
 
 export default function LocationSelectModal({
   selectedAddressBook,
   setSelectedAssressBook,
+  content,
+  state,
+  toggleDrawer,
 }) {
-  const [state, setState] = React.useState({
-    top: false,
-    left: false,
-    bottom: false,
-    right: false,
-  });
-
-  const toggleDrawer = (anchor, open) => (event) => {
-    if (
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
-
-    setState({ ...state, [anchor]: open });
-  };
-
   const { authUser } = React.useContext(AUTH_CONTEXT);
 
   const authUserDefaultLocation = authUser?.locations?.find(
@@ -72,16 +58,7 @@ export default function LocationSelectModal({
     <div className="w-[95%] lg:w-[80%]">
       {["bottom"].map((anchor) => (
         <React.Fragment key={anchor}>
-          <Button
-            fullWidth
-            onClick={toggleDrawer(anchor, true)}
-            className="hover:bg-white bg-white hover:text-black text-black mx-auto normal-case font-bold text-xs"
-            startIcon={<LocationOn className="text-[steelblue]" />}
-          >
-            |{" "}
-            {authUserDefaultLocation?.Address?.address.split(",")[0] ||
-              "Select Your Location"}
-          </Button>
+          {content}
           <Drawer
             sx={{
               "& .MuiDrawer-paper": {
@@ -348,7 +325,7 @@ function EditLocation({
   return (
     <div>
       <div
-        className={`p-5 bg-base-200 flex flex-col ${
+        className={`p-5 bg-base-200 flex flex-col h-[100vh] ${
           activeStep === 3 && "flex-col-reverse"
         }`}
       >
@@ -732,25 +709,48 @@ function EditLocation({
     </div>
   );
 }
-
+import Fuse from "fuse.js";
 function PlacesAutoComplete({ setSelectedPlace, setActiveStep }) {
-  const [places, setPlaces] = useState(null);
+  const [places, setPlaces] = useState([]);
   const [query, setQuery] = useState("");
+
+  const fuseOptions = {
+    keys: ["place_name"], // Adjust this to the key in your data that you want to search
+    threshold: 0.4, // Adjust the threshold as needed to control the fuzziness
+  };
+
+  const fuse = new Fuse([], fuseOptions);
 
   useEffect(() => {
     if (!query) {
       setPlaces([]);
     } else {
       fetch(
-        `https://barikoi.xyz/v1/api/search/verify/autocomplete/bkoi_b98a765d5bf3797e9d766f55da7ff932774f2886d7059c6b889be5aa2e547b12/place?q=House%${query}`
+        `https://barikoi.xyz/v1/api/search/verify/autocomplete/${process.env.NEXT_PUBLIC_BARIKOI_API_KEY}/place?q=House%${query}`
       )
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
+          // const searchResults = fuse.search(data?.places);
+          // setPlaces(searchResults.map((result) => result.item));
           setPlaces(data?.places);
         });
     }
   }, [query]);
+
+  useEffect(() => {
+    console.log("Places Before Update: ", places);
+    fuse.setCollection(places);
+    console.log("Places After Update: ", places);
+  }, [places]);
+
+  // const {
+  //   ready,
+  //   clearSuggestions,
+  //   setValue,
+  //   suggestions: { status, data },
+  //   value,
+  // } = usePlacesAutocomplete();
 
   // return (
   //   <div>
@@ -784,9 +784,27 @@ function PlacesAutoComplete({ setSelectedPlace, setActiveStep }) {
   // );
 
   return (
+    // <div>Something</div>
+    // <AutoSelect
+    //   inputOnchange={(e) => setValue(e.target.value)}
+    //   globalLabel={"description"}
+    //   disabled={!ready}
+    //   placeholder={"Search your address"}
+    //   onChange={(event, newValue) => {
+    //     setSelectedPlace({
+    //       lat: parseFloat(newValue?.latitude),
+    //       lng: parseFloat(newValue?.longitude),
+    //       address: newValue?.address,
+    //     });
+    //     setActiveStep(4);
+    //   }}
+    //   size={"small"}
+    //   options={data}
+    // />
     <AutoSelect
       inputOnchange={(e) => setQuery(e.target.value)}
       globalLabel={"address"}
+      startIcon={<LocationOn />}
       placeholder={"Search your address"}
       onChange={(event, newValue) => {
         setSelectedPlace({

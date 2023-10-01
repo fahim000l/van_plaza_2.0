@@ -56,7 +56,7 @@ const PersonalProfile = () => {
           )}
         </div>
       </div>
-      <EditProfileModal />
+      {authUser && <EditProfileModal />}
     </div>
   );
 };

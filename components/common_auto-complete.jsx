@@ -21,6 +21,7 @@ const AutoSelect = ({
   placeholder,
   freeSolo,
   inputOnchange,
+  startIcon,
 }) => {
   return (
     <Autocomplete
@@ -48,6 +49,7 @@ const AutoSelect = ({
           {imgSrc && (
             <img loading="lazy" width="20" src={option[imgSrc]} alt="" />
           )}
+          {startIcon && startIcon}
           {option[globalLabel]}
         </Box>
       )}
