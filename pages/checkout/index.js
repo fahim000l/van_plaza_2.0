@@ -35,6 +35,24 @@ const CheckOutPage = () => {
 
   const deleveryFee = 100;
 
+  const handlePlaceOrder = () => {
+    fetch(`/api/store-order`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        user: authUser?.email,
+        deleveryFee,
+        location: selectedLocation,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      });
+  };
+
   return (
     <Main>
       <div className="lg:flex justify-evenly items-start lg:mx-10 my-5 mx-2">
@@ -78,7 +96,7 @@ const CheckOutPage = () => {
               {" "}
               <Chip size="small" color="info" label={"Contact"} />{" "}
               <span className="flex justify-between w-full">
-                01726834600 <ArrowRight />
+                {authUser?.phone} <ArrowRight />
               </span>
             </label>
           </div>
@@ -104,6 +122,7 @@ const CheckOutPage = () => {
               />
             </p>
             <Button
+              onClick={handlePlaceOrder}
               variant="contained"
               className="bg-[steelblue] text-white hidden lg:inline"
             >
@@ -117,7 +136,7 @@ const CheckOutPage = () => {
         calculateItemsTotal={calculateItemsTotal}
       />
       <LocationChooseModal setSelectedLocation={setSelectedLocation} />
-      <EditProfileModal />
+      {authUser && <EditProfileModal />}
     </Main>
   );
 };
