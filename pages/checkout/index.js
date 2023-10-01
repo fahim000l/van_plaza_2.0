@@ -1,17 +1,27 @@
 import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
 import Main from "@/layouts/Main";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Avatar, Chip, Divider, Button, IconButton } from "@mui/material";
 import useGetcartByUser from "@/hooks/useGetcartByUser";
 import CheckOutCard from "@/components/checkout/CheckOutCard";
 import { Edit, ArrowRight } from "@mui/icons-material";
 import CheckOutFooter from "@/components/checkout/CheckOutFooter";
+import LocationSelectModal from "@/components/LocationSelectModal";
+import LocationChooseModal from "@/components/checkout/LocationChooseModal";
+import EditProfileModal from "@/components/profile/EditProfileModal";
 
 const CheckOutPage = () => {
   const { authUser } = useContext(AUTH_CONTEXT);
   const { carts_user } = useGetcartByUser(authUser?.email);
 
   const defaultLocation = authUser?.locations?.find((loc) => loc?.def === true);
+  const [selectedLocation, setSelectedLocation] = useState(null);
+
+  useEffect(() => {
+    if (defaultLocation) {
+      setSelectedLocation(defaultLocation);
+    }
+  }, [defaultLocation]);
 
   const calculateItemsTotal = () => {
     return carts_user?.reduce((total, newValue) => {
@@ -50,21 +60,27 @@ const CheckOutPage = () => {
               <span>{authUser?.email}</span>
             </div>
             <Divider />
-            <div className="flex space-x-2 cursor-pointer">
+            <label
+              htmlFor="chooseLocationModal"
+              className="flex space-x-2 cursor-pointer"
+            >
               {" "}
               <Chip size="small" color="info" label={"Home"} />{" "}
               <span className="flex justify-between w-full">
-                {defaultLocation?.Address?.address} <ArrowRight />{" "}
+                {selectedLocation?.Address?.address} <ArrowRight />{" "}
               </span>
-            </div>
+            </label>
             <Divider />
-            <div className="flex space-x-2 cursor-pointer">
+            <label
+              htmlFor="editProfileModal"
+              className="flex space-x-2 cursor-pointer"
+            >
               {" "}
               <Chip size="small" color="info" label={"Contact"} />{" "}
               <span className="flex justify-between w-full">
                 01726834600 <ArrowRight />
               </span>
-            </div>
+            </label>
           </div>
           {carts_user?.map((cart) => (
             <CheckOutCard key={cart?._id} cart={cart} />
@@ -100,6 +116,8 @@ const CheckOutPage = () => {
         deleveryFee={deleveryFee}
         calculateItemsTotal={calculateItemsTotal}
       />
+      <LocationChooseModal setSelectedLocation={setSelectedLocation} />
+      <EditProfileModal />
     </Main>
   );
 };

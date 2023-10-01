@@ -7,12 +7,15 @@ import { IconButton } from "@mui/material";
 import { Button } from "@mui/joy";
 import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
 import LocationSelectModal from "../LocationSelectModal";
+import { useRouter } from "next/router";
 
 const LocationCard = ({
   location,
   setSelectedAssressBook,
   setDeleteOpen,
   setDeletingLocation,
+  setChoosedLocation,
+  chooseModalToggleBtn,
 }) => {
   const {
     Address: { address },
@@ -57,6 +60,8 @@ const LocationCard = ({
     setState({ ...state, [anchor]: open });
   };
 
+  const { pathname } = useRouter();
+
   return (
     <div className="card h-auto bg-base-100 shadow-xl my-2 lg:my-0">
       <label
@@ -68,7 +73,15 @@ const LocationCard = ({
         Something
       </label>
       <div className="card-body p-2 cursor-pointer">
-        <div className="flex items-start">
+        <div
+          onClick={() => {
+            if (pathname === "/checkout") {
+              setChoosedLocation(location);
+              chooseModalToggleBtn.current.click();
+            }
+          }}
+          className="flex items-start"
+        >
           <LocationOn sx={{ color: "steelblue" }} />
           <LocationSelectModal
             selectedAddressBook={location}
@@ -81,7 +94,10 @@ const LocationCard = ({
                 //   // setSelectedAssressBook(location);
                 //   toggleDrawer("bottom", true);
                 // }}
-                onClick={toggleDrawer("bottom", true)}
+                onClick={toggleDrawer(
+                  "bottom",
+                  pathname === "/checkout" ? false : true
+                )}
                 className="text-xs lg:text-sm"
               >
                 <h2 className="font-bold text-[steelblue]">{address}</h2>
@@ -120,19 +136,20 @@ const LocationCard = ({
               </div>
             }
           />
-
-          <div>
-            <IconButton
-              onClick={() => {
-                setDeleteOpen(true);
-                setDeletingLocation(location);
-              }}
-              size="small"
-              className="bg-red-200 text-[red]"
-            >
-              <Delete />
-            </IconButton>
-          </div>
+          {pathname !== "/checkout" && (
+            <div>
+              <IconButton
+                onClick={() => {
+                  setDeleteOpen(true);
+                  setDeletingLocation(location);
+                }}
+                size="small"
+                className="bg-red-200 text-[red]"
+              >
+                <Delete />
+              </IconButton>
+            </div>
+          )}
         </div>
         {def != true && (
           <Button
