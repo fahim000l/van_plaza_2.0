@@ -118,6 +118,7 @@ export default async function (req, res) {
                 categoryId: cart?.qps?.[0]?.categoryId,
                 transId,
                 orderId: result?._id,
+                quantity: cart?.quantity,
               });
             });
 
