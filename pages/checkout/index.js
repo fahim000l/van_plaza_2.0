@@ -50,6 +50,9 @@ const CheckOutPage = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
+        if (data?.url) {
+          location.replace(data?.url);
+        }
       });
   };
 

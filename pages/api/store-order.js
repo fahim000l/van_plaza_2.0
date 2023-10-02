@@ -1,5 +1,6 @@
 import { connectMongo } from "@/database/config";
 import carts from "@/database/models/carts";
+import ordered_stocks from "@/database/models/ordered_stocks";
 import orders from "@/database/models/orders";
 import users from "@/database/models/users";
 import { ObjectId } from "mongodb";
@@ -60,9 +61,9 @@ export default async function (req, res) {
             parseFloat(totalPrice()) + parseFloat(orderInfo?.deleveryFee),
           currency: "BDT",
           tran_id: transId, // use unique tran_id for each api call
-          success_url: `${process.env.PROJECT_URL}payment/success?tran_id=${transId}`,
-          fail_url: `${process.env.PROJECT_URL}payment/fail`,
-          cancel_url: `${process.env.PROJECT_URL}payment/cancel`,
+          success_url: `${process.env.PROJECT_URL}api/payment-success?tran_id=${transId}`,
+          fail_url: `${process.env.PROJECT_URL}api/payment-fail`,
+          cancel_url: `${process.env.PROJECT_URL}api/payment-cancel`,
           ipn_url: "http://localhost:3030/ipn",
           shipping_method: "Courier",
           product_name: "Computer.",
@@ -95,26 +96,37 @@ export default async function (req, res) {
 
         sslcz.init(data).then(async (apiResponse) => {
           let GatewayUrl = apiResponse?.GatewayPageURL;
-          const qpIds = [];
-          orderingCarts?.forEach((cart) => {
-            qpIds?.push(cart?.qps?.[0]?._id);
-          });
+          const orderedStocksData = [];
 
           const orderData = {
             user: customer?.email,
-            qpIds: qpIds,
             location: orderInfo?.location,
             status: "initiated",
             deleveryFee: orderInfo?.deleveryFee,
             transId: transId,
+            date: `${new Date().getDate()}-${
+              new Date().getMonth() + 1
+            }-${new Date().getFullYear()}`,
           };
 
           const result = await orders.create(orderData);
 
           if (result?._id) {
-          }
+            orderingCarts?.forEach((cart) => {
+              orderedStocksData?.push({
+                qpId: cart?.qps?.[0]?._id,
+                categoryId: cart?.qps?.[0]?.categoryId,
+                transId,
+                orderId: result?._id,
+              });
+            });
 
-          return res.status(200).json({ data, GatewayUrl, orderData, result });
+            const result2 = await ordered_stocks.insertMany(orderedStocksData);
+
+            if (result2?.length > 0) {
+              return res.status(200).json({ url: GatewayUrl });
+            }
+          }
         });
       }
     } else {

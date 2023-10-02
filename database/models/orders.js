@@ -6,10 +6,6 @@ const ordersShema = new Schema(
       type: String,
       required: true,
     },
-    qpIds: {
-      type: Array,
-      required: true,
-    },
     location: {
       type: Object,
       required: true,
@@ -23,6 +19,10 @@ const ordersShema = new Schema(
       required: true,
     },
     transId: {
+      type: String,
+      required: true,
+    },
+    date: {
       type: String,
       required: true,
     },
