@@ -20,7 +20,9 @@ const SizeSelectModal = ({ selectedSp, setSelectedProduct }) => {
     qps,
   } = selectedSp;
 
-  const [selectedQp, setSelectedQp] = useState(qps[0]);
+  const [selectedQp, setSelectedQp] = useState(
+    qps?.find((qp) => qp?.quantity !== 0)
+  );
   const { carts_user_refetch } = useGetcartByUser(authUser?.email);
   const { cartsRefetch, carts } = useGetCartsByQpId(selectedQp?._id);
   const [totalQuantity, setTotalQuantity] = useState(0);

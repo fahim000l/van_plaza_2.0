@@ -16,6 +16,7 @@ const ProductCard = ({ sp, setSelectedProduct }) => {
   const {
     _id,
     sellPrice,
+    qps,
     products: { [0]: product },
   } = sp;
 
@@ -79,74 +80,80 @@ const ProductCard = ({ sp, setSelectedProduct }) => {
 
   const sizeSelectModal = useRef();
 
-  return (
-    <div
-      onClick={(e) => {
-        if (e?.target?.id === "addToCartBtn") {
-          sizeSelectModal.current.click();
-          console.log(e.target);
-        } else {
-          console.log(e.target);
-          push(`/shop/${_id}`);
-        }
-      }}
-      className="cursor-pointer"
-    >
-      <Card sx={{ padding: [1, 2, 2] }} variant="outlined">
-        <Box sx={{ maxWidth: 400 }}>
-          <AutoPlaySwipeableViews
-            axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-            index={activeStep}
-            onChangeIndex={handleStepChange}
-            enableMouseEvents
-          >
-            {images?.map((step, index) => (
-              <div key={index}>
-                {Math.abs(activeStep - index) <= 2 ? (
-                  <Box
-                    component="img"
-                    sx={{
-                      height: [100, 150, 150],
-                      display: "block",
-                      maxWidth: 400,
-                      overflow: "hidden",
-                      width: "100%",
-                    }}
-                    src={step.imgPath}
-                    alt={step.label}
-                  />
-                ) : null}
-              </div>
-            ))}
-          </AutoPlaySwipeableViews>
-        </Box>
-        <div className="flex flex-col justify-between">
-          <div>
-            <marquee className="font-bold" behavior="" direction="">
-              {product?.productName}
-            </marquee>
-            <p className="font-bold text-[steelblue]">{sellPrice}/-</p>
+  const totalQpsQuantity = qps?.reduce((total, qp) => {
+    return total + parseInt(qp?.quantity);
+  }, 0);
+
+  if (totalQpsQuantity !== 0) {
+    return (
+      <div
+        onClick={(e) => {
+          if (e?.target?.id === "addToCartBtn") {
+            sizeSelectModal.current.click();
+            console.log(e.target);
+          } else {
+            console.log(e.target);
+            push(`/shop/${_id}`);
+          }
+        }}
+        className="cursor-pointer"
+      >
+        <Card sx={{ padding: [1, 2, 2] }} variant="outlined">
+          <Box sx={{ maxWidth: 400 }}>
+            <AutoPlaySwipeableViews
+              axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+              index={activeStep}
+              onChangeIndex={handleStepChange}
+              enableMouseEvents
+            >
+              {images?.map((step, index) => (
+                <div key={index}>
+                  {Math.abs(activeStep - index) <= 2 ? (
+                    <Box
+                      component="img"
+                      sx={{
+                        height: [100, 150, 150],
+                        display: "block",
+                        maxWidth: 400,
+                        overflow: "hidden",
+                        width: "100%",
+                      }}
+                      src={step.imgPath}
+                      alt={step.label}
+                    />
+                  ) : null}
+                </div>
+              ))}
+            </AutoPlaySwipeableViews>
+          </Box>
+          <div className="flex flex-col justify-between">
+            <div>
+              <marquee className="font-bold" behavior="" direction="">
+                {product?.productName}
+              </marquee>
+              <p className="font-bold text-[steelblue]">{sellPrice}/-</p>
+            </div>
+            <label
+              onClick={() => setSelectedProduct(sp)}
+              ref={sizeSelectModal}
+              hidden
+              htmlFor="sizeSelectModal"
+            >
+              Size Select Modal
+            </label>
+            <Button
+              id="addToCartBtn"
+              endDecorator={<AddShoppingCart />}
+              className="bg-[steelblue] text-white hover:bg-[blue] text-xs"
+              size="sm"
+            >
+              Add To Cart
+            </Button>
           </div>
-          <label
-            onClick={() => setSelectedProduct(sp)}
-            ref={sizeSelectModal}
-            hidden
-            htmlFor="sizeSelectModal"
-          >
-            Size Select Modal
-          </label>
-          <Button
-            id="addToCartBtn"
-            endDecorator={<AddShoppingCart />}
-            className="bg-[steelblue] text-white hover:bg-[blue] text-xs"
-            size="sm"
-          >
-            Add To Cart
-          </Button>
-        </div>
-      </Card>
-    </div>
-  );
+        </Card>
+      </div>
+    );
+  }
 };
 
 export default ProductCard;

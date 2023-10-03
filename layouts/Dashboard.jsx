@@ -24,8 +24,9 @@ import {
   CategoryOutlined,
   SquareFootOutlined,
   Hail,
+  ChecklistRtl,
 } from "@mui/icons-material";
-import { FaTshirt } from "react-icons/fa";
+import { FaTshirt, FaFirstOrder } from "react-icons/fa";
 
 const drawerWidth = 240;
 
@@ -64,6 +65,11 @@ const navItems = [
     path: "/dashboard/dashboard-sizes",
     content: "Sizes",
     icon: <SquareFootOutlined />,
+  },
+  {
+    path: "/dashboard/dashboard-orders",
+    content: "Orders",
+    icon: <ChecklistRtl />,
   },
 ];
 
