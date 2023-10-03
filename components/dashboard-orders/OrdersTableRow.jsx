@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import ShowLocationModal from "./ShowLocationModal";
 
-const OrdersTableRow = ({ order }) => {
+const OrdersTableRow = ({ order, setViewLocation }) => {
   const {
     date,
     _id,
@@ -47,6 +47,7 @@ const OrdersTableRow = ({ order }) => {
           ref={showLocationModalLabel}
           htmlFor="showLocationModal"
           className="hidden"
+          onClick={() => setViewLocation(location)}
         >
           Show Location
         </label>
@@ -60,9 +61,7 @@ const OrdersTableRow = ({ order }) => {
         </Button>
       </TableCell>
       <TableCell align="center">{ops?.length}</TableCell>
-
       <TableCell align="center">{status}</TableCell>
-      <ShowLocationModal location={location} />
     </TableRow>
   );
 };

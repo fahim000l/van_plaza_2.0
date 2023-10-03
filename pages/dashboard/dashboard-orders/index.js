@@ -1,6 +1,6 @@
 import useGetAllOrders from "@/hooks/useGetAllOrders";
 import Dashboard from "@/layouts/Dashboard";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -9,6 +9,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import OrdersTableRow from "@/components/dashboard-orders/OrdersTableRow";
+import ShowLocationModal from "@/components/dashboard-orders/ShowLocationModal";
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -24,6 +25,8 @@ const rows = [
 
 const DashboardOrders = () => {
   const { orders } = useGetAllOrders();
+
+  const [viewLocation, setViewLocation] = useState(null);
 
   useEffect(() => {
     console.log(orders);
@@ -63,11 +66,16 @@ const DashboardOrders = () => {
           </TableHead>
           <TableBody>
             {orders?.map((order) => (
-              <OrdersTableRow key={order?._id} order={order} />
+              <OrdersTableRow
+                setViewLocation={setViewLocation}
+                key={order?._id}
+                order={order}
+              />
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+      {viewLocation && <ShowLocationModal location={viewLocation} />}
     </Dashboard>
   );
 };
