@@ -17,15 +17,7 @@ const LocationCard = ({
   setChoosedLocation,
   chooseModalToggleBtn,
 }) => {
-  const {
-    Address: { address },
-    Region,
-    City,
-    Area,
-    LandMark,
-    def,
-    _id,
-  } = location;
+  const { Address, Region, City, Area, LandMark, def, _id } = location;
   const locationSelectModalLabel = useRef();
   const { authUser } = useContext(AUTH_CONTEXT);
 
@@ -100,7 +92,9 @@ const LocationCard = ({
                 )}
                 className="text-xs lg:text-sm"
               >
-                <h2 className="font-bold text-[steelblue]">{address}</h2>
+                <h2 className="font-bold text-[steelblue]">
+                  {Address?.address}
+                </h2>
 
                 {def === true && (
                   <span className="text-center font-bold text-green-500">

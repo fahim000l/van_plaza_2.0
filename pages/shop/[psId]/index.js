@@ -185,14 +185,18 @@ const OnSaleProductDetails = () => {
                 <div>
                   <p>Available Sizes</p>
                   <div className="grid grid-cols-4 gap-5">
-                    {qps?.map((quantity) => (
-                      <div
-                        key={quantity?._id}
-                        className="rounded-lg bg-primary text-white font-bold text-center"
-                      >
-                        {quantity?.sizes[0].sizeName}
-                      </div>
-                    ))}
+                    {qps?.map((quantity) => {
+                      if (quantity?.quantity !== 0) {
+                        return (
+                          <div
+                            key={quantity?._id}
+                            className="rounded-lg bg-primary text-white font-bold text-center"
+                          >
+                            {quantity?.sizes[0].sizeName}
+                          </div>
+                        );
+                      }
+                    })}
                   </div>
                 </div>
               </div>

@@ -61,7 +61,7 @@ export default async function (req, res) {
             parseFloat(totalPrice()) + parseFloat(orderInfo?.deleveryFee),
           currency: "BDT",
           tran_id: transId, // use unique tran_id for each api call
-          success_url: `${process.env.PROJECT_URL}api/payment-success?tran_id=${transId}`,
+          success_url: `${process.env.PROJECT_URL}api/payment-success?tran_id=${transId}&user=${customer?.email}`,
           fail_url: `${process.env.PROJECT_URL}api/payment-fail`,
           cancel_url: `${process.env.PROJECT_URL}api/payment-cancel`,
           ipn_url: "http://localhost:3030/ipn",
@@ -114,6 +114,7 @@ export default async function (req, res) {
           if (result?._id) {
             orderingCarts?.forEach((cart) => {
               orderedStocksData?.push({
+                user: customer?.email,
                 qpId: cart?.qps?.[0]?._id,
                 categoryId: cart?.qps?.[0]?.categoryId,
                 transId,
