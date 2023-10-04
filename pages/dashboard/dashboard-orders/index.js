@@ -10,6 +10,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import OrdersTableRow from "@/components/dashboard-orders/OrdersTableRow";
 import ShowLocationModal from "@/components/dashboard-orders/ShowLocationModal";
+import ShowUserModal from "@/components/dashboard-orders/ShowUserModal";
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -27,6 +28,7 @@ const DashboardOrders = () => {
   const { orders } = useGetAllOrders();
 
   const [viewLocation, setViewLocation] = useState(null);
+  const [viewUser, setViewUser] = useState(null);
 
   useEffect(() => {
     console.log(orders);
@@ -68,6 +70,7 @@ const DashboardOrders = () => {
             {orders?.map((order) => (
               <OrdersTableRow
                 setViewLocation={setViewLocation}
+                setViewUser={setViewUser}
                 key={order?._id}
                 order={order}
               />
@@ -76,6 +79,7 @@ const DashboardOrders = () => {
         </Table>
       </TableContainer>
       {viewLocation && <ShowLocationModal location={viewLocation} />}
+      {viewUser && <ShowUserModal user={viewUser} />}
     </Dashboard>
   );
 };

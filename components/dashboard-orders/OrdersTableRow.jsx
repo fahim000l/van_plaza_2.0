@@ -6,10 +6,12 @@ import {
   TableCell,
   TextField,
   Button,
+  IconButton,
 } from "@mui/material";
 import ShowLocationModal from "./ShowLocationModal";
+import OpsDrawer from "./OpsDrawer";
 
-const OrdersTableRow = ({ order, setViewLocation }) => {
+const OrdersTableRow = ({ order, setViewLocation, setViewUser }) => {
   const {
     date,
     _id,
@@ -18,17 +20,29 @@ const OrdersTableRow = ({ order, setViewLocation }) => {
     ops,
     deleveryFee,
     transId,
+    userInfo,
     userInfo: {
       [0]: { profilePic },
     },
   } = order;
 
   const showLocationModalLabel = useRef();
+  const showUserModalLabel = useRef();
 
   return (
     <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
       <TableCell component="th" scope="row">
-        <Avatar src={profilePic} />
+        <label
+          onClick={() => setViewUser(userInfo[0])}
+          ref={showUserModalLabel}
+          className="hidden"
+          htmlFor="showUserModal"
+        >
+          Show User
+        </label>
+        <IconButton onClick={() => showUserModalLabel.current.click()}>
+          <Avatar src={profilePic} />
+        </IconButton>
       </TableCell>
       <TableCell align="center">
         <input
@@ -60,8 +74,12 @@ const OrdersTableRow = ({ order, setViewLocation }) => {
           Detail
         </Button>
       </TableCell>
-      <TableCell align="center">{ops?.length}</TableCell>
-      <TableCell align="center">{status}</TableCell>
+      <TableCell align="center">
+        <OpsDrawer ops={ops} />
+      </TableCell>
+      <TableCell align="center">
+        <button className="btn btn-info btn-xs normal-case">{status}</button>
+      </TableCell>
     </TableRow>
   );
 };
