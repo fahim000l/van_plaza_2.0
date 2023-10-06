@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import ShowLocationModal from "./ShowLocationModal";
 import OpsDrawer from "./OpsDrawer";
+import useGetAllOrders from "@/hooks/useGetAllOrders";
 
 const OrdersTableRow = ({ order, setViewLocation, setViewUser }) => {
   const {
@@ -28,6 +29,26 @@ const OrdersTableRow = ({ order, setViewLocation, setViewUser }) => {
 
   const showLocationModalLabel = useRef();
   const showUserModalLabel = useRef();
+  const { ordersRefetch } = useGetAllOrders();
+
+  const calculateTotalPrice = () => {
+    return ops?.reduce((total, op) => {
+      return total + parseFloat(op?.qpInfo?.[0]?.psInfo?.[0]?.sellPrice);
+    }, 0);
+  };
+
+  const handleOrderStatus = () => {
+    fetch(`/api/edit-order-status?orderId=${_id}`, {
+      method: "PUT",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data?.success) {
+          ordersRefetch();
+        }
+      });
+  };
 
   return (
     <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
@@ -77,8 +98,16 @@ const OrdersTableRow = ({ order, setViewLocation, setViewUser }) => {
       <TableCell align="center">
         <OpsDrawer ops={ops} />
       </TableCell>
+      <TableCell align="center">{calculateTotalPrice()} /-</TableCell>
       <TableCell align="center">
-        <button className="btn btn-info btn-xs normal-case">{status}</button>
+        <button
+          onClick={handleOrderStatus}
+          className={`btn btn-xs ${
+            status === "delevered" ? "btn-success" : "btn-info"
+          }`}
+        >
+          {status}
+        </button>
       </TableCell>
     </TableRow>
   );

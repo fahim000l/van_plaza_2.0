@@ -62,6 +62,9 @@ const DashboardOrders = () => {
                 Contents
               </TableCell>
               <TableCell className="text-white font-bold" align="center">
+                Total Price
+              </TableCell>
+              <TableCell className="text-white font-bold" align="center">
                 Status
               </TableCell>
             </TableRow>
