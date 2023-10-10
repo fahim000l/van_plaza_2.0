@@ -7,6 +7,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { AddShoppingCartSharp } from "@mui/icons-material";
 import SizeSelectModal from "@/components/SizeSelectModal";
 import PsDetailsBottomNav from "@/components/PsDetails/PsDetailsBottomNav";
+import SwipeableViews from "react-swipeable-views";
+import { autoPlay } from "react-swipeable-views-utils";
+import { useTheme } from "@mui/material/styles";
+import { Box } from "@mui/joy";
+
+const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 const OnSaleProductDetails = () => {
   const { query } = useRouter();
@@ -43,7 +49,103 @@ const OnSaleProductDetails = () => {
     }
   }, [standardImage]);
 
+  const [images, setImages] = useState([]);
+
   const [imagesArray, setImagesArray] = useState([]);
+  const [activeStep, setActiveStep] = React.useState(0);
+  const maxSteps = images?.length;
+
+  useEffect(() => {
+    if (
+      standardImage &&
+      !images?.some((img) => img?.imgPath === standardImage)
+    ) {
+      setImages((image) => [
+        ...image,
+        {
+          label: "Standard Image",
+          imgPath: standardImage,
+        },
+      ]);
+    }
+
+    if (regularImage && !images?.some((img) => img?.imgPath === regularImage)) {
+      setImages((image) => [
+        ...image,
+        {
+          label: "Regular Image",
+          imgPath: regularImage,
+        },
+      ]);
+    }
+
+    if (
+      detailedImage &&
+      !images?.some((img) => img?.imgPath === detailedImage)
+    ) {
+      setImages((image) => [
+        ...image,
+        {
+          label: "Detailed Image",
+          imgPath: detailedImage,
+        },
+      ]);
+    }
+    if (flaw1 && !images?.some((img) => img?.imgPath === flaw1)) {
+      setImages((image) => [
+        ...image,
+        {
+          label: "Defect 1",
+          imgPath: flaw1,
+        },
+      ]);
+    }
+    if (flaw2 && !images?.some((img) => img?.imgPath === flaw2)) {
+      setImages((image) => [
+        ...image,
+        {
+          label: "Defect 2",
+          imgPath: flaw2,
+        },
+      ]);
+    }
+    if (flaw3 && !images?.some((img) => img?.imgPath === flaw3)) {
+      setImages((image) => [
+        ...image,
+        {
+          label: "Defect 3",
+          imgPath: flaw3,
+        },
+      ]);
+    }
+
+    console.log(images);
+  }, [
+    images,
+    ps,
+    standardImage,
+    regularImage,
+    detailedImage,
+    flaw1,
+    flaw2,
+    flaw3,
+    activeStep,
+  ]);
+
+  const theme = useTheme();
+
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleStepChange = (step) => {
+    console.log("changing", step);
+    setActiveStep(step);
+  };
 
   useEffect(() => {
     if (ps) {
@@ -65,7 +167,36 @@ const OnSaleProductDetails = () => {
       <div className="flex bg-[steelblue] rounded-box my-5 mx-2 p-1 md:m-5 lg:m-10 md:p-5 lg:p-10">
         <div className="flex flex-col w-full">
           <div className="flex lg:flex-row flex-col space-x-2 w-full">
-            <div className="carousel lg:hidden h-64">
+            <Box className="lg:hidden">
+              {" "}
+              <AutoPlaySwipeableViews
+                axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+                index={activeStep}
+                onChangeIndex={handleStepChange}
+                enableMouseEvents
+              >
+                {images?.map((step, index) => (
+                  <div key={index}>
+                    {Math.abs(activeStep - index) <= 2 ? (
+                      <Box
+                        component="img"
+                        sx={{
+                          height: 200,
+                          display: "block",
+                          maxWidth: 400,
+                          overflow: "hidden",
+                          width: "100%",
+                        }}
+                        className="rounded-lg mb-2"
+                        src={step.imgPath}
+                        alt={step.label}
+                      />
+                    ) : null}
+                  </div>
+                ))}
+              </AutoPlaySwipeableViews>
+            </Box>
+            {/* <div className="carousel lg:hidden h-64">
               {imagesArray?.map((img, i) => (
                 <div
                   id={`slide${i}`}
@@ -97,7 +228,7 @@ const OnSaleProductDetails = () => {
                   </div>
                 </div>
               ))}
-            </div>
+            </div> */}
 
             <div className="lg:w-[40%] hidden lg:inline mb-2 lg:mb-0">
               <div className="rounded-lg">

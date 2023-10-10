@@ -7,8 +7,15 @@ const useGetAllCategories = (limit) => {
     isLoading: categoriesLoading,
   } = useQuery({
     queryKey: ["/api/get-all-categories", limit],
-    queryFn: () =>
-      fetch(`/api/get-all-categories?limit=${limit}`).then((res) => res.json()),
+    queryFn: async () => {
+      if (limit) {
+        return await fetch(`/api/get-all-categories?limit=${limit}`).then(
+          (res) => res.json()
+        );
+      } else {
+        return await fetch(`/api/get-all-categories`).then((res) => res.json());
+      }
+    },
   });
 
   return { categories, categoriesRefetch, categoriesLoading };

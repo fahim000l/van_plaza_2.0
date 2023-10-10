@@ -85,75 +85,82 @@ const ProductCard = ({ sp, setSelectedProduct }) => {
   }, 0);
 
   if (totalQpsQuantity !== 0) {
-    return (
-      <div
-        className="cursor-pointer flex flex-col items-center justify-center p-1 lg:p-2 tooltip"
-        data-tip={product?.productName}
-      >
-        <Card
-          sx={{ padding: [1, 2, 2], borderRadius: "10px 10px 0px 0px" }}
-          variant="outlined"
+    if (product?.productName) {
+      return (
+        <div
+          className="cursor-pointer flex flex-col items-center justify-center p-1 lg:p-2 tooltip"
+          data-tip={product?.productName}
         >
-          <Box onClick={() => push(`/shop/${_id}`)}>
-            <AutoPlaySwipeableViews
-              axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-              index={activeStep}
-              onChangeIndex={handleStepChange}
-              enableMouseEvents
-            >
-              {images?.map((step, index) => (
-                <div key={index}>
-                  {Math.abs(activeStep - index) <= 2 ? (
-                    <Box
-                      component="img"
-                      sx={{
-                        height: [100, 150, 150],
-                        display: "block",
-                        maxWidth: 400,
-                        overflow: "hidden",
-                        width: "100%",
-                      }}
-                      src={step.imgPath}
-                      alt={step.label}
-                    />
-                  ) : null}
-                </div>
-              ))}
-            </AutoPlaySwipeableViews>
-          </Box>
-          <div className="flex flex-col justify-between">
-            <div>
-              {/* <marquee className="font-bold" behavior="" direction="">
-                {product?.productName}
-              </marquee> */}
-              <p className="font-bold">
-                {product?.productName?.length > 12
-                  ? product?.productName?.slice(0, 12) + "..."
-                  : product?.productName}
-              </p>
-              <p className="font-bold text-[steelblue]">{sellPrice}/-</p>
+          <Card
+            onClick={() => push(`/shop/${_id}`)}
+            sx={{
+              padding: [1, 2, 2],
+              width: "100%",
+              borderRadius: "10px 10px 0px 0px",
+            }}
+            variant="outlined"
+          >
+            <Box>
+              <AutoPlaySwipeableViews
+                axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+                index={activeStep}
+                onChangeIndex={handleStepChange}
+                enableMouseEvents
+              >
+                {images?.map((step, index) => (
+                  <div key={index}>
+                    {Math.abs(activeStep - index) <= 2 ? (
+                      <Box
+                        component="img"
+                        sx={{
+                          height: [100, 150, 150],
+                          display: "block",
+                          maxWidth: 400,
+                          overflow: "hidden",
+                          width: "100%",
+                        }}
+                        src={step.imgPath}
+                        alt={step.label}
+                      />
+                    ) : null}
+                  </div>
+                ))}
+              </AutoPlaySwipeableViews>
+            </Box>
+            <div className="flex flex-col justify-between">
+              <div>
+                {/* <marquee className="font-bold" behavior="" direction="">
+                  {product?.productName}
+                </marquee> */}
+                <p className="font-bold">
+                  {product?.productName?.length > 12
+                    ? product?.productName?.slice(0, 12) + "..."
+                    : product?.productName}
+                </p>
+                <p className="font-bold text-[steelblue]">{sellPrice}/-</p>
+              </div>
             </div>
-          </div>
-          <label ref={sizeSelectModal} hidden htmlFor="sizeSelectModal">
-            Size Select Modal
-          </label>
-        </Card>
-        <Button
-          fullWidth
-          onClick={() => {
-            sizeSelectModal.current.click();
-            setSelectedProduct(sp);
-          }}
-          sx={{ borderRadius: "0px 0px 10px 10px" }}
-          id="addToCartBtn"
-          endDecorator={<AddShoppingCart />}
-          className="bg-[steelblue] text-white hover:bg-[blue] text-xs"
-          size="sm"
-        >
-          Add To Cart
-        </Button>
-      </div>
-    );
+            <label ref={sizeSelectModal} hidden htmlFor="sizeSelectModal">
+              Size Select Modal
+            </label>
+          </Card>
+          <Button
+            fullWidth
+            onClick={() => {
+              sizeSelectModal.current.click();
+              setSelectedProduct(sp);
+            }}
+            sx={{ borderRadius: "0px 0px 10px 10px" }}
+            id="addToCartBtn"
+            endDecorator={<AddShoppingCart />}
+            className="bg-[steelblue] text-white hover:bg-[blue] text-xs"
+            size="sm"
+          >
+            Add To Cart
+          </Button>
+        </div>
+      );
+    }
   }
 };
 

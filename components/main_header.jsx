@@ -19,6 +19,7 @@ import useGetAllCategories from "@/hooks/useGetAllCategories";
 import useGetAllProducts from "@/hooks/useGetAllProducts";
 import CartDrawer from "./CartDrawer";
 import { useRouter } from "next/router";
+import SearchDrawer from "./main_search-drawer";
 
 const Header = ({ setMobileOpen, navItems }) => {
   const { authUser, sessionData, sessionStatus, authLoader, setAuthLoader } =
@@ -79,79 +80,11 @@ const Header = ({ setMobileOpen, navItems }) => {
         >
           Van Plaza
         </Typography>
-        {(pathname === "/" || pathname === "/shop") && (
+        {(pathname === "/" ||
+          pathname === "/shop" ||
+          pathname?.includes("/search")) && (
           <div className="lg:w-[35%] md:w-full w-full">
-            <TextField
-              onClick={() => {
-                backDropInput.current.click();
-                setBackDropOpen(true);
-              }}
-              InputProps={{
-                startAdornment: (
-                  <IconButton>
-                    <Search />
-                  </IconButton>
-                ),
-              }}
-              placeholder="Search Category"
-              size="small"
-              className="bg-white rounded-lg w-full"
-            />
-            <Backdrop
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "start",
-                color: "#fff",
-                zIndex: (theme) => theme.zIndex.drawer + 1,
-              }}
-              open={backDropOpen}
-            >
-              <div className="flex items-start mt-2 w-full">
-                <TextField
-                  onChange={handleSearch}
-                  ref={backDropInput}
-                  InputProps={{
-                    startAdornment: (
-                      <IconButton>
-                        <Search />
-                      </IconButton>
-                    ),
-                  }}
-                  placeholder="Search Category"
-                  size="small"
-                  className="bg-white rounded-lg w-full"
-                />
-                <IconButton
-                  onClick={() => setBackDropOpen(false)}
-                  className="text-white"
-                >
-                  <Backspace />
-                </IconButton>
-              </div>
-              <div className="bg-white text-black w-full">
-                {searchItems?.map((item, i) => (
-                  <Box
-                    key={i}
-                    sx={{
-                      "& > img": { mr: 2, flexShrink: 0 },
-                      display: "flex",
-                      padding: 1,
-                    }}
-                    // {...props}
-                  >
-                    <img
-                      loading="lazy"
-                      width="20"
-                      src={item?.categoryImage || item?.standardImage}
-                      alt=""
-                    />
-                    {item?.categoryName || item?.productName}
-                  </Box>
-                ))}
-              </div>
-            </Backdrop>
+            <SearchDrawer />
           </div>
         )}
         <Box sx={{ display: ["none", "none", "flex"], alignItems: "center" }}>

@@ -21,7 +21,7 @@ const BottomNav = () => {
   return (
     <div
       // className="btm-nav"
-      className="sticky bottom-0 lg:hidden"
+      className="sticky bottom-0 lg:hidden z-[300]"
     >
       <Divider />
       <BottomNavigation

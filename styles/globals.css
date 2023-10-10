@@ -2,6 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  /* h1 {
+    @apply text-4xl font-bold text-center mb-8;
+  }
+  h2 {
+    @apply text-2xl font-bold;
+  }
+  p {
+    @apply opacity-80;
+  } */
+  /* Scrollbar Styling */
+  ::-webkit-scrollbar {
+    @apply w-2;
+    @apply h-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-base-content/10 rounded-full;
+    -webkit-border-radius: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gradient-to-tr from-secondary via-primary to-accent rounded-full;
+    -webkit-border-radius: 8px;
+  }
+}
+
 /* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
