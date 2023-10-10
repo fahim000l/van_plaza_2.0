@@ -8,14 +8,15 @@ const Profile = ({ children }) => {
       <ProfileNav />
       <div className="drawer lg:drawer-open">
         <input id="profileDrawer" type="checkbox" className="drawer-toggle" />
-        <div className="drawer-content">
+        <div className="drawer-content lg:m-10 m-2">
           {/* Page content here */}
-          <div className="h-[100vh]">
-            <div className="lg:p-10 p-2">{children}</div>
-            <BottomNav />
-          </div>
+          {/* <div className="h-[100vh]"> */}
+          {/* <div className="lg:p-10 p-2"></div> */}
+          {children}
+          <BottomNav />
+          {/* </div> */}
         </div>
-        <div className="drawer-side">
+        <div className="drawer-side z-[300]">
           <label htmlFor="profileDrawer" className="drawer-overlay"></label>
           <ul className="menu p-4 w-48 min-h-full bg-base-200 text-base-content space-y-5">
             {/* Sidebar content here */}

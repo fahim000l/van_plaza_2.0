@@ -35,11 +35,6 @@ const BottomNav = () => {
         <BottomNavigationAction value={"/"} label="Home" icon={<Home />} />
         <BottomNavigationAction value={"/shop"} label="Shop" icon={<Shop2 />} />
         <BottomNavigationAction
-          value={"/account"}
-          label="Account"
-          icon={<Avatar size="sm" src={authUser?.profilePic} />}
-        />
-        <BottomNavigationAction
           value={"/profile"}
           label="Profile"
           icon={<Avatar size="sm" src={authUser?.profilePic} />}

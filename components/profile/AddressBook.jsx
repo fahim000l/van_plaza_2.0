@@ -61,7 +61,7 @@ const AddressBook = () => {
         <label ref={locationSelectLabel} hidden htmlFor="locationSelectModal">
           locationSelectModal
         </label>
-        <p className="font-bold text-white">Address Book</p>
+        <p className="font-bold text-white w-full">Address Book</p>
         <LocationSelectModal
           state={state}
           toggleDrawer={toggleDrawer}

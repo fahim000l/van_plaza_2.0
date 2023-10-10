@@ -94,7 +94,7 @@ const ProductCard = ({ sp, setSelectedProduct }) => {
           sx={{ padding: [1, 2, 2], borderRadius: "10px 10px 0px 0px" }}
           variant="outlined"
         >
-          <Box onClick={() => push(`/shop/${_id}`)} sx={{ maxWidth: 400 }}>
+          <Box onClick={() => push(`/shop/${_id}`)}>
             <AutoPlaySwipeableViews
               axis={theme.direction === "rtl" ? "x-reverse" : "x"}
               index={activeStep}

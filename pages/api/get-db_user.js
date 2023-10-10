@@ -24,6 +24,42 @@ export default async function (req, res) {
             pipeline: [
               {
                 $lookup: {
+                  from: "quantities_stocks",
+                  localField: "qpId",
+                  foreignField: "_id",
+                  as: "qpInfo",
+                  pipeline: [
+                    {
+                      $lookup: {
+                        from: "products_stocks",
+                        localField: "psId",
+                        foreignField: "_id",
+                        as: "psInfo",
+                        pipeline: [
+                          {
+                            $lookup: {
+                              from: "products",
+                              localField: "productId",
+                              foreignField: "_id",
+                              as: "productInfo",
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                $lookup: {
+                  from: "orders",
+                  localField: "orderId",
+                  foreignField: "_id",
+                  as: "orderInfo",
+                },
+              },
+              {
+                $lookup: {
                   from: "categories",
                   localField: "categoryId",
                   foreignField: "_id",

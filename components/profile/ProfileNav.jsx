@@ -7,18 +7,19 @@ const ProfileNav = () => {
   const { authUser } = useContext(AUTH_CONTEXT);
 
   return (
-    <div className="navbar bg-[steelblue] space-x-2">
-      <div className="flex-none gap-2">
-        <Avatar src={authUser?.profilePic} />
-      </div>
-      <div className="flex-1">
-        <p className="text-white font-bold text-xl">{authUser?.userName}</p>
-      </div>
-
+    <div className="navbar bg-[steelblue] space-x-2 sticky top-0 z-[300]">
       <div className="flex-none gap-2">
         <label htmlFor="profileDrawer" className="text-white lg:hidden">
           <Menu />
         </label>
+      </div>
+      <div className="w-full flex items-center justify-center space-x-2">
+        <div>
+          <Avatar src={authUser?.profilePic} />
+        </div>
+        <div>
+          <p className="text-white font-bold text-xl">{authUser?.userName}</p>
+        </div>
       </div>
     </div>
   );
