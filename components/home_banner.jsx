@@ -103,22 +103,24 @@ const HomeBanner = () => {
         {authUserDefaultLocation?.Address?.address.split(",")[0] ||
           "Select Your Location"}
       </Button> */}
-      <LocationSelectModal
-        state={state}
-        toggleDrawer={toggleDrawer}
-        content={
-          <Button
-            fullWidth
-            onClick={toggleDrawer("bottom", true)}
-            className="hover:bg-white bg-white hover:text-black text-black mx-auto normal-case font-bold text-xs"
-            startIcon={<LocationOn className="text-[steelblue]" />}
-          >
-            |{" "}
-            {authUserDefaultLocation?.Address?.address.split(",")[0] ||
-              "Select Your Location"}
-          </Button>
-        }
-      />
+      {authUser?.email && (
+        <LocationSelectModal
+          state={state}
+          toggleDrawer={toggleDrawer}
+          content={
+            <Button
+              fullWidth
+              onClick={toggleDrawer("bottom", true)}
+              className="hover:bg-white bg-white hover:text-black text-black mx-auto normal-case font-bold text-xs"
+              startIcon={<LocationOn className="text-[steelblue]" />}
+            >
+              |{" "}
+              {authUserDefaultLocation?.Address?.address.split(",")[0] ||
+                "Select Your Location"}
+            </Button>
+          }
+        />
+      )}
     </Box>
   );
 };

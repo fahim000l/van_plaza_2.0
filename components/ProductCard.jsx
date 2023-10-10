@@ -86,7 +86,10 @@ const ProductCard = ({ sp, setSelectedProduct }) => {
 
   if (totalQpsQuantity !== 0) {
     return (
-      <div className="cursor-pointer flex flex-col items-center justify-center p-1 lg:p-2">
+      <div
+        className="cursor-pointer flex flex-col items-center justify-center p-1 lg:p-2 tooltip"
+        data-tip={product?.productName}
+      >
         <Card
           sx={{ padding: [1, 2, 2], borderRadius: "10px 10px 0px 0px" }}
           variant="outlined"
@@ -123,7 +126,11 @@ const ProductCard = ({ sp, setSelectedProduct }) => {
               {/* <marquee className="font-bold" behavior="" direction="">
                 {product?.productName}
               </marquee> */}
-              <p className="font-bold">{product?.productName}</p>
+              <p className="font-bold">
+                {product?.productName?.length > 12
+                  ? product?.productName?.slice(0, 12) + "..."
+                  : product?.productName}
+              </p>
               <p className="font-bold text-[steelblue]">{sellPrice}/-</p>
             </div>
           </div>

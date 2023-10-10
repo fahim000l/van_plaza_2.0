@@ -9,7 +9,7 @@ const HomeCategories = () => {
   const { categories } = useGetAllCategories(8);
 
   return (
-    <div className="grid card bg-[steelblue] lg:rounded-box lg:p-10 p-5">
+    <div className="grid lg:card bg-[steelblue] lg:rounded-box lg:p-10 p-5">
       <div className="flex justify-between">
         <p className="text-white font-bold">Categories</p>
         <Link href={"/all-categories"}>
