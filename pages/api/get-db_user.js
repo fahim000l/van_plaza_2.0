@@ -17,6 +17,62 @@ export default async function (req, res) {
         },
         {
           $lookup: {
+            from: "ordered_stocks",
+            localField: "email",
+            foreignField: "user",
+            as: "ops",
+            pipeline: [
+              {
+                $lookup: {
+                  from: "categories",
+                  localField: "categoryId",
+                  foreignField: "_id",
+                  as: "categoryInfo",
+                  pipeline: [
+                    {
+                      $lookup: {
+                        from: "products_stocks",
+                        localField: "_id",
+                        foreignField: "categoryId",
+                        as: "sps",
+                        pipeline: [
+                          {
+                            $lookup: {
+                              from: "products",
+                              localField: "productId",
+                              foreignField: "_id",
+                              as: "products",
+                            },
+                          },
+                          {
+                            $lookup: {
+                              from: "quantities_stocks",
+                              localField: "_id",
+                              foreignField: "psId",
+                              as: "qps",
+                              pipeline: [
+                                {
+                                  $lookup: {
+                                    from: "sizes",
+                                    localField: "size",
+                                    foreignField: "_id",
+                                    as: "sizes",
+                                  },
+                                },
+                              ],
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+        {
+          $lookup: {
             from: "locations",
             localField: "email",
             foreignField: "user",

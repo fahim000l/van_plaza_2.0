@@ -24,19 +24,21 @@ const BoxStyle = {
 };
 
 export default function HomeCategoryCard({ category }) {
-  const { categoryName, categoryImage } = category;
+  const { categoryName, categoryImage, _id } = category;
 
   return (
-    <Card variant="outlined">
-      {/* <AspectRatio> */}
-      <div>
-        <img src={categoryImage} className="w-full h-20 lg:h-40" alt="" />
-      </div>
-      {/* </AspectRatio> */}
-      <div>
-        <Typography level="title-md">{categoryName}</Typography>
-        {/* <Typography level="body-sm">Description of the card.</Typography> */}
-      </div>
-    </Card>
+    <Link href={`/category/${_id}`}>
+      <Card variant="outlined" sx={{ cursor: "pointer" }}>
+        {/* <AspectRatio> */}
+        <div>
+          <img src={categoryImage} className="w-full h-20 lg:h-40" alt="" />
+        </div>
+        {/* </AspectRatio> */}
+        <div>
+          <Typography level="title-md">{categoryName}</Typography>
+          {/* <Typography level="body-sm">Description of the card.</Typography> */}
+        </div>
+      </Card>
+    </Link>
   );
 }

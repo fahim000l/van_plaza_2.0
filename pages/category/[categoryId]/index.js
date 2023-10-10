@@ -1,12 +1,17 @@
 import ProductCard from "@/components/ProductCard";
 import SizeSelectModal from "@/components/SizeSelectModal";
-import useGetAllProducts from "@/hooks/useGetAllProducts";
 import useGetAllPs from "@/hooks/useGetAllPs";
 import Main from "@/layouts/Main";
-import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
 
-const Shop = () => {
-  const { sps } = useGetAllPs("");
+const categoryProducts = () => {
+  const {
+    query: { categoryId },
+  } = useRouter();
+
+  const { sps } = useGetAllPs(categoryId);
+
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   return (
@@ -32,4 +37,4 @@ const Shop = () => {
   );
 };
 
-export default Shop;
+export default categoryProducts;

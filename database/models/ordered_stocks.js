@@ -6,6 +6,10 @@ const orderedStocksSchema = new Schema(
       type: Schema.ObjectId,
       required: true,
     },
+    user: {
+      type: String,
+      required: true,
+    },
     categoryId: {
       type: Schema.ObjectId,
       required: true,

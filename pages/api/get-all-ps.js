@@ -1,4 +1,4 @@
-import { client, connectMongo } from "@/database/config";
+import { connectMongo } from "@/database/config";
 import products_stocks from "@/database/models/products_stocks";
 import { ObjectId } from "mongodb";
 
@@ -6,6 +6,11 @@ export default async function (req, res) {
   try {
     connectMongo().catch((err) => res.json({ error: "Connection Failed...!" }));
     const sps = await products_stocks.aggregate([
+      {
+        $match: req.query.categoryId
+          ? { categoryId: new ObjectId(req.query.categoryId) }
+          : {},
+      },
       {
         $lookup: {
           from: "products",

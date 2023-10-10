@@ -1,22 +1,18 @@
 import { client, connectMongo } from "@/database/config";
+import categories from "@/database/models/categories";
 
 export default async function (req, res) {
-  connectMongo().catch((err) => res.json({ error: "Connection Failed...!" }));
   try {
-    await client.connect();
-    const categoryCollection = client.db("van_plaza").collection("categories");
+    connectMongo().catch((err) => res.json({ error: "Connection Failed...!" }));
 
     const query = {};
 
-    if (req.limit) {
-      const categories = await categoryCollection
-        .find(query)
-        .limit(req.limit)
-        .toArray();
-      return res.status(200).json(categories);
+    if (req.query.limit) {
+      const allCategories = await categories.find(query).limit(req.query.limit);
+      return res.status(200).json(allCategories);
     } else {
-      const categories = await categoryCollection.find(query).toArray();
-      return res.status(200).json(categories);
+      const allCategories = await categories.find(query);
+      return res.status(200).json(allCategories);
     }
   } finally {
   }

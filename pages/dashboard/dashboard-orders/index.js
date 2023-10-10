@@ -25,7 +25,8 @@ const rows = [
 ];
 
 const DashboardOrders = () => {
-  const { orders } = useGetAllOrders();
+  const [showingStatus, setShowingStatus] = useState(null);
+  const { orders } = useGetAllOrders(showingStatus);
 
   const [viewLocation, setViewLocation] = useState(null);
   const [viewUser, setViewUser] = useState(null);
@@ -37,9 +38,28 @@ const DashboardOrders = () => {
   return (
     <Dashboard>
       <div className="tabs tabs-boxed mb-5">
-        <a className="tab">All</a>
-        <a className="tab">Pending</a>
-        <a className="tab">Delevered</a>
+        <button
+          onClick={() => setShowingStatus(null)}
+          className={`tab w-[33.3%] ${showingStatus === null && "tab-active"}`}
+        >
+          All
+        </button>
+        <button
+          onClick={() => setShowingStatus("success")}
+          className={`tab w-[33.3%] ${
+            showingStatus === "success" && "tab-active"
+          }`}
+        >
+          Pending
+        </button>
+        <button
+          onClick={() => setShowingStatus("delevered")}
+          className={`tab w-[33.3%] ${
+            showingStatus === "delevered" && "tab-active"
+          }`}
+        >
+          Delevered
+        </button>
       </div>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">

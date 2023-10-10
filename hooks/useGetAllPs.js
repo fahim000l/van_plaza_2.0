@@ -1,14 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 
-const useGetAllPs = () => {
+const useGetAllPs = (categoryId) => {
   const {
     data: sps,
     refetch: spsRefetch,
     isLoading: spsLoading,
   } = useQuery({
-    queryKey: ["/api/get-all-ps"],
-    queryFn: () => fetch("/api/get-all-ps").then((res) => res.json()),
+    queryKey: ["/api/get-all-ps", categoryId],
+    queryFn: () =>
+      fetch(`/api/get-all-ps?categoryId=${categoryId}`).then((res) =>
+        res.json()
+      ),
   });
 
   return { sps, spsRefetch, spsLoading };

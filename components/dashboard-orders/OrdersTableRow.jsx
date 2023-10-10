@@ -66,34 +66,43 @@ const OrdersTableRow = ({ order, setViewLocation, setViewUser }) => {
         </IconButton>
       </TableCell>
       <TableCell align="center">
-        <input
-          type="text"
-          className="input input-bordered input-sm mb-2"
-          value={date}
-          disabled
-        />
-        <Chip label={_id} />
+        <div className="tooltip" data-tip={_id}>
+          <input
+            type="text"
+            className="input input-bordered input-sm mb-2"
+            value={date}
+            disabled
+          />
+        </div>
       </TableCell>
       <TableCell align="center">{deleveryFee} /-</TableCell>
-      <TableCell align="center">{transId}</TableCell>
       <TableCell align="center">
-        <TextField size="small" value={location?.Address?.address} />
-        <label
-          ref={showLocationModalLabel}
-          htmlFor="showLocationModal"
-          className="hidden"
-          onClick={() => setViewLocation(location)}
-        >
-          Show Location
-        </label>
-        <Button
+        {transId}
+        {/* <input
+          type="text"
+          className="input input-bordered input-xs w-20"
+          value={transId}
+        /> */}
+      </TableCell>
+      <TableCell align="center">
+        <div className="tooltip" data-tip={location?.Address?.address}>
+          <label
+            ref={showLocationModalLabel}
+            htmlFor="showLocationModal"
+            className="btn btn-xs btn-primary"
+            onClick={() => setViewLocation(location)}
+          >
+            Show
+          </label>
+        </div>
+        {/* <Button
           onClick={() => showLocationModalLabel.current.click()}
           fullWidth
           size="small"
           className="bg-[steelblue] hover:bg-[steelblue] text-white hover:text-white normal-case mt-2"
         >
           Detail
-        </Button>
+        </Button> */}
       </TableCell>
       <TableCell align="center">
         <OpsDrawer ops={ops} />
