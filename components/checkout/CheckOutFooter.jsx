@@ -2,7 +2,7 @@ import React from "react";
 
 const CheckOutFooter = ({ calculateItemsTotal, deleveryFee }) => {
   return (
-    <div className="btm-nav z-[200] lg:hidden">
+    <div className="btm-nav z-[900] lg:hidden">
       <div className="flex w-[50%] active">
         <p>
           Total :{" "}
