@@ -53,6 +53,8 @@ const signin = () => {
     console.log(confirmation);
     if (confirmation?.status === 200) {
       setLoading(false);
+      console.log(confirmation);
+
       push(confirmation.url);
     }
   };

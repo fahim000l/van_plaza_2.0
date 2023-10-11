@@ -25,12 +25,12 @@ const PsDetailsBottomNav = ({ sizeSelectModal }) => {
   const { push } = useRouter();
 
   return (
-    <div className="btm-nav z-[900] lg:hidden">
-      <button onClick={() => push("/shop")} className="active">
+    <div className="btm-nav z-[900] lg:hidden border-2 border-solid border-b-0 border-r-0 border-l-0 border-gray-500">
+      <button onClick={() => push("/shop")} className="text-xs">
         <Shop2 />
         <span className="btm-nav-label">Shop</span>
       </button>
-      <button className="active">
+      <button>
         <label
           onClick={() => sizeSelectModal.current.click()}
           //   variant="contained"

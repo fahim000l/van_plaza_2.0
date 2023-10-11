@@ -2,15 +2,14 @@ import React, { useContext } from "react";
 import { Menu, MenuItem, ListItemIcon, Avatar, Divider } from "@mui/material";
 import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
 import { PersonAdd, Settings, Logout } from "@mui/icons-material";
-import { signOut } from "next-auth/react";
 import Link from "next/link";
 
 const AuthMenu = ({ anchorEl, setAnchorEl, open }) => {
-  const { authUser, setAuthLoader } = useContext(AUTH_CONTEXT);
+  const { authUser, setAuthLoader, signingOut } = useContext(AUTH_CONTEXT);
 
   const handleLogOut = () => {
     setAuthLoader(true);
-    signOut();
+    signingOut();
     setAnchorEl(null);
   };
 

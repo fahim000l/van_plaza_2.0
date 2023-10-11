@@ -298,20 +298,12 @@ const OnSaleProductDetails = () => {
                 </p>
                 <label
                   onClick={() => setSelectedProduct(ps[0])}
-                  ref={sizeSelectModal}
-                  hidden
+                  className="bg-[steelblue] text-white w-full normal-case py-1 flex items-center justify-center space-x-5 font-bold cursor-pointer shadow-xl rounded-md"
                   htmlFor="sizeSelectModal"
                 >
-                  Size Select Modal
+                  <span>Add To Cart</span>
+                  <AddShoppingCartSharp />
                 </label>
-                <Button
-                  onClick={() => sizeSelectModal.current.click()}
-                  variant="contained"
-                  className="bg-[steelblue] text-white hidden lg:inline"
-                  endIcon={<AddShoppingCartSharp />}
-                >
-                  Add to Cart
-                </Button>
                 <div className="divider"></div>
                 <div>
                   <p>Available Sizes</p>

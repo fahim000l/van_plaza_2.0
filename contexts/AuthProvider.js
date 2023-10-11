@@ -1,32 +1,56 @@
 // import useGetDbUser from "@/hooks/useGetDbUser";
 import useGetDbUser from "@/hooks/useGetDbUser";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import React, { createContext, useEffect, useState } from "react";
 
 export const AUTH_CONTEXT = createContext();
 
 const AuthProvider = ({ children }) => {
-  const [authUser, setAuthUser] = useState(null);
   const [authLoader, setAuthLoader] = useState(false);
-  const [findingUser, setFindingUser] = useState("");
   const { data: sessionData, status: sessionStatus, update } = useSession();
-  const { dbUser } = useGetDbUser(findingUser);
+  const { dbUser: authUser, dbUserRefetch } = useGetDbUser(
+    sessionData?.user?.email ? sessionData?.user?.email : null
+  );
 
   useEffect(() => {
     if (sessionData && sessionStatus === "authenticated") {
-      setFindingUser(sessionData?.user?.email);
+      localStorage.setItem("van_jwt", sessionData?.jwt);
+      if (localStorage?.getItem("van_jwt") === sessionData?.jwt) {
+        sessionData.jwt = "";
+      }
+      dbUserRefetch();
+      console.log(sessionData);
     } else {
-      setAuthUser(null);
       setAuthLoader(false);
     }
   }, [sessionData, sessionStatus]);
 
   useEffect(() => {
-    if (dbUser) {
-      setAuthUser(dbUser);
+    if (authUser) {
       setAuthLoader(false);
     }
-  }, [dbUser]);
+  }, [authUser]);
+
+  useEffect(() => {
+    console.log(sessionData, sessionStatus);
+    if (!sessionData?.user) {
+      signingOut();
+    }
+  }, [sessionData, sessionStatus]);
+
+  const signingOut = () => {
+    if (authUser) {
+      fetch(`/api/delete-all-cart?user=${authUser?.email}`, {
+        method: "DELETE",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data?.success) {
+            signOut().then(() => localStorage.removeItem("van_jwt"));
+          }
+        });
+    }
+  };
 
   const authInfo = {
     authUser,
@@ -34,6 +58,7 @@ const AuthProvider = ({ children }) => {
     sessionStatus,
     authLoader,
     setAuthLoader,
+    signingOut,
   };
 
   return (

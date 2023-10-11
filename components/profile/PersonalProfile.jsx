@@ -1,7 +1,7 @@
 import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
 import React, { useContext, useRef } from "react";
 import { Avatar, Chip, Button } from "@mui/material";
-import { Edit } from "@mui/icons-material";
+import { Edit, Logout } from "@mui/icons-material";
 import { IconButton } from "@mui/joy";
 import EditProfileModal from "./EditProfileModal";
 
@@ -54,6 +54,14 @@ const PersonalProfile = () => {
               Phone : <Chip size="small" color="error" label={"Not set yet"} />
             </p>
           )}
+          <Button
+            color="error"
+            variant="contained"
+            className="bg-red-700 font-bold mt-5"
+            startIcon={<Logout />}
+          >
+            Log Out
+          </Button>
         </div>
       </div>
       {authUser && <EditProfileModal />}

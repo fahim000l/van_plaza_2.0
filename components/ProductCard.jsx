@@ -140,24 +140,16 @@ const ProductCard = ({ sp, setSelectedProduct }) => {
                 <p className="font-bold text-[steelblue]">{sellPrice}/-</p>
               </div>
             </div>
-            <label ref={sizeSelectModal} hidden htmlFor="sizeSelectModal">
-              Size Select Modal
-            </label>
           </Card>
-          <Button
-            fullWidth
-            onClick={() => {
-              sizeSelectModal.current.click();
-              setSelectedProduct(sp);
-            }}
-            sx={{ borderRadius: "0px 0px 10px 10px" }}
-            id="addToCartBtn"
-            endDecorator={<AddShoppingCart />}
-            className="bg-[steelblue] text-white hover:bg-[blue] text-xs"
-            size="sm"
+          <label
+            onClick={() => setSelectedProduct(sp)}
+            style={{ borderRadius: "0px 0px 10px 10px" }}
+            className="bg-[steelblue] text-white w-full normal-case py-1 flex items-center justify-center space-x-5 font-bold cursor-pointer text-sm"
+            htmlFor="sizeSelectModal"
           >
-            Add To Cart
-          </Button>
+            <span>Add To Cart</span>
+            <AddShoppingCart />
+          </label>
         </div>
       );
     }
