@@ -110,8 +110,9 @@ export default function SearchDrawer() {
             open={state[anchor]}
             onClose={toggleDrawer(anchor, false)}
           >
-            <div className="flex items-center space-x-2 mt-2 w-screen p-5">
+            <div className="flex items-center space-x-2 mt-2 w-screen p-1 lg:p-5">
               <IconButton
+                size="small"
                 ref={backSpaceBtn}
                 onClick={toggleDrawer(anchor, false)}
               >
@@ -127,6 +128,7 @@ export default function SearchDrawer() {
                 options={categories}
               />
               <IconButton
+                size="small"
                 onClick={(anchor) => {
                   push(`/search/${searchValue}`);
                   backSpaceBtn.current.click();

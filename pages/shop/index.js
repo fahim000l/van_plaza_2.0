@@ -6,7 +6,7 @@ import Main from "@/layouts/Main";
 import React, { useEffect, useState } from "react";
 
 const Shop = () => {
-  const { sps } = useGetAllPs("");
+  const { sps } = useGetAllPs("", "*");
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   return (

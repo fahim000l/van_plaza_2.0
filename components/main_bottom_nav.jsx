@@ -18,30 +18,40 @@ const BottomNav = () => {
   const { authUser } = useContext(AUTH_CONTEXT);
   const { push, pathname } = useRouter();
 
-  return (
-    <div
-      // className="btm-nav"
-      className="sticky bottom-0 lg:hidden z-[300]"
-    >
-      <Divider />
-      <BottomNavigation
-        showLabels
-        value={value}
-        onChange={(event, newValue) => {
-          push(newValue);
-          setValue(newValue);
-        }}
+  if (
+    !pathname.includes("/shop/") ||
+    !pathname.includes("/checkout") ||
+    !pathname.includes("/search/")
+  ) {
+    return (
+      <div
+        // className="btm-nav"
+        className="sticky bottom-0 lg:hidden z-[300]"
       >
-        <BottomNavigationAction value={"/"} label="Home" icon={<Home />} />
-        <BottomNavigationAction value={"/shop"} label="Shop" icon={<Shop2 />} />
-        <BottomNavigationAction
-          value={"/profile"}
-          label="Profile"
-          icon={<Avatar size="sm" src={authUser?.profilePic} />}
-        />
-      </BottomNavigation>
-    </div>
-  );
+        <Divider />
+        <BottomNavigation
+          showLabels
+          value={value}
+          onChange={(event, newValue) => {
+            push(newValue);
+            setValue(newValue);
+          }}
+        >
+          <BottomNavigationAction value={"/"} label="Home" icon={<Home />} />
+          <BottomNavigationAction
+            value={"/shop"}
+            label="Shop"
+            icon={<Shop2 />}
+          />
+          <BottomNavigationAction
+            value={"/profile"}
+            label="Profile"
+            icon={<Avatar size="sm" src={authUser?.profilePic} />}
+          />
+        </BottomNavigation>
+      </div>
+    );
+  }
 };
 
 export default BottomNav;

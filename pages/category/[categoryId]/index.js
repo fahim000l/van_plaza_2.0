@@ -10,7 +10,7 @@ const categoryProducts = () => {
     query: { categoryId },
   } = useRouter();
 
-  const { sps } = useGetAllPs(categoryId);
+  const { sps } = useGetAllPs(categoryId, "*");
 
   const [selectedProduct, setSelectedProduct] = useState(null);
 

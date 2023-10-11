@@ -17,21 +17,31 @@ export default async function (req, res) {
           localField: "productId",
           foreignField: "_id",
           as: "products",
-          pipeline: req.query.search
-            ? [
-                {
-                  $search: {
-                    index: "search_products",
-                    text: {
-                      query: req.query.search,
-                      path: {
-                        wildcard: "*",
+          pipeline:
+            req.query.search !== "*"
+              ? [
+                  {
+                    $search: {
+                      index: "search_products",
+                      text: {
+                        query: req.query.search,
+                        path: {
+                          wildcard: "*",
+                        },
                       },
                     },
                   },
-                },
-              ]
-            : [],
+                ]
+              : [
+                  {
+                    $lookup: {
+                      from: "categories",
+                      localField: "categoryId",
+                      foreignField: "_id",
+                      as: "categoryInfo",
+                    },
+                  },
+                ],
         },
       },
       {
