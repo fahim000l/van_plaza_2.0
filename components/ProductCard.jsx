@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Button, Card, Typography } from "@mui/joy";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -7,10 +7,14 @@ import { autoPlay } from "react-swipeable-views-utils";
 import { LoadingButton } from "@mui/lab";
 import { AddShoppingCart } from "@mui/icons-material";
 import { useRouter } from "next/router";
+import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
+import Link from "next/link";
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 const ProductCard = ({ sp, setSelectedProduct }) => {
+  const { authUser } = useContext(AUTH_CONTEXT);
+
   const [images, setImages] = useState([]);
   const { push } = useRouter();
   const {
@@ -141,15 +145,30 @@ const ProductCard = ({ sp, setSelectedProduct }) => {
               </div>
             </div>
           </Card>
-          <label
-            onClick={() => setSelectedProduct(sp)}
-            style={{ borderRadius: "0px 0px 10px 10px" }}
-            className="bg-[steelblue] text-white w-full normal-case py-1 flex items-center justify-center space-x-5 font-bold cursor-pointer text-sm"
-            htmlFor="sizeSelectModal"
-          >
-            <span>Add To Cart</span>
-            <AddShoppingCart />
-          </label>
+          <div className="w-full">
+            {authUser?.email ? (
+              <label
+                onClick={() => setSelectedProduct(sp)}
+                style={{ borderRadius: "0px 0px 10px 10px" }}
+                className="bg-[steelblue] text-white w-full normal-case py-1 flex items-center justify-center space-x-5 font-bold cursor-pointer text-sm"
+                htmlFor="sizeSelectModal"
+              >
+                <span>Add To Cart</span>
+                <AddShoppingCart />
+              </label>
+            ) : (
+              <Link href={"/signin"}>
+                <button
+                  style={{ borderRadius: "0px 0px 10px 10px" }}
+                  className="bg-[steelblue] text-white w-full normal-case py-1 flex items-center justify-center space-x-5 font-bold cursor-pointer text-sm"
+                  htmlFor="sizeSelectModal"
+                >
+                  <span>Add To Cart</span>
+                  <AddShoppingCart />
+                </button>
+              </Link>
+            )}
+          </div>
         </div>
       );
     }

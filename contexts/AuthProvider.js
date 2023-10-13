@@ -8,22 +8,27 @@ export const AUTH_CONTEXT = createContext();
 const AuthProvider = ({ children }) => {
   const [authLoader, setAuthLoader] = useState(false);
   const { data: sessionData, status: sessionStatus, update } = useSession();
+  const [isCookieSet, setCookie] = useState(false);
   const { dbUser: authUser, dbUserRefetch } = useGetDbUser(
     sessionData?.user?.email ? sessionData?.user?.email : null
   );
 
   useEffect(() => {
     if (sessionData && sessionStatus === "authenticated") {
-      localStorage.setItem("van_jwt", sessionData?.jwt);
-      if (localStorage?.getItem("van_jwt") === sessionData?.jwt) {
-        sessionData.jwt = "";
+      if (!isCookieSet) {
+        fetch(`/api/sign-jwt?email=${sessionData.user.email}`)
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+            setCookie(data?.success);
+          });
       }
       dbUserRefetch();
       console.log(sessionData);
     } else {
       setAuthLoader(false);
     }
-  }, [sessionData, sessionStatus]);
+  }, [sessionData, sessionStatus, isCookieSet]);
 
   useEffect(() => {
     if (authUser) {

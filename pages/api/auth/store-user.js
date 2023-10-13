@@ -24,12 +24,14 @@ export default async function handler(req, res) {
               userName: userInfo?.userName,
               password: await hash(userInfo?.password, 12),
               profilePic: userInfo?.profilePic,
+              role: "user",
             };
           } else {
             userData = {
               email: userInfo?.email,
               userName: userInfo?.userName,
               profilePic: userInfo?.profilePic,
+              role: "user",
             };
           }
           const confirmation = await users.create(userData);

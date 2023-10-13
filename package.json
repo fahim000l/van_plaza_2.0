@@ -26,6 +26,7 @@
     "formidable": "^3.5.1",
     "formik": "^2.4.3",
     "fuse.js": "^6.6.2",
+    "jose": "^4.15.3",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^5.8.1",
     "mongoose": "^7.5.2",

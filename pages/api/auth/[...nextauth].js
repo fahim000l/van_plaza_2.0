@@ -5,7 +5,9 @@ import { client, connectMongo } from "@/database/config";
 import { compare } from "bcrypt";
 import users from "@/database/models/users";
 import JWT from "jsonwebtoken";
+import { serialize } from "cookie";
 import { NextResponse } from "next/server";
+import fetch from "node-fetch";
 
 export default NextAuth({
   providers: [
@@ -71,22 +73,6 @@ export default NextAuth({
             if (!checkPassword || isExist?.email !== credentials?.email) {
               throw new Error("User email or password doesn't match");
             } else {
-              const jwt_token = JWT.sign(
-                { email: credentials?.email },
-                process.env.NEXT_PUBLIC_JWT_TOKEN,
-                { expiresIn: 60 }
-              );
-
-              const response = NextResponse.json({
-                mesage: "Login successful",
-                success: true,
-                isExist,
-              });
-
-              response.cookies.set("van_plaza_jwt", jwt_token, {
-                httpOnly: true,
-              });
-
               return isExist;
             }
           }
@@ -97,8 +83,9 @@ export default NextAuth({
   ],
   secret: process.env.NEXTAUTH_SECRET,
   session: {
+    strategy: "jwt",
     jwt: true, // Enable JSON Web Tokens for sessions
-    maxAge: 60, // Set the session expiration to 2 minutes (120 seconds)
+    maxAge: 24 * 60 * 60, // Set the session expiration to 2 minutes (120 seconds)
   },
   callbacks: {
     jwt: async ({ token, user }) => {
