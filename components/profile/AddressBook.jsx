@@ -56,7 +56,10 @@ const AddressBook = () => {
   };
 
   return (
-    <div className="grid card bg-[steelblue] rounded-box p-5 my-2">
+    <div
+      id="addressBook"
+      className="grid card bg-[steelblue] rounded-box p-5 my-2"
+    >
       <div className="flex justify-between mb-5">
         <label ref={locationSelectLabel} hidden htmlFor="locationSelectModal">
           locationSelectModal

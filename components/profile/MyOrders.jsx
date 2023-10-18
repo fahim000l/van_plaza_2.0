@@ -8,7 +8,10 @@ const MyOrders = () => {
   } = useContext(AUTH_CONTEXT);
 
   return (
-    <div className="grid card bg-[steelblue] rounded-box p-5 my-2">
+    <div
+      id="myOrders"
+      className="grid card bg-[steelblue] rounded-box p-5 my-2"
+    >
       <div className="flex justify-between mb-5">
         <p className="font-bold text-white w-full">My Orders</p>
       </div>

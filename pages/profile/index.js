@@ -11,7 +11,7 @@ const ProfilePage = () => {
   return (
     <Profile>
       <PersonalProfile />
-      <AddressBook />
+      {authUser?.locations?.length > 0 && <AddressBook />}
       {authUser?.ops?.length > 0 && <MyOrders />}
     </Profile>
   );

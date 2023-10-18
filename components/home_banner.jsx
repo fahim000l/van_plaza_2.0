@@ -115,7 +115,7 @@ const HomeBanner = () => {
               startIcon={<LocationOn className="text-[steelblue]" />}
             >
               |{" "}
-              {authUserDefaultLocation?.Address?.address.split(",")[0] ||
+              {authUserDefaultLocation?.Address?.address ||
                 "Select Your Location"}
             </Button>
           }

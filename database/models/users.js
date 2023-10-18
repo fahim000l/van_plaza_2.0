@@ -19,8 +19,16 @@ const usersSchema = new Schema(
     role: {
       type: String,
     },
+    isVarified: {
+      type: Boolean,
+      required: true,
+    },
     password: {
       type: String,
+    },
+    emailToken: {
+      type: String,
+      required: true,
     },
   },
   { timestamps: true }

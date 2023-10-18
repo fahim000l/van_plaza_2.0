@@ -13,9 +13,10 @@ export default async function (req, res) {
           req.body.to,
           req.body.text
         );
-        return res
-          .status(200)
-          .json({ mailResult, message: "Mail sent successfully" });
+
+        if (mailResult?.accepted?.length > 0) {
+          return res.status(200).json({ mailResult, success: true });
+        }
       }
     } else {
       return res.status(500).json({

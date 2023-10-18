@@ -1,5 +1,7 @@
 import BottomNav from "@/components/main_bottom_nav";
 import ProfileNav from "@/components/profile/ProfileNav";
+import { Button } from "@mui/joy";
+import Link from "next/link";
 import React from "react";
 
 const Profile = ({ children }) => {
@@ -21,19 +23,34 @@ const Profile = ({ children }) => {
           <ul className="menu p-4 w-48 min-h-full bg-base-200 text-base-content space-y-5">
             {/* Sidebar content here */}
             <li>
-              <a className="bg-[steelblue] text-white hover:bg-[steelblue] hover:text-white">
+              <a
+                href="#personalProfile"
+                className="bg-[steelblue] text-white hover:bg-[steelblue] hover:text-white"
+              >
                 Personal Profile
               </a>
             </li>
             <li>
-              <a className="bg-[steelblue] text-white hover:bg-[steelblue] hover:text-white">
+              <a
+                href="#addressBook"
+                className="bg-[steelblue] text-white hover:bg-[steelblue] hover:text-white"
+              >
                 Address Book
               </a>
             </li>
             <li>
-              <a className="bg-[steelblue] text-white hover:bg-[steelblue] hover:text-white">
+              <a
+                href="#myOrders"
+                className="bg-[steelblue] text-white hover:bg-[steelblue] hover:text-white"
+              >
                 My Orders
               </a>
+            </li>
+            <li>
+              <Link href={"/"}>
+                {" "}
+                <button>Back to home</button>
+              </Link>
             </li>
           </ul>
         </div>

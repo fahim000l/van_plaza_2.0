@@ -25,6 +25,8 @@ export default async function handler(req, res) {
               password: await hash(userInfo?.password, 12),
               profilePic: userInfo?.profilePic,
               role: "user",
+              isVarified: false,
+              emailToken: await hash(process.env.NEXT_PUBLIC_EMAIL_TOKEN, 12),
             };
           } else {
             userData = {
@@ -32,6 +34,8 @@ export default async function handler(req, res) {
               userName: userInfo?.userName,
               profilePic: userInfo?.profilePic,
               role: "user",
+              isVarified: false,
+              emailToken: await hash(process.env.NEXT_PUBLIC_EMAIL_TOKEN, 12),
             };
           }
           const confirmation = await users.create(userData);

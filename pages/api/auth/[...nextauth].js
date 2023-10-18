@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { client, connectMongo } from "@/database/config";
-import { compare } from "bcrypt";
+import { compare, hash } from "bcrypt";
 import users from "@/database/models/users";
 import JWT from "jsonwebtoken";
 import { serialize } from "cookie";
@@ -35,6 +35,12 @@ export default NextAuth({
             email: userProfile?.email,
             userName: userProfile?.name,
             profilePic: userProfile?.picture,
+            isVarified: true,
+            emailToken: await hash(process.env.NEXT_PUBLIC_EMAIL_TOKEN, 12),
+            role:
+              userProfile?.email === "mdfahimfaisal000@gmail.com"
+                ? "admin"
+                : "user",
           });
 
           if (confirmation) {

@@ -13,9 +13,16 @@ import EditProfileModal from "@/components/profile/EditProfileModal";
 const CheckOutPage = () => {
   const { authUser } = useContext(AUTH_CONTEXT);
   const { carts_user } = useGetcartByUser(authUser?.email);
+  const [state, setState] = React.useState({
+    top: false,
+    left: false,
+    bottom: false,
+    right: false,
+  });
 
   const defaultLocation = authUser?.locations?.find((loc) => loc?.def === true);
   const [selectedLocation, setSelectedLocation] = useState(null);
+  const [errors, setErrors] = useState([]);
 
   useEffect(() => {
     if (defaultLocation) {
@@ -35,25 +42,51 @@ const CheckOutPage = () => {
 
   const deleveryFee = 100;
 
+  const toggleDrawer = (anchor, open) => (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+
+    setState({ ...state, [anchor]: open });
+  };
+
   const handlePlaceOrder = () => {
-    fetch(`/api/store-order`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        user: authUser?.email,
-        deleveryFee,
-        location: selectedLocation,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        if (data?.url) {
-          location.replace(data?.url);
-        }
-      });
+    setErrors([]);
+    if (!authUser?.isVarified || !authUser?.phone || !selectedLocation) {
+      if (!authUser?.isVarified) {
+        setErrors((err) => [...err, "Please verify your email"]);
+      }
+
+      if (!authUser?.phone) {
+        setErrors((err) => [...err, "Please add your contact number"]);
+      }
+
+      if (!selectedLocation) {
+        setErrors((err) => [...err, "Please select a delevery location"]);
+      }
+    } else {
+      fetch(`/api/store-order`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          user: authUser?.email,
+          deleveryFee,
+          location: selectedLocation,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          if (data?.url) {
+            location.replace(data?.url);
+          }
+        });
+    }
   };
 
   return (
@@ -75,32 +108,70 @@ const CheckOutPage = () => {
               </div>{" "}
             </div>
             <Divider />
-            <div className="flex space-x-2 cursor-pointer">
+            <div className="flex space-x-2 cursor-pointer items-center">
               {" "}
               <Chip size="small" color="info" label={"Email"} />{" "}
               <span>{authUser?.email}</span>
+              <Chip
+                color={authUser?.isVarified ? "success" : "error"}
+                label={authUser?.isVarified ? "Varified" : "Varify Email"}
+              />{" "}
             </div>
             <Divider />
             <label
-              htmlFor="chooseLocationModal"
-              className="flex space-x-2 cursor-pointer"
+              htmlFor={authUser?.locations?.length > 0 && "chooseLocationModal"}
+              className="flex justify-between cursor-pointer"
             >
               {" "}
-              <Chip size="small" color="info" label={"Home"} />{" "}
-              <span className="flex justify-between w-full">
-                {selectedLocation?.Address?.address} <ArrowRight />{" "}
-              </span>
+              <div className="flex space-x-2 items-center">
+                <Chip size="small" color="info" label={"Location"} />{" "}
+                <div>
+                  {authUser?.locations?.length > 0 ? (
+                    <span className="flex justify-between w-full">
+                      {selectedLocation?.Address?.address}{" "}
+                    </span>
+                  ) : (
+                    <LocationSelectModal
+                      state={state}
+                      toggleDrawer={toggleDrawer}
+                      content={
+                        <div
+                          className="w-full"
+                          onClick={toggleDrawer("bottom", true)}
+                        >
+                          <Chip color="error" label={"Set a location"} />
+                        </div>
+                      }
+                    />
+                    // <div>
+                    //   <Chip color="error" label={"Set a delevery location"} />
+                    // </div>
+                  )}
+                </div>
+              </div>
+              <ArrowRight />
             </label>
             <Divider />
             <label
               htmlFor="editProfileModal"
-              className="flex space-x-2 cursor-pointer"
+              className="flex justify-between cursor-pointer items-center"
             >
               {" "}
-              <Chip size="small" color="info" label={"Contact"} />{" "}
-              <span className="flex justify-between w-full">
-                {authUser?.phone} <ArrowRight />
-              </span>
+              <div className="flex space-x-2 items-center">
+                <Chip size="small" color="info" label={"Contact"} />{" "}
+                <div>
+                  {authUser?.phone ? (
+                    <span className="flex justify-between w-full">
+                      {authUser?.phone}
+                    </span>
+                  ) : (
+                    <div>
+                      <Chip color="error" label={"Not set yet"} />
+                    </div>
+                  )}
+                </div>
+              </div>
+              <ArrowRight />
             </label>
           </div>
           {carts_user?.map((cart) => (
@@ -131,6 +202,11 @@ const CheckOutPage = () => {
             >
               Place Order
             </Button>
+            <div className="my-2">
+              {errors?.map((error) => (
+                <p className="text-red-600 font-bold">* {error}</p>
+              ))}
+            </div>
           </div>
         </div>
       </div>

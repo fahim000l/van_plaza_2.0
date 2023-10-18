@@ -15,7 +15,12 @@ import {
 } from "@reach/combobox";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import React, { useContext, useEffect, useMemo, useState } from "react";
-import { LocationOn, ArrowRight, EditLocationAlt } from "@mui/icons-material";
+import {
+  LocationOn,
+  ArrowRight,
+  EditLocationAlt,
+  Done,
+} from "@mui/icons-material";
 import { Divider, List, ListItemButton } from "@mui/joy";
 import {
   IconButton,
@@ -215,7 +220,7 @@ function Map({
               fullWidth
               className="bg-white text-black hover:bg-white"
             >
-              {pathname === "/"
+              {pathname === "/" || pathname === "/checkout"
                 ? authUser?.locations?.length === 0
                   ? "Set a Default Delevery Location"
                   : "Change Default Location"
@@ -255,14 +260,14 @@ function EditLocation({
     Area: "",
     Address: "",
     LandMark: "",
-    def: pathname === "/" ? true : false,
+    def: pathname === "/" || pathname === "/checkout" ? true : false,
   });
   const [activeStep, setActiveStep] = useState(0);
 
   const handleSetLocation = () => {
     console.log(selectedLocation);
 
-    if (pathname === "/") {
+    if (pathname === "/" || pathname === "/checkout") {
       fetch(`/api/store-user-default-location?email=${authUser?.email}`, {
         method: "PUT",
         headers: {
@@ -323,7 +328,7 @@ function EditLocation({
   }, [selectedPlace]);
 
   return (
-    <div>
+    <div className="h-screen">
       <div
         className={`p-5 bg-base-200 flex flex-col h-[100vh] ${
           activeStep === 3 && "flex-col-reverse"
@@ -598,7 +603,7 @@ function EditLocation({
         <p className="my-2 font-bold">
           Select {Object?.keys(selectedLocation)[activeStep]}
         </p>
-        <List className="bg-white rounded-lg p-2 w-full">
+        <List className="bg-white rounded-lg p-2 w-full overflow-y-scroll">
           {activeStep === 0 ? (
             divisions?.divisions?.map(({ id, name }) => {
               return (
@@ -618,25 +623,34 @@ function EditLocation({
               );
             })
           ) : activeStep === 1 ? (
-            districts?.districts?.map(({ division_id, name, id }) => {
-              if (division_id === selectedLocation?.Region) {
-                return (
-                  <ListItemButton
-                    onClick={() => {
-                      setSelectedLocation((s) => {
-                        const newObj = { ...s };
-                        newObj.City = id;
-                        return newObj;
-                      });
-                      setActiveStep(2);
-                    }}
-                    key={id}
-                  >
-                    {name}
-                  </ListItemButton>
-                );
+            districts?.districts?.map(
+              ({ division_id, name, id, lat, long }) => {
+                if (division_id === selectedLocation?.Region) {
+                  return (
+                    <ListItemButton
+                      onClick={() => {
+                        setSelectedLocation((s) => {
+                          const newObj = { ...s };
+                          newObj.City = id;
+                          return newObj;
+                        });
+                        setSelectedPlace((old) => {
+                          return {
+                            address: old?.address,
+                            lat: parseFloat(lat),
+                            lng: parseFloat(long),
+                          };
+                        });
+                        setActiveStep(2);
+                      }}
+                      key={id}
+                    >
+                      {name}
+                    </ListItemButton>
+                  );
+                }
               }
-            })
+            )
           ) : activeStep === 2 ? (
             postCodes?.postcodes.map(
               ({ division_id, district_id, upazila, postOffice, postCode }) => {
@@ -663,10 +677,20 @@ function EditLocation({
               }
             )
           ) : activeStep === 3 ? (
-            <PlacesAutoComplete
-              setActiveStep={setActiveStep}
-              setSelectedPlace={setSelectedPlace}
-            />
+            <div className="flex space-x-3 w-full">
+              <PlacesAutoComplete
+                setActiveStep={setActiveStep}
+                setSelectedPlace={setSelectedPlace}
+              />
+              <IconButton
+                disabled={!selectedPlace?.address}
+                onClick={() => setActiveStep(4)}
+                size="small"
+                className="bg-success rounded-full"
+              >
+                <Done />
+              </IconButton>
+            </div>
           ) : (
             <TextField
               size="small"
@@ -682,29 +706,29 @@ function EditLocation({
           )}
           <ListItemButton></ListItemButton>
         </List>
-      </div>
-      <div className="sticky bottom-0">
-        <Button
-          disabled={
-            !selectedLocation?.Address ||
-            !selectedLocation?.Area ||
-            !selectedLocation?.City ||
-            !selectedLocation?.LandMark ||
-            !selectedLocation?.Region
-          }
-          onClick={handleSetLocation}
-          fullWidth
-          className="bg-[steelblue] text-white font-bold normal-case"
-        >
-          Confirm
-        </Button>
-        <Button
-          onClick={toggleDrawer(anchor, false)}
-          fullWidth
-          className="bg-red-500 hover:bg-red-500 text-white hover:text-white"
-        >
-          Cancel
-        </Button>
+        <div className="sticky bottom-0">
+          <Button
+            disabled={
+              !selectedLocation?.Address ||
+              !selectedLocation?.Area ||
+              !selectedLocation?.City ||
+              !selectedLocation?.LandMark ||
+              !selectedLocation?.Region
+            }
+            onClick={handleSetLocation}
+            fullWidth
+            className="bg-[steelblue] text-white font-bold normal-case"
+          >
+            Confirm
+          </Button>
+          <Button
+            onClick={toggleDrawer(anchor, false)}
+            fullWidth
+            className="bg-red-500 hover:bg-red-500 text-white hover:text-white"
+          >
+            Cancel
+          </Button>
+        </div>
       </div>
     </div>
   );
@@ -802,10 +826,16 @@ function PlacesAutoComplete({ setSelectedPlace, setActiveStep }) {
     //   options={data}
     // />
     <AutoSelect
-      inputOnchange={(e) => setQuery(e.target.value)}
+      inputOnchange={(e) => {
+        setQuery(e.target.value);
+        setSelectedPlace((old) => {
+          return { lat: old?.lat, lng: old?.lng, address: e.target.value };
+        });
+      }}
+      fullWidth={true}
       globalLabel={"address"}
       startIcon={<LocationOn />}
-      placeholder={"Search your address"}
+      placeholder={"your address"}
       onChange={(event, newValue) => {
         setSelectedPlace({
           lat: parseFloat(newValue?.latitude),
