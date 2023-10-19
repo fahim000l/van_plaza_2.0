@@ -47,7 +47,7 @@ const signin = () => {
   // "/dashboard/stock-collection/products-stock"
 
   const handlePassReset = () => {
-    fetch("/api/reset-password", {
+    fetch("/api/reset-password-request", {
       method: "POST",
       headers: {
         "content-type": "application/json",

@@ -2,6 +2,7 @@ import { connectMongo } from "@/database/config";
 import carts from "@/database/models/carts";
 import orders from "@/database/models/orders";
 import quantities_stock from "@/database/models/quantities_stock";
+import { sendMail } from "@/lib/mailer";
 
 export default async function (req, res) {
   try {
@@ -39,6 +40,12 @@ export default async function (req, res) {
 
         const result = await orders.updateOne(findOrder, updatingDoc);
         if (result.acknowledged) {
+          const mailResult = await sendMail(
+            "Order Confirmed",
+            req.query.user,
+            "<p>Your order has been confirmed</p>"
+          );
+
           return res.redirect(
             `${process.env.NEXT_PUBLIC_PROJECT_URL}/payment?transId=${req.query.tran_id}`
           );

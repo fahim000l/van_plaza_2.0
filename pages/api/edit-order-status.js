@@ -1,5 +1,6 @@
 import { connectMongo } from "@/database/config";
 import orders from "@/database/models/orders";
+import { sendMail } from "@/lib/mailer";
 import { ObjectId } from "mongodb";
 
 export default async function (req, res) {
@@ -32,6 +33,14 @@ export default async function (req, res) {
           };
         }
         const result = await orders.updateOne(query, updatingDoc);
+        console.log(result);
+
+        const mailResult = await sendMail(
+          "Order Confirmed",
+          order.user,
+          "<p>Your order has been delevered</p>"
+        );
+
         return res.status(200).json({ success: true, result });
       }
     } else {
