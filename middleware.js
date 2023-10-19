@@ -6,7 +6,9 @@ import { jwtVerify } from "jose";
 
 export async function middleware(request) {
   const path = request.nextUrl.pathname;
-  const sessionToken = request?.cookies?.get("next-auth.session-token")?.value;
+  const sessionToken =
+    request?.cookies?.get("next-auth.session-token")?.value ||
+    request?.cookies?.get("_Secure-next-auth.session-token")?.value;
   const jwtToken = request?.cookies?.get("token")?.value;
   const userRole = jwtToken?.split("_role_")[1];
 
