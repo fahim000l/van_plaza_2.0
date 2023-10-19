@@ -22,13 +22,49 @@ import Link from "next/link";
 import { useFormik } from "formik";
 import { userLogInValidation } from "@/lib/validation";
 import { useRouter } from "next/router";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Swal from "sweetalert2";
 
 const signin = () => {
   const [passShow, setPassShow] = useState(false);
   const { data: sessionData } = useSession();
   const [loading, setLoading] = useState(false);
   const { push } = useRouter();
+  const [resetingPassEmail, setResetingPassEmail] = useState("");
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   // "/dashboard/stock-collection/products-stock"
+
+  const handlePassReset = () => {
+    fetch("/api/reset-password", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ email: resetingPassEmail }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+
+        if (data?.success) {
+          Swal.fire("Check you email inbox or spam");
+          setOpen(false);
+        }
+      });
+  };
+
   const handleGoogleSignIn = async () => {
     const confirmation = await signIn("google", {
       callbackUrl: "/shop",
@@ -114,9 +150,35 @@ const signin = () => {
                 ),
               }}
             />
-            <Button sx={{ color: "blue", textTransform: "none" }}>
-              Forget Password ?
-            </Button>
+            <div>
+              <Button
+                onClick={handleClickOpen}
+                sx={{ color: "blue", textTransform: "none" }}
+              >
+                Forget Password ?
+              </Button>
+              <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Reset Password</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Please provide your email to reset password
+                  </DialogContentText>
+                  <TextField
+                    onChange={(e) => setResetingPassEmail(e.target.value)}
+                    autoFocus
+                    margin="dense"
+                    id="name"
+                    label="Email Address"
+                    type="email"
+                    fullWidth
+                    variant="standard"
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handlePassReset}>Confirm</Button>
+                </DialogActions>
+              </Dialog>
+            </div>
           </div>
           <LoadingButton
             loading={loading}

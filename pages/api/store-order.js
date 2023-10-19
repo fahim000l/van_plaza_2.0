@@ -61,9 +61,9 @@ export default async function (req, res) {
             parseFloat(totalPrice()) + parseFloat(orderInfo?.deleveryFee),
           currency: "BDT",
           tran_id: transId, // use unique tran_id for each api call
-          success_url: `${process.env.PROJECT_URL}api/payment-success?tran_id=${transId}&user=${customer?.email}`,
-          fail_url: `${process.env.PROJECT_URL}api/payment-fail`,
-          cancel_url: `${process.env.PROJECT_URL}api/payment-cancel`,
+          success_url: `${process.env.NEXT_PUBLIC_PROJECT_URL}api/payment-success?tran_id=${transId}&user=${customer?.email}`,
+          fail_url: `${process.env.NEXT_PUBLIC_PROJECT_URL}api/payment-fail`,
+          cancel_url: `${process.env.NEXT_PUBLIC_PROJECT_URL}api/payment-cancel`,
           ipn_url: "http://localhost:3030/ipn",
           shipping_method: "Courier",
           product_name: "Computer.",
