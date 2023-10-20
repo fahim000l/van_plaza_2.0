@@ -164,7 +164,7 @@ const OnSaleProductDetails = () => {
 
   return (
     <Main>
-      <div className="flex bg-[steelblue] rounded-box my-5 mx-2 p-1 md:m-5 lg:m-10 md:p-5 lg:p-10">
+      <div className="flex bg-[steelblue] rounded-box my-5 mx-2 p-1 md:m-5 lg:m-10 md:p-5 lg:p-10 mb-20">
         <div className="flex flex-col w-full">
           <div className="flex lg:flex-row flex-col space-x-2 w-full">
             <Box className="lg:hidden">
