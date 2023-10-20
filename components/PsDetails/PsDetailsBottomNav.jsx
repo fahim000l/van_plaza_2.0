@@ -19,22 +19,22 @@ import {
   AddShoppingCartSharp,
 } from "@mui/icons-material";
 
-const PsDetailsBottomNav = ({ sizeSelectModal }) => {
+const PsDetailsBottomNav = ({ setSelectedProduct, ps }) => {
   const [value, setValue] = useState("/");
   const { authUser } = useContext(AUTH_CONTEXT);
   const { push } = useRouter();
 
   return (
-    <div className="btm-nav z-[900] lg:hidden border-2 border-solid border-b-0 border-r-0 border-l-0 border-gray-500">
+    <div className="btm-nav z-[900] lg:hidden border-2 border-solid border-b-0 border-r-0 border-l-0 border-gray-500 h-12 bg-base-200">
       <button onClick={() => push("/shop")} className="text-xs">
         <Shop2 />
         <span className="btm-nav-label">Shop</span>
       </button>
       <button>
         <label
-          onClick={() => sizeSelectModal.current.click()}
           //   variant="contained"
           //   size="sm"
+          onClick={() => setSelectedProduct(ps?.[0])}
           htmlFor="sizeSelectModal"
           className="btn btn-primary btn-sm normal-case"
         >

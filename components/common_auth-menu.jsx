@@ -42,18 +42,6 @@ const AuthMenu = ({ anchorEl, setAnchorEl, open }) => {
         </Link>
       )}
       <Divider />
-      <MenuItem onClick={() => setAnchorEl(null)}>
-        <ListItemIcon>
-          <PersonAdd fontSize="small" />
-        </ListItemIcon>
-        Add another account
-      </MenuItem>
-      <MenuItem onClick={() => setAnchorEl(null)}>
-        <ListItemIcon>
-          <Settings fontSize="small" />
-        </ListItemIcon>
-        Settings
-      </MenuItem>
       <MenuItem onClick={handleLogOut}>
         <ListItemIcon>
           <Logout fontSize="small" />

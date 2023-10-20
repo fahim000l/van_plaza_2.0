@@ -91,7 +91,7 @@ const CheckOutPage = () => {
 
   return (
     <Main>
-      <div className="lg:flex justify-evenly items-start lg:mx-10 my-5 mx-2">
+      <div className="lg:flex justify-evenly items-start lg:mx-10 my-5 mx-2 min-h-screen mb-20">
         <div className="lg:w-[45%] my-5">
           <div className="space-y-2 lg:p-5 p-2 rounded-box shadow-xl">
             <div className="flex justify-between items-center">
@@ -108,11 +108,12 @@ const CheckOutPage = () => {
               </div>{" "}
             </div>
             <Divider />
-            <div className="flex space-x-2 cursor-pointer items-center">
+            <div className="flex space-x-2 cursor-pointer items-center text-xs">
               {" "}
               <Chip size="small" color="info" label={"Email"} />{" "}
               <span>{authUser?.email}</span>
               <Chip
+                size="small"
                 color={authUser?.isVarified ? "success" : "error"}
                 label={authUser?.isVarified ? "Varified" : "Varify Email"}
               />{" "}
@@ -120,10 +121,10 @@ const CheckOutPage = () => {
             <Divider />
             <label
               htmlFor={authUser?.locations?.length > 0 && "chooseLocationModal"}
-              className="flex justify-between cursor-pointer"
+              className="flex justify-between cursor-pointer text-xs"
             >
               {" "}
-              <div className="flex space-x-2 items-center">
+              <div className="flex space-x-2 items-center text-xs">
                 <Chip size="small" color="info" label={"Location"} />{" "}
                 <div>
                   {authUser?.locations?.length > 0 ? (
@@ -139,7 +140,11 @@ const CheckOutPage = () => {
                           className="w-full"
                           onClick={toggleDrawer("bottom", true)}
                         >
-                          <Chip color="error" label={"Set a location"} />
+                          <Chip
+                            size="small"
+                            color="error"
+                            label={"Set a location"}
+                          />
                         </div>
                       }
                     />
@@ -154,7 +159,7 @@ const CheckOutPage = () => {
             <Divider />
             <label
               htmlFor="editProfileModal"
-              className="flex justify-between cursor-pointer items-center"
+              className="flex justify-between cursor-pointer items-center text-xs"
             >
               {" "}
               <div className="flex space-x-2 items-center">
@@ -166,7 +171,7 @@ const CheckOutPage = () => {
                     </span>
                   ) : (
                     <div>
-                      <Chip color="error" label={"Not set yet"} />
+                      <Chip size="small" color="error" label={"Not set yet"} />
                     </div>
                   )}
                 </div>

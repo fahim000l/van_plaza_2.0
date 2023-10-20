@@ -50,21 +50,6 @@ const authItems = [
     icon: <Avatar />,
   },
   {
-    path: "/clothings",
-    content: "My Account",
-    icon: <Avatar />,
-  },
-  {
-    path: "/contact-us",
-    content: "Add Another Account",
-    icon: <PersonAdd />,
-  },
-  {
-    path: "/contact-us",
-    content: "Settinsgs",
-    icon: <Settings />,
-  },
-  {
     path: "/contact-us",
     content: "LogOut",
     icon: <Logout />,
@@ -126,11 +111,11 @@ function Main({ window, children }) {
           </Box>
         </Drawer>
       </nav>
-      <div className="w-full place-items-center h-[100vh]">
+      <div className="w-full place-items-center min-h-screen">
         <Toolbar />
         {children}
-        <BottomNav />
       </div>
+      <BottomNav />
     </Box>
   );
 }

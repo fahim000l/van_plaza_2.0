@@ -3,7 +3,7 @@ import { Divider } from "@mui/material";
 
 const CheckOutFooter = ({ calculateItemsTotal, deleveryFee }) => {
   return (
-    <div className="btm-nav z-[900] lg:hidden border-2 border-solid border-b-0 border-r-0 border-l-0 border-gray-500">
+    <div className="btm-nav z-[900] lg:hidden border-2 border-solid border-b-0 border-r-0 border-l-0 border-gray-500 h-12 bg-base-200">
       <div className="flex w-[50%]">
         <p>
           Total :{" "}

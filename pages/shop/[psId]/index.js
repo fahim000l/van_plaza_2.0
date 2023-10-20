@@ -298,7 +298,7 @@ const OnSaleProductDetails = () => {
                 </p>
                 <label
                   onClick={() => setSelectedProduct(ps[0])}
-                  className="bg-[steelblue] text-white w-full normal-case py-1 flex items-center justify-center space-x-5 font-bold cursor-pointer shadow-xl rounded-md"
+                  className="bg-[steelblue] text-white w-full normal-case py-1 flex items-center justify-center space-x-5 font-bold cursor-pointer shadow-xl rounded-md hidden lg:block text-center"
                   htmlFor="sizeSelectModal"
                 >
                   <span>Add To Cart</span>
@@ -354,7 +354,7 @@ const OnSaleProductDetails = () => {
           </div>
         </div>
       </div>
-      <PsDetailsBottomNav sizeSelectModal={sizeSelectModal} />
+      <PsDetailsBottomNav setSelectedProduct={setSelectedProduct} ps={ps} />
       {selectedProduct && (
         <SizeSelectModal
           setSelectedProduct={setSelectedProduct}
