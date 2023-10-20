@@ -66,7 +66,7 @@ const ProductsTableRow = ({
           fullWidth
           {...Formik.getFieldProps("productName")}
           size="small"
-          defaultValue={product?.productName}
+          defaultValue={product?.productName?.split("-")[0]}
         />
         <Chip className="mt-2" label={product?._id} />
       </TableCell>

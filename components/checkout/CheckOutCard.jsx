@@ -26,7 +26,7 @@ const CheckOutCard = ({ cart }) => {
         <div className="flex space-x-2 items-center">
           <img className="w-12 h-12 rounded-lg" src={standardImage} alt="" />
           <div>
-            <p>{productName}</p>
+            <p>{productName?.split("-")[0]}</p>
             <p>Size :{sizeName}</p>
           </div>
         </div>

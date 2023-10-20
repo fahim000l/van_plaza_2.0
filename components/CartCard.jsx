@@ -115,13 +115,15 @@ const CartCard = ({ carts_user, cart, i, setDeletingCart, setDeleteOpen }) => {
         <img
           className="w-20 h-20 rounded-lg"
           src={standardImage}
-          alt={productName}
+          alt={productName?.split("-")[0]}
         />
         <ListItemContent sx={{ width: "100%" }}>
           <div className="flex lg:space-x-10 items-start lg:items-center">
             <div className="lg:flex w-full lg:items-center lg:space-x-10">
               <div>
-                <Typography fontWeight="md">{productName}</Typography>
+                <Typography fontWeight="md">
+                  {productName?.split("-")[0]}
+                </Typography>
                 <Typography level="body-sm">Size : {sizeName}</Typography>
               </div>
               <p className="font-bold text-[steelblue]">{sellPrice}/-</p>

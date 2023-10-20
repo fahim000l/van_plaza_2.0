@@ -93,7 +93,7 @@ const ProductCard = ({ sp, setSelectedProduct }) => {
       return (
         <div
           className="cursor-pointer flex flex-col items-center justify-center p-1 lg:p-2 tooltip"
-          data-tip={product?.productName}
+          data-tip={product?.productName?.split("-")[0]}
         >
           <Card
             onClick={() => push(`/shop/${_id}`)}
@@ -133,13 +133,10 @@ const ProductCard = ({ sp, setSelectedProduct }) => {
             </Box>
             <div className="flex flex-col justify-between">
               <div>
-                {/* <marquee className="font-bold" behavior="" direction="">
-                  {product?.productName}
-                </marquee> */}
                 <p className="font-bold">
-                  {product?.productName?.length > 12
-                    ? product?.productName?.slice(0, 12) + "..."
-                    : product?.productName}
+                  {product?.productName?.split("-")[0]?.length > 12
+                    ? product?.productName?.slice(0, 12)?.split("-")[0] + "..."
+                    : product?.productName?.split("-")[0]}
                 </p>
                 <p className="font-bold text-[steelblue]">{sellPrice}/-</p>
               </div>

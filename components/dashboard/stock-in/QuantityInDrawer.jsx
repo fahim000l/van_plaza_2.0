@@ -52,7 +52,10 @@ export default function QuantityInDrawer({ disabled, product, i }) {
               <div className="grid card bg-base-300 rounded-box p-10">
                 <p className="my2">
                   Product :{" "}
-                  <Chip color="primary" label={product?.productName} />{" "}
+                  <Chip
+                    color="primary"
+                    label={product?.productName?.split("-")[0]}
+                  />{" "}
                 </p>
                 <p className="my-2">
                   Category :{" "}

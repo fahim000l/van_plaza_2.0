@@ -45,7 +45,7 @@ const ProductsStockRow = ({ product }) => {
                 <img src={standardImage} />
               </div>
             </div>
-            {productName}
+            {productName?.split("-")[0]}
           </div>
         </TableCell>
         <TableCell align="center">

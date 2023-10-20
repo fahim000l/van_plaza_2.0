@@ -10,11 +10,11 @@ const Profile = ({ children }) => {
       <ProfileNav />
       <div className="drawer lg:drawer-open">
         <input id="profileDrawer" type="checkbox" className="drawer-toggle" />
-        <div className="drawer-content lg:m-10 m-2">
+        <div className="drawer-content">
           {/* Page content here */}
           {/* <div className="h-[100vh]"> */}
           {/* <div className="lg:p-10 p-2"></div> */}
-          {children}
+          <div className="min-h-screen lg:m-10 m-2">{children}</div>
           <BottomNav />
           {/* </div> */}
         </div>

@@ -291,7 +291,9 @@ const OnSaleProductDetails = () => {
             </div>
             <div className="flex lg:flex-row flex-col bg-base-300 rounded-box py-5 px-2 lg:w-[60%]">
               <div className="lg:w-[50%]">
-                <p className="lg:text-3xl text-2xl upper-case">{productName}</p>
+                <p className="lg:text-3xl text-2xl upper-case">
+                  {productName?.split("-")[0]}
+                </p>
                 <div className="divider"></div>
                 <p className="lg:text-5xl text-3xl text-[blue]">
                   {sellPrice} /-

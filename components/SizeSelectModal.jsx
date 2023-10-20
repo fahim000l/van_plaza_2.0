@@ -77,7 +77,9 @@ const SizeSelectModal = ({ selectedSp, setSelectedProduct }) => {
               </div>
             </div>
             <div className="ml-2">
-              <h3 className="text-lg font-bold">{productName}</h3>
+              <h3 className="text-lg font-bold">
+                {productName?.split("-")[0]}
+              </h3>
               <p>
                 Selected Size :{" "}
                 <Chip label={selectedQp?.sizes?.[0]?.sizeName} />{" "}

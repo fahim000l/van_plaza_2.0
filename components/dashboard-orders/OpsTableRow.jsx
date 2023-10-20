@@ -33,10 +33,10 @@ const OpsTableRow = ({ op, i }) => {
       <td className="flex space-x-2 items-center">
         <div className="avatar">
           <div className="w-14 rounded">
-            <img src={standardImage} alt={productName} />
+            <img src={standardImage} alt={productName?.split("-")[0]} />
           </div>
         </div>
-        <p>{productName}</p>
+        <p>{productName?.split("-")[0]}</p>
       </td>
       <td>
         <Chip color="primary" label={categoryName} />

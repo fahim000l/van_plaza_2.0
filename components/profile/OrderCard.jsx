@@ -41,7 +41,7 @@ export default function OrderCard({ op }) {
       <CardContent>
         <Typography level="body-xs">{date}</Typography>
         <Typography level="title-lg" component="div">
-          {productName}
+          {productName?.split("-")[0]}
         </Typography>
         <Typography level="body-lg">{sellPrice} /-</Typography>
         <CardActions buttonFlex="none">
