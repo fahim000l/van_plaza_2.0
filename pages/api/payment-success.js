@@ -47,7 +47,7 @@ export default async function (req, res) {
           );
 
           return res.redirect(
-            `${process.env.NEXT_PUBLIC_PROJECT_URL}/payment?transId=${req.query.tran_id}`
+            `${process.env.NEXT_PUBLIC_PROJECT_URL}payment?transId=${req.query.tran_id}`
           );
         } else {
           return res.status(500).json({ success: false });
