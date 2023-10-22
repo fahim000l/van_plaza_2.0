@@ -96,8 +96,9 @@ export default function CartDrawer() {
             disabled={carts?.length === 0}
             onClick={toggleDrawer(anchor, true)}
             className="text-white"
+            size="small"
           >
-            <Badge badgeContent={calculateTotalProducts()}>
+            <Badge size="sm" badgeContent={calculateTotalProducts()}>
               <ShoppingCart />
             </Badge>
           </IconButton>

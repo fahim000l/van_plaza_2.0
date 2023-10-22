@@ -8,6 +8,7 @@ import JWT from "jsonwebtoken";
 import { serialize } from "cookie";
 import { NextResponse } from "next/server";
 import fetch from "node-fetch";
+import carts from "@/database/models/carts";
 
 export default NextAuth({
   providers: [
@@ -24,6 +25,8 @@ export default NextAuth({
         });
 
         if (requiredUser) {
+          await carts.deleteMany({ user: userProfile?.email });
+
           return {
             ...userProfile,
             image: requiredUser?.profilePic,
@@ -79,6 +82,8 @@ export default NextAuth({
             if (!checkPassword || isExist?.email !== credentials?.email) {
               throw new Error("User email or password doesn't match");
             } else {
+              await carts.deleteMany({ user: isExist?.email });
+
               return isExist;
             }
           }
@@ -91,7 +96,8 @@ export default NextAuth({
   session: {
     strategy: "jwt",
     jwt: true, // Enable JSON Web Tokens for sessions
-    maxAge: 24 * 60 * 60, // Set the session expiration to 2 minutes (120 seconds)
+    // maxAge: 24 * 60 * 60, // Set the session expiration to 2 minutes (120 seconds)
+    maxAge: 60, // Set the session expiration to 2 minutes (120 seconds)
   },
   callbacks: {
     jwt: async ({ token, user }) => {

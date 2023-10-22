@@ -135,13 +135,13 @@ const Header = ({ setMobileOpen, navItems }) => {
           )}
         </Box>
         {authUser?.email && (
-          <IconButton className={`${pathname === "/payment" && "hidden"}`}>
+          <IconButton
+            size="small"
+            className={`${pathname === "/payment" && "hidden"}`}
+          >
             <CartDrawer />
           </IconButton>
         )}
-        {/* <IconButton className="text-white">
-          <ShoppingCart />
-        </IconButton> */}
       </Toolbar>
     </AppBar>
   );

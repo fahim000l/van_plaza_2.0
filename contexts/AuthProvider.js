@@ -1,6 +1,7 @@
 // import useGetDbUser from "@/hooks/useGetDbUser";
 import useGetDbUser from "@/hooks/useGetDbUser";
 import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import React, { createContext, useEffect, useState } from "react";
 
 export const AUTH_CONTEXT = createContext();
@@ -12,6 +13,7 @@ const AuthProvider = ({ children }) => {
   const { dbUser: authUser, dbUserRefetch } = useGetDbUser(
     sessionData?.user?.email ? sessionData?.user?.email : null
   );
+  const { push } = useRouter();
 
   useEffect(() => {
     if (sessionData && sessionStatus === "authenticated") {
@@ -38,20 +40,20 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     console.log(sessionData, sessionStatus);
-    if (!sessionData?.user) {
+    if (!sessionData?.user?.email) {
       signingOut();
     }
   }, [sessionData, sessionStatus]);
 
   const signingOut = () => {
     if (authUser) {
-      fetch(`/api/delete-all-cart?user=${authUser?.email}`, {
-        method: "DELETE",
-      })
+      fetch(`/api/log-out?email=${authUser?.email}`)
         .then((res) => res.json())
         .then((data) => {
+          console.log(data);
           if (data?.success) {
-            signOut().then(() => localStorage.removeItem("van_jwt"));
+            console.log(data);
+            signOut();
           }
         });
     }

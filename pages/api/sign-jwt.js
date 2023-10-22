@@ -1,7 +1,6 @@
 import { connectMongo } from "@/database/config";
 import users from "@/database/models/users";
 import { serialize } from "cookie";
-import { SignJWT } from "jose";
 
 import JWT from "jsonwebtoken";
 
@@ -29,6 +28,7 @@ export default async function (req, res) {
         serialize("token", tokenWithPayload, {
           httpOnly: true,
           path: "/",
+          maxAge: 60,
         })
       );
 

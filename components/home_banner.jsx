@@ -111,12 +111,14 @@ const HomeBanner = () => {
             <Button
               fullWidth
               onClick={toggleDrawer("bottom", true)}
-              className="hover:bg-white bg-white hover:text-black text-black mx-auto normal-case font-bold text-xs"
+              className="hover:bg-white bg-white hover:text-black text-black mx-auto normal-case font-bold flex items-center justify-center"
               startIcon={<LocationOn className="text-[steelblue]" />}
             >
-              |{" "}
-              {authUserDefaultLocation?.Address?.address ||
-                "Select Your Location"}
+              <span>|</span>
+              <span className="text-start mx-2 text-xs">
+                {authUserDefaultLocation?.Address?.address ||
+                  "Select Your Location"}
+              </span>
             </Button>
           }
         />
