@@ -4,9 +4,10 @@ import HomeCategoryCard from "./HomeCategoryCard";
 import { Button } from "@mui/joy";
 import { KeyboardDoubleArrowRightSharp } from "@mui/icons-material";
 import Link from "next/link";
+import { Skeleton } from "@mui/material";
 
 const HomeCategories = () => {
-  const { categories } = useGetAllCategories(8);
+  const { categories, categoriesLoading } = useGetAllCategories(8);
 
   return (
     <div className="grid lg:card bg-[steelblue] lg:rounded-box lg:p-10 p-5">
@@ -22,6 +23,13 @@ const HomeCategories = () => {
           </Button>
         </Link>
       </div>
+      {categoriesLoading && (
+        <div className="grid grid-cols-2 lg:grid-cols-4 lg:gap-5 gap-2">
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((anti, i) => (
+            <Skeleton variant="rectangular" width={210} height={118} key={i} />
+          ))}
+        </div>
+      )}
       <div className="grid grid-cols-2 lg:grid-cols-4 lg:gap-5 gap-2">
         {categories?.map((category) => (
           <HomeCategoryCard key={category?._id} category={category} />

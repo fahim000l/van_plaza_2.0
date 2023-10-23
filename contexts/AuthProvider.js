@@ -10,10 +10,11 @@ const AuthProvider = ({ children }) => {
   const [authLoader, setAuthLoader] = useState(false);
   const { data: sessionData, status: sessionStatus, update } = useSession();
   const [isCookieSet, setCookie] = useState(false);
-  const { dbUser: authUser, dbUserRefetch } = useGetDbUser(
-    sessionData?.user?.email ? sessionData?.user?.email : null
-  );
-  const { push } = useRouter();
+  const {
+    dbUser: authUser,
+    dbUserRefetch,
+    dbUserLoading,
+  } = useGetDbUser(sessionData?.user?.email ? sessionData?.user?.email : null);
 
   useEffect(() => {
     if (sessionData && sessionStatus === "authenticated") {
@@ -64,6 +65,7 @@ const AuthProvider = ({ children }) => {
     sessionData,
     sessionStatus,
     authLoader,
+    dbUserLoading,
     setAuthLoader,
     signingOut,
   };

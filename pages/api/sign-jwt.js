@@ -1,7 +1,6 @@
 import { connectMongo } from "@/database/config";
 import users from "@/database/models/users";
 import { serialize } from "cookie";
-
 import JWT from "jsonwebtoken";
 
 export default async function (req, res) {
@@ -28,7 +27,7 @@ export default async function (req, res) {
         serialize("token", tokenWithPayload, {
           httpOnly: true,
           path: "/",
-          maxAge: 60,
+          maxAge: 24 * 60 * 60,
         })
       );
 

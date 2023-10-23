@@ -22,8 +22,14 @@ import { useRouter } from "next/router";
 import SearchDrawer from "./main_search-drawer";
 
 const Header = ({ setMobileOpen, navItems }) => {
-  const { authUser, sessionData, sessionStatus, authLoader, setAuthLoader } =
-    useContext(AUTH_CONTEXT);
+  const {
+    authUser,
+    sessionData,
+    sessionStatus,
+    authLoader,
+    setAuthLoader,
+    dbUserLoading,
+  } = useContext(AUTH_CONTEXT);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const { categories } = useGetAllCategories();

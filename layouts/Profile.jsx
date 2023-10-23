@@ -1,10 +1,21 @@
 import BottomNav from "@/components/main_bottom_nav";
 import ProfileNav from "@/components/profile/ProfileNav";
+import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
 import { Button } from "@mui/joy";
 import Link from "next/link";
-import React from "react";
+import React, { useContext } from "react";
 
 const Profile = ({ children }) => {
+  const { authLoader, dbUserLoading } = useContext(AUTH_CONTEXT);
+
+  if (authLoader || dbUserLoading) {
+    return (
+      <div className="min-h-screen w-full text-center my-auto">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
   return (
     <div>
       <ProfileNav />

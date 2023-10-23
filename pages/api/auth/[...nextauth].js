@@ -96,8 +96,8 @@ export default NextAuth({
   session: {
     strategy: "jwt",
     jwt: true, // Enable JSON Web Tokens for sessions
-    // maxAge: 24 * 60 * 60, // Set the session expiration to 2 minutes (120 seconds)
-    maxAge: 60, // Set the session expiration to 2 minutes (120 seconds)
+    maxAge: 24 * 60 * 60, // Set the session expiration to 2 minutes (120 seconds)
+    // maxAge: 60, // Set the session expiration to 2 minutes (120 seconds)
   },
   callbacks: {
     jwt: async ({ token, user }) => {

@@ -57,8 +57,17 @@ const authItems = [
 ];
 
 function Main({ window, children }) {
-  const { authUser } = React.useContext(AUTH_CONTEXT);
+  const { authUser, authLoader, dbUserLoading } =
+    React.useContext(AUTH_CONTEXT);
   const [mobileOpen, setMobileOpen] = React.useState(false);
+
+  if (authLoader || dbUserLoading) {
+    return (
+      <div className="min-h-screen w-full text-center my-auto">
+        <p>Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <Box>
