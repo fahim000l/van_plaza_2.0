@@ -164,7 +164,7 @@ const OnSaleProductDetails = () => {
 
   return (
     <Main>
-      <div className="flex bg-[steelblue] rounded-box my-5 mx-2 p-1 md:m-5 lg:m-10 md:p-5 lg:p-10 mb-20">
+      <div className="flex bg-[#222745] rounded-box my-5 mx-2 p-1 md:m-5 lg:m-10 md:p-5 lg:p-10 mb-20">
         <div className="flex flex-col w-full">
           <div className="flex lg:flex-row flex-col space-x-2 w-full">
             <Box className="lg:hidden">
@@ -300,7 +300,7 @@ const OnSaleProductDetails = () => {
                 </p>
                 <label
                   onClick={() => setSelectedProduct(ps[0])}
-                  className="bg-[steelblue] text-white w-full normal-case py-1 flex items-center justify-center space-x-5 font-bold cursor-pointer shadow-xl rounded-md hidden lg:block text-center"
+                  className="bg-[#222745] text-white w-full normal-case py-1 lg:flex items-center justify-center space-x-5 font-bold cursor-pointer shadow-xl rounded-md hidden text-center"
                   htmlFor="sizeSelectModal"
                 >
                   <span>Add To Cart</span>
@@ -315,7 +315,7 @@ const OnSaleProductDetails = () => {
                         return (
                           <div
                             key={quantity?._id}
-                            className="rounded-lg bg-primary text-white font-bold text-center"
+                            className="rounded-lg bg-[#C5ACED] text-black font-bold text-center"
                           >
                             {quantity?.sizes[0].sizeName}
                           </div>
@@ -329,7 +329,7 @@ const OnSaleProductDetails = () => {
               <div className="overflow-x-auto rounded-box lg:w-[50%]">
                 <table className="table">
                   {/* head */}
-                  <thead className="bg-primary text-white">
+                  <thead className="bg-[#C5ACED] text-white">
                     <tr>
                       <th className="font-bold">Size</th>
                       {allSizes?.[0]?.sizeAttributes?.map((attr, i) => (

@@ -20,6 +20,8 @@ import useGetAllProducts from "@/hooks/useGetAllProducts";
 import CartDrawer from "./CartDrawer";
 import { useRouter } from "next/router";
 import SearchDrawer from "./main_search-drawer";
+import logo from "../public/logo.png";
+import Image from "next/image";
 
 const Header = ({ setMobileOpen, navItems }) => {
   const {
@@ -53,7 +55,7 @@ const Header = ({ setMobileOpen, navItems }) => {
 
   return (
     <AppBar
-      className="flex justify-between"
+      className="flex justify-between h-16"
       sx={{ boxShadow: "none" }}
       component="nav"
     >
@@ -62,7 +64,8 @@ const Header = ({ setMobileOpen, navItems }) => {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          backgroundColor: "steelblue",
+          // backgroundColor: "#222745",
+          backgroundColor: "#222745",
         }}
       >
         <IconButton
@@ -74,7 +77,10 @@ const Header = ({ setMobileOpen, navItems }) => {
         >
           <Menu />
         </IconButton>
-        <Typography
+        <div className="w-20 h-20">
+          {/* <img className="w-28 h-20" src={logo} alt="" /> */}
+        </div>
+        {/* <Typography
           variant="h6"
           component="div"
           sx={{
@@ -85,7 +91,7 @@ const Header = ({ setMobileOpen, navItems }) => {
           }}
         >
           Van Plaza
-        </Typography>
+        </Typography> */}
         {(pathname === "/" ||
           pathname === "/shop" ||
           pathname?.includes("/search")) && (
@@ -132,7 +138,9 @@ const Header = ({ setMobileOpen, navItems }) => {
                 variant="contained"
                 sx={{
                   textTransform: "none",
-                  backgroundColor: "darkblue !important",
+                  backgroundColor: "#C5ACED !important",
+                  color: "black",
+                  fontWeight: "bold",
                 }}
               >
                 Shign In / Create Account

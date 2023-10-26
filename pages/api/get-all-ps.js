@@ -4,12 +4,23 @@ import { ObjectId } from "mongodb";
 
 export default async function (req, res) {
   try {
+    const priceStatus = req.query.priceStatus;
+    const priceRange = {
+      $and: [
+        { sellPrice: { $gt: req.query.minPrice } },
+        { sellPrice: { $lt: req.query.maxPrice } },
+      ],
+    };
+    console.log(priceStatus);
+
     connectMongo().catch((err) => res.json({ error: "Connection Failed...!" }));
     const sps = await products_stocks
       .aggregate([
         {
           $match: req.query.categoryId
             ? { categoryId: new ObjectId(req.query.categoryId) }
+            : req.query.maxPrice && req.query.minPrice
+            ? priceRange
             : {},
         },
         {
@@ -64,7 +75,7 @@ export default async function (req, res) {
           },
         },
       ])
-      .sort({ sellPrice: 1 });
+      .sort({ sellPrice: parseInt(priceStatus) });
 
     return res.status(200).json(sps);
   } finally {

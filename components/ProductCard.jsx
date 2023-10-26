@@ -101,6 +101,7 @@ const ProductCard = ({ sp, setSelectedProduct }) => {
               padding: [1, 2, 2],
               width: "100%",
               borderRadius: "10px 10px 0px 0px",
+              backgroundColor: "",
             }}
             variant="outlined"
           >
@@ -147,7 +148,7 @@ const ProductCard = ({ sp, setSelectedProduct }) => {
               <label
                 onClick={() => setSelectedProduct(sp)}
                 style={{ borderRadius: "0px 0px 10px 10px" }}
-                className="bg-[steelblue] text-white w-full normal-case py-1 flex items-center justify-center space-x-5 font-bold cursor-pointer text-sm"
+                className="bg-[#222745] text-white w-full normal-case py-1 flex items-center justify-center space-x-5 font-bold cursor-pointer text-sm"
                 htmlFor="sizeSelectModal"
               >
                 <span>Add To Cart</span>
@@ -157,7 +158,7 @@ const ProductCard = ({ sp, setSelectedProduct }) => {
               <Link href={"/signin"}>
                 <button
                   style={{ borderRadius: "0px 0px 10px 10px" }}
-                  className="bg-[steelblue] text-white w-full normal-case py-1 flex items-center justify-center space-x-5 font-bold cursor-pointer text-sm"
+                  className="bg-[#222745] text-white w-full normal-case py-1 flex items-center justify-center space-x-5 font-bold cursor-pointer text-sm"
                   htmlFor="sizeSelectModal"
                 >
                   <span>Add To Cart</span>

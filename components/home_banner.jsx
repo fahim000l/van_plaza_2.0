@@ -5,6 +5,7 @@ import React, { useContext, useRef } from "react";
 import { ArrowRight, LocationOn } from "@mui/icons-material";
 import LocationSelectModal from "./LocationSelectModal";
 import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
+import logo from "../public/logo.png";
 
 const HomeBanner = () => {
   const locationSelectModal = useRef();
@@ -40,7 +41,7 @@ const HomeBanner = () => {
         //   "polygon(0% 0%, 100% 0%, 100% 90%,0% 100%)",
         //   "polygon(0% 0%, 100% 0%, 100% 80%,0% 100%)",
         // ],
-        backgroundColor: "steelblue",
+        backgroundColor: "#222745",
         p: ["20px", "20px", "50px"],
         display: "flex",
         flexDirection: "column",
@@ -63,6 +64,7 @@ const HomeBanner = () => {
             display: "grid",
             gridTemplateColumns: "1fr",
             gap: [2, 2, 5],
+            color: "white",
           }}
         >
           <Typography variant="h5" sx={{ fontWeight: "bold" }}>
@@ -76,7 +78,8 @@ const HomeBanner = () => {
             endIcon={<ArrowRight />}
             sx={{
               width: ["100%", "100%", "50%"],
-              backgroundColor: "darkblue !important",
+              backgroundColor: "#C5ACED !important",
+              color: "black",
             }}
             variant="contained"
           >
@@ -84,7 +87,9 @@ const HomeBanner = () => {
           </Button>
         </Box>
         <Box sx={{ width: "40%", display: ["none", "none", "block"] }}>
-          <Image width={550} height={550} src={BannerImage} alt="Home Banner" />
+          {/* <Image src={logo} width={550} height={550} /> */}
+          <Image src={logo} className="h-64" />
+          {/* <Image src={BannerImage} alt="Home Banner" /> */}
         </Box>
       </Box>
       <label

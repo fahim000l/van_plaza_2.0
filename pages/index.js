@@ -5,6 +5,8 @@ import HomeFav from "@/components/home_fav";
 import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
 import dynamic from "next/dynamic";
 import { useContext } from "react";
+import logo from "../public/logo_bgless.png";
+import Image from "next/image";
 const Main = dynamic(() =>
   import("@/layouts/Main", {
     ssr: false,

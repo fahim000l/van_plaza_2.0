@@ -120,7 +120,7 @@ function Main({ window, children }) {
           </Box>
         </Drawer>
       </nav>
-      <div className="w-full place-items-center min-h-screen">
+      <div className="w-full place-items-center min-h-screen bg-[#F6F4FF]">
         <Toolbar />
         {children}
       </div>
