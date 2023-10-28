@@ -8,6 +8,8 @@ import {
   Divider,
 } from "@mui/material";
 import { Rectangle, Cancel } from "@mui/icons-material";
+import useGetAllCategories from "@/hooks/useGetAllCategories";
+import AutoSelect from "../common_auto-complete";
 
 const SideFilter = ({
   selectedPriceRange,
@@ -16,7 +18,10 @@ const SideFilter = ({
   setMaxPrice,
   setMinPrice,
   setSearch,
+  setCategoryId,
 }) => {
+  const { categories } = useGetAllCategories();
+
   const handlePriceRange = (e) => {
     e.preventDefault();
 
@@ -54,7 +59,7 @@ const SideFilter = ({
   ];
 
   return (
-    <div>
+    <div className="mb-10">
       <div className="flex items-center justify-between">
         <p className="text-2xl font-bold">Filters</p>
         <label
@@ -112,6 +117,17 @@ const SideFilter = ({
             </Button>
           </form>
         )}
+      </div>
+      <Divider />
+      <div className="my-2">
+        <p>Category</p>
+        <AutoSelect
+          size={"small"}
+          className={"rounded-lg"}
+          options={categories}
+          onChange={(event, newValue) => setCategoryId(newValue?._id)}
+          globalLabel={"categoryName"}
+        />
       </div>
       <Divider />
       <div className="my-2">

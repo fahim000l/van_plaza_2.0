@@ -14,8 +14,9 @@ const SearchProduct = () => {
   const [maxPrice, setMaxPrice] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [search, setSearch] = useState("");
+  const [categoryId, setCategoryId] = useState("");
   const { sps, spsRefetch } = useGetAllPs(
-    "",
+    categoryId,
     search + " " + searchResult,
     selectedPriceRange,
     maxPrice,
@@ -59,6 +60,7 @@ const SearchProduct = () => {
           <div className="p-4 py-20 lg:py-10 w-80 min-h-full text-base-content bg-[#C5ACED]">
             {/* Sidebar content here */}
             <SideFilter
+              setCategoryId={setCategoryId}
               spsRefetch={spsRefetch}
               setSelectedPriceRange={setSelectedPriceRange}
               selectedPriceRange={selectedPriceRange}

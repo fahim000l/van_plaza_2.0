@@ -11,10 +11,10 @@ const Shop = () => {
   const [selectedPriceRange, setSelectedPriceRange] = useState(0);
   const [maxPrice, setMaxPrice] = useState("");
   const [minPrice, setMinPrice] = useState("");
-  console.log(selectedPriceRange);
   const [search, setSearch] = useState("*");
+  const [categoryId, setCategoryId] = useState("");
   const { sps, spsLoading, spsRefetch } = useGetAllPs(
-    "",
+    categoryId,
     search,
     selectedPriceRange,
     maxPrice,
@@ -64,10 +64,11 @@ const Shop = () => {
             aria-label="close sidebar"
             className="drawer-overlay"
           ></label>
-          <div className="p-4 py-20 lg:py-10 w-80 min-h-full text-base-content bg-[#C5ACED]">
+          <div className="p-4 py-20 lg:py-10 w-80 h-screen text-base-content bg-[#C5ACED] overflow-y-scroll">
             {/* Sidebar content here */}
 
             <SideFilter
+              setCategoryId={setCategoryId}
               spsRefetch={spsRefetch}
               setSelectedPriceRange={setSelectedPriceRange}
               selectedPriceRange={selectedPriceRange}
