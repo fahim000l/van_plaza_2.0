@@ -14,10 +14,9 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 const BottomNav = () => {
-  const [value, setValue] = useState("/");
   const { authUser } = useContext(AUTH_CONTEXT);
   const { push, pathname } = useRouter();
-  console.log(pathname);
+  const [value, setValue] = useState(pathname);
   return (
     <div
       // className="btm-nav"

@@ -55,7 +55,7 @@ const Header = ({ setMobileOpen, navItems }) => {
 
   return (
     <AppBar
-      className="flex justify-between h-16"
+      className="flex justify-between h-16 bg-[#222745]"
       sx={{ boxShadow: "none" }}
       component="nav"
     >

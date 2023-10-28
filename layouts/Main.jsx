@@ -110,7 +110,9 @@ function Main({ window, children }) {
                   variant="contained"
                   sx={{
                     textTransform: "none",
-                    backgroundColor: "darkblue !important",
+                    backgroundColor: "#C5ACED !important",
+                    color: "black",
+                    fontWeight: "bold",
                   }}
                 >
                   Shign In / Create Account
