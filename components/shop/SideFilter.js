@@ -6,6 +6,7 @@ import {
   FormControl,
   Button,
   Divider,
+  Chip,
 } from "@mui/material";
 import { Rectangle, Cancel } from "@mui/icons-material";
 import useGetAllCategories from "@/hooks/useGetAllCategories";
@@ -19,8 +20,12 @@ const SideFilter = ({
   setMinPrice,
   setSearch,
   setCategoryId,
+  categoryId,
 }) => {
   const { categories } = useGetAllCategories();
+
+  const { sizes = [] } =
+    categories?.find((category) => category?._id === categoryId) || {};
 
   const handlePriceRange = (e) => {
     e.preventDefault();
@@ -125,10 +130,27 @@ const SideFilter = ({
           size={"small"}
           className={"rounded-lg"}
           options={categories}
-          onChange={(event, newValue) => setCategoryId(newValue?._id)}
+          onChange={(event, newValue) => setCategoryId(newValue?._id || "")}
           globalLabel={"categoryName"}
         />
       </div>
+      {categoryId && (
+        <>
+          <Divider />
+          <div className="my-2 w-full">
+            <p>Sizes</p>
+            <div className="grid grid-cols-4 gap-2 w-full">
+              {sizes?.map(({ sizeName }) => (
+                <Chip
+                  color="info"
+                  className="w-full cursor-pointer"
+                  label={sizeName}
+                />
+              ))}
+            </div>
+          </div>
+        </>
+      )}
       <Divider />
       <div className="my-2">
         <p>Color</p>

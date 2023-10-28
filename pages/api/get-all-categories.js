@@ -8,10 +8,36 @@ export default async function (req, res) {
     const query = {};
 
     if (req.query.limit) {
-      const allCategories = await categories.find(query).limit(req.query.limit);
+      const allCategories = await categories
+        .aggregate([
+          {
+            $match: query,
+          },
+          {
+            $lookup: {
+              from: "sizes",
+              localField: "_id",
+              foreignField: "categoryId",
+              as: "sizes",
+            },
+          },
+        ])
+        .limit(req.query.limit);
       return res.status(200).json(allCategories);
     } else {
-      const allCategories = await categories.find(query);
+      const allCategories = await categories.aggregate([
+        {
+          $match: query,
+        },
+        {
+          $lookup: {
+            from: "sizes",
+            localField: "_id",
+            foreignField: "categoryId",
+            as: "sizes",
+          },
+        },
+      ]);
       return res.status(200).json(allCategories);
     }
   } finally {

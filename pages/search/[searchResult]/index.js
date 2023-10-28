@@ -57,9 +57,10 @@ const SearchProduct = () => {
             aria-label="close sidebar"
             className="drawer-overlay"
           ></label>
-          <div className="p-4 py-20 lg:py-10 w-80 min-h-full text-base-content bg-[#C5ACED]">
+          <div className="p-4 py-20 lg:py-10 w-80 h-screen overflow-y-scroll text-base-content bg-[#C5ACED]">
             {/* Sidebar content here */}
             <SideFilter
+              categoryId={categoryId}
               setCategoryId={setCategoryId}
               spsRefetch={spsRefetch}
               setSelectedPriceRange={setSelectedPriceRange}

@@ -68,6 +68,7 @@ const Shop = () => {
             {/* Sidebar content here */}
 
             <SideFilter
+              categoryId={categoryId}
               setCategoryId={setCategoryId}
               spsRefetch={spsRefetch}
               setSelectedPriceRange={setSelectedPriceRange}
