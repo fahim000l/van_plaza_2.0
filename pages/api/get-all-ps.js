@@ -11,7 +11,7 @@ export default async function (req, res) {
         { sellPrice: { $lt: req.query.maxPrice } },
       ],
     };
-    console.log(priceStatus);
+    console.log(req.query.search);
 
     connectMongo().catch((err) => res.json({ error: "Connection Failed...!" }));
     const sps = await products_stocks

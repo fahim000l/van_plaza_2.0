@@ -7,6 +7,7 @@ import {
   Button,
   Divider,
 } from "@mui/material";
+import { Rectangle, Cancel } from "@mui/icons-material";
 
 const SideFilter = ({
   selectedPriceRange,
@@ -14,6 +15,7 @@ const SideFilter = ({
   spsRefetch,
   setMaxPrice,
   setMinPrice,
+  setSearch,
 }) => {
   const handlePriceRange = (e) => {
     e.preventDefault();
@@ -23,9 +25,45 @@ const SideFilter = ({
     setMaxPrice(form.maxPrice.value);
   };
 
+  const colorGroups = [
+    "aqua",
+    "blue",
+    "darkblue",
+    "lightblue",
+    "brown",
+    "cyan",
+    "darkcyan",
+    "lightcyan",
+    "gray",
+    "darkgray",
+    "lightgray",
+    "green",
+    "darkgreen",
+    "lightgreen",
+    "orange",
+    "darkorange",
+    "pink",
+    "lightpink",
+    "purple",
+    "red",
+    "darkred",
+    "yellow",
+    "lightyellow",
+    "black",
+    "white",
+  ];
+
   return (
-    <div className="bg-[#C5ACED] w-[25%] p-5">
-      <p className="text-2xl font-bold">Filters</p>
+    <div>
+      <div className="flex items-center justify-between">
+        <p className="text-2xl font-bold">Filters</p>
+        <label
+          htmlFor="filterDrawer"
+          className="btn btn-sm btn-circle drawer-button lg:hidden"
+        >
+          <Cancel />
+        </label>
+      </div>
       <div className="my-2">
         <p>Price</p>
         <FormControl fullWidth>
@@ -78,6 +116,19 @@ const SideFilter = ({
       <Divider />
       <div className="my-2">
         <p>Color</p>
+        <div className="grid grid-cols-2 gap-2 my-2">
+          {colorGroups?.map((color) => (
+            <div
+              onClick={() => setSearch(color)}
+              className={`bg-base-300 cursor-pointer rounded-lg flex`}
+            >
+              <Rectangle
+                sx={{ color: color, width: "50px", marginX: 0, paddingX: 0 }}
+              />
+              {color}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

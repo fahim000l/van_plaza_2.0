@@ -1,20 +1,21 @@
 import ProductCard from "@/components/ProductCard";
 import SizeSelectModal from "@/components/SizeSelectModal";
-import useGetAllProducts from "@/hooks/useGetAllProducts";
 import useGetAllPs from "@/hooks/useGetAllPs";
 import Main from "@/layouts/Main";
 import React, { useEffect, useState } from "react";
 import { Skeleton } from "@mui/material";
 import SideFilter from "@/components/shop/SideFilter";
+import { Cancel } from "@mui/icons-material";
 
 const Shop = () => {
   const [selectedPriceRange, setSelectedPriceRange] = useState(0);
   const [maxPrice, setMaxPrice] = useState("");
   const [minPrice, setMinPrice] = useState("");
   console.log(selectedPriceRange);
+  const [search, setSearch] = useState("*");
   const { sps, spsLoading, spsRefetch } = useGetAllPs(
     "",
-    "*",
+    search,
     selectedPriceRange,
     maxPrice,
     minPrice
@@ -23,38 +24,61 @@ const Shop = () => {
 
   return (
     <Main>
-      <div className="flex">
-        <SideFilter
-          spsRefetch={spsRefetch}
-          setSelectedPriceRange={setSelectedPriceRange}
-          selectedPriceRange={selectedPriceRange}
-          setMinPrice={setMinPrice}
-          setMaxPrice={setMaxPrice}
-        />
-        <div className="lg:mx-20 my-10 mx-2 w-[80%]">
-          {spsLoading && (
+      <div className="drawer lg:drawer-open">
+        <input id="filterDrawer" type="checkbox" className="drawer-toggle" />
+        <div className="drawer-content">
+          {/* Page content here */}
+          <div className="my-10 mx-2">
+            <label
+              htmlFor="filterDrawer"
+              className="btn btn-outline btn-sm mb-2 btn-ghost w-full drawer-button lg:hidden"
+            >
+              Filter
+            </label>
+            {spsLoading && (
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-5 ">
+                {[1, 2, 3, 4, 5, 6, 7, 8]?.map((anti) => (
+                  <Skeleton
+                    variant="rectangular"
+                    width={280}
+                    height={300}
+                    key={anti}
+                  />
+                ))}
+              </div>
+            )}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-5 ">
-              {[1, 2, 3, 4, 5, 6, 7, 8]?.map((anti) => (
-                <Skeleton
-                  variant="rectangular"
-                  width={280}
-                  height={300}
-                  key={anti}
+              {sps?.map((sp) => (
+                <ProductCard
+                  setSelectedProduct={setSelectedProduct}
+                  sp={sp}
+                  key={sp?._id}
                 />
               ))}
             </div>
-          )}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-5 ">
-            {sps?.map((sp) => (
-              <ProductCard
-                setSelectedProduct={setSelectedProduct}
-                sp={sp}
-                key={sp?._id}
-              />
-            ))}
+          </div>
+        </div>
+        <div className="drawer-side">
+          <label
+            htmlFor="filterDrawer"
+            aria-label="close sidebar"
+            className="drawer-overlay"
+          ></label>
+          <div className="p-4 py-20 lg:py-10 w-80 min-h-full text-base-content bg-[#C5ACED]">
+            {/* Sidebar content here */}
+
+            <SideFilter
+              spsRefetch={spsRefetch}
+              setSelectedPriceRange={setSelectedPriceRange}
+              selectedPriceRange={selectedPriceRange}
+              setMinPrice={setMinPrice}
+              setMaxPrice={setMaxPrice}
+              setSearch={setSearch}
+            />
           </div>
         </div>
       </div>
+      <div className="flex"></div>
       {selectedProduct && (
         <SizeSelectModal
           setSelectedProduct={setSelectedProduct}
