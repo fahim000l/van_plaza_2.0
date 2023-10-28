@@ -11,7 +11,6 @@ export default async function (req, res) {
         { sellPrice: { $lt: req.query.maxPrice } },
       ],
     };
-    console.log(req.query.search);
 
     connectMongo().catch((err) => res.json({ error: "Connection Failed...!" }));
     const sps = await products_stocks
@@ -73,6 +72,11 @@ export default async function (req, res) {
               },
             ],
           },
+        },
+        {
+          $match: req.query.sizeId
+            ? { "qps.size": new ObjectId(req.query.sizeId) }
+            : {},
         },
       ])
       .sort({ sellPrice: parseInt(priceStatus) });

@@ -1,7 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
 
-const useGetAllPs = (categoryId, search, priceStatus, maxPrice, minPrice) => {
+const useGetAllPs = (
+  categoryId,
+  search,
+  priceStatus,
+  maxPrice,
+  minPrice,
+  sizeId
+) => {
   const {
     data: sps,
     refetch: spsRefetch,
@@ -14,10 +20,11 @@ const useGetAllPs = (categoryId, search, priceStatus, maxPrice, minPrice) => {
       priceStatus,
       maxPrice,
       minPrice,
+      sizeId,
     ],
     queryFn: () =>
       fetch(
-        `/api/get-all-ps?categoryId=${categoryId}&search=${search}&priceStatus=${priceStatus}&maxPrice=${maxPrice}&minPrice=${minPrice}`
+        `/api/get-all-ps?categoryId=${categoryId}&search=${search}&priceStatus=${priceStatus}&maxPrice=${maxPrice}&minPrice=${minPrice}&sizeId=${sizeId}`
       ).then((res) => res.json()),
   });
 

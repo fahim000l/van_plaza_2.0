@@ -26,7 +26,7 @@ const HomeCategories = () => {
       {categoriesLoading && (
         <div className="grid grid-cols-2 lg:grid-cols-4 lg:gap-5 gap-2">
           {[1, 2, 3, 4, 5, 6, 7, 8].map((anti, i) => (
-            <Skeleton variant="rectangular" width={210} height={118} key={i} />
+            <Skeleton variant="rectangular" width={100} height={100} key={i} />
           ))}
         </div>
       )}

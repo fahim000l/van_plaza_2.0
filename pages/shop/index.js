@@ -5,20 +5,23 @@ import Main from "@/layouts/Main";
 import React, { useEffect, useState } from "react";
 import { Skeleton } from "@mui/material";
 import SideFilter from "@/components/shop/SideFilter";
-import { Cancel } from "@mui/icons-material";
+import { Chip } from "@mui/material";
+import { FilterAlt } from "@mui/icons-material";
 
 const Shop = () => {
   const [selectedPriceRange, setSelectedPriceRange] = useState(0);
   const [maxPrice, setMaxPrice] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [search, setSearch] = useState("*");
-  const [categoryId, setCategoryId] = useState("");
+  const [categoryId, setCategoryId] = useState(null);
+  const [sizeId, setSizeId] = useState(null);
   const { sps, spsLoading, spsRefetch } = useGetAllPs(
-    categoryId,
+    categoryId?.categoryId || "",
     search,
     selectedPriceRange,
     maxPrice,
-    minPrice
+    minPrice,
+    sizeId?.sizeId || ""
   );
   const [selectedProduct, setSelectedProduct] = useState(null);
 
@@ -33,15 +36,45 @@ const Shop = () => {
               htmlFor="filterDrawer"
               className="btn btn-outline btn-sm mb-2 btn-ghost w-full drawer-button lg:hidden"
             >
+              <FilterAlt />
               Filter
             </label>
+            <div className="my-2 flex space-x-2">
+              {categoryId && (
+                <Chip
+                  onDelete={() => setCategoryId(null)}
+                  label={categoryId?.categoryName}
+                />
+              )}
+              {sizeId && (
+                <Chip
+                  onDelete={() => setSizeId(null)}
+                  label={sizeId?.sizeName}
+                />
+              )}
+              {search !== "*" && (
+                <Chip onDelete={() => setSearch("*")} label={search} />
+              )}
+              {selectedPriceRange !== 0 && (
+                <Chip
+                  onDelete={() => setSelectedPriceRange(0)}
+                  label={
+                    selectedPriceRange === 1
+                      ? "Low to high"
+                      : selectedPriceRange === -1
+                      ? "high to low"
+                      : selectedPriceRange
+                  }
+                />
+              )}
+            </div>
             {spsLoading && (
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-5 ">
                 {[1, 2, 3, 4, 5, 6, 7, 8]?.map((anti) => (
                   <Skeleton
                     variant="rectangular"
-                    width={280}
-                    height={300}
+                    width={150}
+                    height={200}
                     key={anti}
                   />
                 ))}
@@ -68,6 +101,7 @@ const Shop = () => {
             {/* Sidebar content here */}
 
             <SideFilter
+              setSizeId={setSizeId}
               categoryId={categoryId}
               setCategoryId={setCategoryId}
               spsRefetch={spsRefetch}

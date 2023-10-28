@@ -11,6 +11,7 @@ import {
 import { Rectangle, Cancel } from "@mui/icons-material";
 import useGetAllCategories from "@/hooks/useGetAllCategories";
 import AutoSelect from "../common_auto-complete";
+import { useRouter } from "next/router";
 
 const SideFilter = ({
   selectedPriceRange,
@@ -21,11 +22,14 @@ const SideFilter = ({
   setSearch,
   setCategoryId,
   categoryId,
+  setSizeId,
 }) => {
   const { categories } = useGetAllCategories();
-
+  const { pathname } = useRouter();
+  console.log(pathname);
   const { sizes = [] } =
-    categories?.find((category) => category?._id === categoryId) || {};
+    categories?.find((category) => category?._id === categoryId?.categoryId) ||
+    {};
 
   const handlePriceRange = (e) => {
     e.preventDefault();
@@ -123,25 +127,38 @@ const SideFilter = ({
           </form>
         )}
       </div>
-      <Divider />
-      <div className="my-2">
-        <p>Category</p>
-        <AutoSelect
-          size={"small"}
-          className={"rounded-lg"}
-          options={categories}
-          onChange={(event, newValue) => setCategoryId(newValue?._id || "")}
-          globalLabel={"categoryName"}
-        />
-      </div>
-      {categoryId && (
+      {pathname !== "/category/[categoryId]" && (
+        <>
+          <Divider />
+          <div className="my-2">
+            <p>Category</p>
+            <AutoSelect
+              size={"small"}
+              className={"rounded-lg"}
+              options={categories}
+              onChange={(event, newValue) =>
+                setCategoryId(
+                  {
+                    categoryId: newValue?._id,
+                    categoryName: newValue?.categoryName,
+                  } || ""
+                )
+              }
+              globalLabel={"categoryName"}
+            />
+          </div>
+        </>
+      )}
+      {categoryId?.categoryId && (
         <>
           <Divider />
           <div className="my-2 w-full">
             <p>Sizes</p>
             <div className="grid grid-cols-4 gap-2 w-full">
-              {sizes?.map(({ sizeName }) => (
+              {sizes?.map(({ sizeName, _id }) => (
                 <Chip
+                  key={_id}
+                  onClick={() => setSizeId({ sizeId: _id, sizeName })}
                   color="info"
                   className="w-full cursor-pointer"
                   label={sizeName}

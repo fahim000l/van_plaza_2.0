@@ -77,9 +77,9 @@ const Header = ({ setMobileOpen, navItems }) => {
         >
           <Menu />
         </IconButton>
-        <div className="w-20 h-20">
-          {/* <img className="w-28 h-20" src={logo} alt="" /> */}
-        </div>
+        {/* <div className="w-20 h-20">
+          <img className="w-28 h-20" src={logo} alt="" />
+        </div> */}
         {/* <Typography
           variant="h6"
           component="div"
@@ -94,8 +94,9 @@ const Header = ({ setMobileOpen, navItems }) => {
         </Typography> */}
         {(pathname === "/" ||
           pathname === "/shop" ||
-          pathname?.includes("/search")) && (
-          <div className="lg:w-[35%] md:w-full w-full">
+          pathname?.includes("/search") ||
+          pathname === "/category/[categoryId]") && (
+          <div className="w-full lg:w-[50%]">
             <SearchDrawer />
           </div>
         )}
