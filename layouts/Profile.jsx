@@ -4,16 +4,14 @@ import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
 import { Button } from "@mui/joy";
 import Link from "next/link";
 import React, { useContext } from "react";
+import loader from "../public/logo.png";
+import Image from "next/image";
 
 const Profile = ({ children }) => {
   const { authLoader, dbUserLoading } = useContext(AUTH_CONTEXT);
 
   if (authLoader || dbUserLoading) {
-    return (
-      <div className="min-h-screen w-full text-center my-auto">
-        <p>Loading...</p>
-      </div>
-    );
+    return <Image className="w-full h-screen" src={loader} alt="" />;
   }
 
   return (

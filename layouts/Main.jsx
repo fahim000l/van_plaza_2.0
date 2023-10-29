@@ -23,6 +23,8 @@ import Link from "next/link";
 import { PersonAdd, Settings, Logout, Shop2 } from "@mui/icons-material";
 import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
 import BottomNav from "@/components/main_bottom_nav";
+import loader from "../public/logo.png";
+import Image from "next/image";
 
 const drawerWidth = 240;
 const navItems = [
@@ -62,11 +64,7 @@ function Main({ window, children }) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   if (authLoader || dbUserLoading) {
-    return (
-      <div className="min-h-screen w-full text-center my-auto">
-        <p>Loading...</p>
-      </div>
-    );
+    return <Image className="w-full h-screen" src={loader} alt="" />;
   }
 
   return (

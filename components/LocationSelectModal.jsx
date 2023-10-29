@@ -40,6 +40,7 @@ import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 import usePlacesAutocomplete from "use-places-autocomplete";
+import loader from "../public/logo.png";
 
 export default function LocationSelectModal({
   selectedAddressBook,
@@ -76,7 +77,7 @@ export default function LocationSelectModal({
             onClose={toggleDrawer(anchor, false)}
           >
             {!isLoaded ? (
-              <p>Loading...</p>
+              <Image className="w-full h-screen" src={loader} alt="" />
             ) : (
               <Map
                 toggleDrawer={toggleDrawer}
@@ -751,6 +752,7 @@ function EditLocation({
   );
 }
 import Fuse from "fuse.js";
+import Image from "next/image";
 function PlacesAutoComplete({ setSelectedPlace, setActiveStep }) {
   const [places, setPlaces] = useState([]);
   const [query, setQuery] = useState("");
