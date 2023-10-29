@@ -7,7 +7,7 @@ const ProfileNav = () => {
   const { authUser } = useContext(AUTH_CONTEXT);
 
   return (
-    <div className="navbar bg-[steelblue] space-x-2 sticky top-0 z-[300]">
+    <div className="navbar bg-[#222745] space-x-2 sticky top-0 z-[300]">
       <div className="flex-none gap-2">
         <label htmlFor="profileDrawer" className="text-white lg:hidden">
           <Menu />

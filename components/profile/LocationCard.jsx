@@ -149,7 +149,7 @@ const LocationCard = ({
           <Button
             onClick={handleMakeDefault}
             size="sm"
-            className="bg-[green] text-white mt-2"
+            className="bg-[#222745] text-white mt-2"
           >
             Set as Default Delevery Location
           </Button>

@@ -101,63 +101,65 @@ const Header = ({ setMobileOpen, navItems }) => {
             <SearchDrawer />
           </div>
         )}
-        <Box sx={{ display: ["none", "none", "flex"], alignItems: "center" }}>
-          {navItems.map((item) => (
-            <Link href={item.path} key={item.path}>
-              <Button
-                startIcon={item.icon}
-                sx={{
-                  color: "#fff",
-                  fontWeight: "bold",
-                  textTransform: "none",
-                  mx: "10px",
-                }}
-              >
-                {item.content}
-              </Button>
-            </Link>
-          ))}
-          {authUser?.email ? (
-            <div className="flex items-center">
-              <IconButton
-                id="basic-button"
-                aria-controls={open ? "basic-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? "true" : undefined}
-                onClick={(event) => setAnchorEl(event.currentTarget)}
-              >
-                <Avatar alt={authUser?.userName} src={authUser?.profilePic} />
-              </IconButton>
-              <AuthMenu
-                anchorEl={anchorEl}
-                setAnchorEl={setAnchorEl}
-                open={open}
-              />
-            </div>
-          ) : (
-            <Link href={"/signin"}>
-              <Button
-                variant="contained"
-                sx={{
-                  textTransform: "none",
-                  backgroundColor: "#C5ACED !important",
-                  color: "black",
-                  fontWeight: "bold",
-                }}
-              >
-                Shign In / Create Account
-              </Button>
-            </Link>
+        <div className="flex items-center lg:max-w-[50%] place-content-end">
+          <Box sx={{ display: ["none", "none", "flex"], alignItems: "center" }}>
+            {navItems.map((item) => (
+              <Link href={item.path} key={item.path}>
+                <Button
+                  startIcon={item.icon}
+                  sx={{
+                    color: "#fff",
+                    fontWeight: "bold",
+                    textTransform: "none",
+                    mx: "10px",
+                  }}
+                >
+                  {item.content}
+                </Button>
+              </Link>
+            ))}
+            {authUser?.email ? (
+              <div className="flex items-center">
+                <IconButton
+                  id="basic-button"
+                  aria-controls={open ? "basic-menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                  onClick={(event) => setAnchorEl(event.currentTarget)}
+                >
+                  <Avatar alt={authUser?.userName} src={authUser?.profilePic} />
+                </IconButton>
+                <AuthMenu
+                  anchorEl={anchorEl}
+                  setAnchorEl={setAnchorEl}
+                  open={open}
+                />
+              </div>
+            ) : (
+              <Link href={"/signin"}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    textTransform: "none",
+                    backgroundColor: "#C5ACED !important",
+                    color: "black",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Shign In / Create Account
+                </Button>
+              </Link>
+            )}
+          </Box>
+          {authUser?.email && (
+            <IconButton
+              size="small"
+              className={`${pathname === "/payment" && "hidden"}`}
+            >
+              <CartDrawer />
+            </IconButton>
           )}
-        </Box>
-        {authUser?.email && (
-          <IconButton
-            size="small"
-            className={`${pathname === "/payment" && "hidden"}`}
-          >
-            <CartDrawer />
-          </IconButton>
-        )}
+        </div>
       </Toolbar>
     </AppBar>
   );

@@ -25,7 +25,9 @@ const Profile = ({ children }) => {
           {/* Page content here */}
           {/* <div className="h-[100vh]"> */}
           {/* <div className="lg:p-10 p-2"></div> */}
-          <div className="min-h-screen lg:m-10 m-2">{children}</div>
+          <div className="min-h-screen lg:m-10 m-2 bg-[#F6F4FF]">
+            {children}
+          </div>
           <BottomNav />
           {/* </div> */}
         </div>
@@ -36,7 +38,7 @@ const Profile = ({ children }) => {
             <li>
               <a
                 href="#personalProfile"
-                className="bg-[steelblue] text-white hover:bg-[steelblue] hover:text-white"
+                className="bg-[#222745] text-white hover:bg-[#222745] hover:text-white"
               >
                 Personal Profile
               </a>
@@ -44,7 +46,7 @@ const Profile = ({ children }) => {
             <li>
               <a
                 href="#addressBook"
-                className="bg-[steelblue] text-white hover:bg-[steelblue] hover:text-white"
+                className="bg-[#222745] text-white hover:bg-[#222745] hover:text-white"
               >
                 Address Book
               </a>
@@ -52,7 +54,7 @@ const Profile = ({ children }) => {
             <li>
               <a
                 href="#myOrders"
-                className="bg-[steelblue] text-white hover:bg-[steelblue] hover:text-white"
+                className="bg-[#222745] text-white hover:bg-[#222745] hover:text-white"
               >
                 My Orders
               </a>

@@ -152,6 +152,23 @@ function Map({
     (loc) => loc?.def === true
   );
 
+  // let displayingLatLng = selectedPlace
+  //   ? {
+  //       lat: parseFloat(selectedPlace?.lat),
+  //       lng: parseFloat(selectedPlace?.lng),
+  //     }
+  //   : selectedAddressBook
+  //   ? {
+  //       lat: selectedAddressBook?.Address?.lat,
+  //       lng: selectedAddressBook?.Address?.lng,
+  //     }
+  //   : authUser?.locations?.length > 0
+  //   ? {
+  //       lat: authUserDefaultLocation?.Address?.lat,
+  //       lng: authUserDefaultLocation?.Address?.lng,
+  //     }
+  //   : center;
+
   return (
     <div className="flex flex-col lg:flex-col-reverse">
       {editing ? (

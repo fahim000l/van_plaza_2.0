@@ -1,7 +1,7 @@
 import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
 import Main from "@/layouts/Main";
 import { useFormik } from "formik";
-import React, { useContext, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import Swal from "sweetalert2";
 import emailjs from "@emailjs/browser";
 
@@ -38,6 +38,13 @@ const ContactUs = () => {
         );
     },
   });
+
+  useEffect(() => {
+    if (authUser?.email) {
+      Formik.setFieldValue("email", authUser?.email);
+      Formik.setFieldValue("userName", authUser?.userName);
+    }
+  }, [authUser]);
 
   return (
     <Main>

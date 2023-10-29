@@ -9,7 +9,13 @@ import Swal from "sweetalert2";
 import { useRouter } from "next/router";
 
 const PersonalProfile = () => {
-  const { authUser } = useContext(AUTH_CONTEXT);
+  const { authUser, signingOut, setAuthLoader } = useContext(AUTH_CONTEXT);
+
+  const handleLogOut = () => {
+    setAuthLoader(true);
+    signingOut();
+  };
+
   const editProfileModalLabel = useRef();
   const { pathname } = useRouter();
 
@@ -50,7 +56,7 @@ const PersonalProfile = () => {
   return (
     <div
       id="personalProfile"
-      className="grid card bg-[steelblue] rounded-box p-5 my-2"
+      className="grid card bg-[#222745] rounded-box p-5 my-2"
     >
       <div className="flex justify-between mb-5">
         <p className="font-bold text-white">Personal Profile</p>
@@ -112,6 +118,8 @@ const PersonalProfile = () => {
             </p>
           )}
           <Button
+            onClick={handleLogOut}
+            size="small"
             color="error"
             variant="contained"
             className="bg-red-700 font-bold mt-5"
