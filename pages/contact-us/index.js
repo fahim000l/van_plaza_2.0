@@ -1,7 +1,44 @@
+import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
 import Main from "@/layouts/Main";
-import React from "react";
+import { useFormik } from "formik";
+import React, { useContext, useRef } from "react";
+import Swal from "sweetalert2";
+import emailjs from "@emailjs/browser";
 
 const ContactUs = () => {
+  const { authUser } = useContext(AUTH_CONTEXT);
+  const form = useRef();
+
+  const Formik = useFormik({
+    initialValues: {
+      userName: authUser?.userName || "",
+      email: authUser?.email || "",
+      message: "",
+    },
+    onSubmit: (values) => {
+      console.log(values);
+      emailjs
+        .sendForm(
+          `${process.env.NEXT_PUBLIC_EMAILJS_SERVICEID}`,
+          `${process.env.NEXT_PUBLIC_EMAILJS_TEMPLATEID}`,
+          form.current,
+          `${process.env.NEXT_PUBLIC_EMAILJS_PUBLICKEY}`
+        )
+        .then(
+          (result) => {
+            console.log(result.text);
+            if (result.text === "OK") {
+              Swal.fire("Your message is sent");
+              Formik.resetForm();
+            }
+          },
+          (error) => {
+            console.log(error.text);
+          }
+        );
+    },
+  });
+
   return (
     <Main>
       <section class="bg-white dark:bg-gray-900">
@@ -21,14 +58,16 @@ const ContactUs = () => {
           </div>
 
           <div class="grid grid-cols-1 gap-12 mt-10 lg:grid-cols-3">
-            <form class="mt-4">
+            <form ref={form} onSubmit={Formik.handleSubmit} class="mt-4">
               <div class="flex-1">
                 <label class="block mb-2 text-sm text-gray-600 dark:text-gray-200">
                   Full Name
                 </label>
                 <input
                   type="text"
-                  placeholder="John Doe"
+                  required
+                  {...Formik.getFieldProps("userName")}
+                  placeholder="Your Name"
                   class="block w-full px-5 py-3 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
                 />
               </div>
@@ -38,8 +77,10 @@ const ContactUs = () => {
                   Email address
                 </label>
                 <input
+                  required
                   type="email"
-                  placeholder="johndoe@example.com"
+                  {...Formik.getFieldProps("email")}
+                  placeholder="example@gmail.com"
                   class="block w-full px-5 py-3 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
                 />
               </div>
@@ -49,13 +90,18 @@ const ContactUs = () => {
                   Message
                 </label>
                 <textarea
+                  required
+                  {...Formik.getFieldProps("message")}
                   class="block w-full h-32 px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md md:h-48 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
                   placeholder="Message"
                 ></textarea>
               </div>
 
-              <button class="w-full px-6 py-3 mt-6 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-400 focus:ring-opacity-50">
-                get in touch
+              <button
+                type="submit"
+                class="w-full px-6 py-3 mt-6 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-400 focus:ring-opacity-50"
+              >
+                Send
               </button>
             </form>
 
