@@ -348,7 +348,7 @@ function EditLocation({
   return (
     <div className="h-screen">
       <div
-        className={`p-5 bg-base-200 flex flex-col h-[100vh] ${
+        className={`lg:p-5 bg-base-200 flex flex-col min-h-screen ${
           activeStep === 3 && "flex-col-reverse"
         }`}
       >
@@ -695,19 +695,20 @@ function EditLocation({
               }
             )
           ) : activeStep === 3 ? (
-            <div className="flex space-x-3 w-full">
+            <div className="flex items-center space-x-3 w-full">
               <PlacesAutoComplete
+                selectedPlace={selectedPlace}
                 setActiveStep={setActiveStep}
                 setSelectedPlace={setSelectedPlace}
               />
-              <IconButton
+              {/* <button
                 disabled={!selectedPlace?.address}
                 onClick={() => setActiveStep(4)}
                 size="small"
-                className="bg-success rounded-full"
+                className="btn btn-sm btn-circle bg-success"
               >
                 <Done />
-              </IconButton>
+              </button> */}
             </div>
           ) : (
             <TextField
@@ -724,36 +725,40 @@ function EditLocation({
           )}
           <ListItemButton></ListItemButton>
         </List>
-        <div className="sticky bottom-0">
-          <Button
-            disabled={
-              !selectedLocation?.Address ||
-              !selectedLocation?.Area ||
-              !selectedLocation?.City ||
-              !selectedLocation?.LandMark ||
-              !selectedLocation?.Region
-            }
-            onClick={handleSetLocation}
-            fullWidth
-            className="bg-[steelblue] text-white font-bold normal-case"
-          >
-            Confirm
-          </Button>
-          <Button
-            onClick={toggleDrawer(anchor, false)}
-            fullWidth
-            className="bg-red-500 hover:bg-red-500 text-white hover:text-white"
-          >
-            Cancel
-          </Button>
-        </div>
+      </div>
+      <div className="sticky bottom-0">
+        <Button
+          disabled={
+            !selectedLocation?.Address ||
+            !selectedLocation?.Area ||
+            !selectedLocation?.City ||
+            !selectedLocation?.LandMark ||
+            !selectedLocation?.Region
+          }
+          onClick={handleSetLocation}
+          fullWidth
+          className="bg-[steelblue] text-white font-bold normal-case"
+        >
+          Confirm
+        </Button>
+        <Button
+          onClick={toggleDrawer(anchor, false)}
+          fullWidth
+          className="bg-red-500 hover:bg-red-500 text-white hover:text-white"
+        >
+          Cancel
+        </Button>
       </div>
     </div>
   );
 }
 import Fuse from "fuse.js";
 import Image from "next/image";
-function PlacesAutoComplete({ setSelectedPlace, setActiveStep }) {
+function PlacesAutoComplete({
+  setSelectedPlace,
+  setActiveStep,
+  selectedPlace,
+}) {
   const [places, setPlaces] = useState([]);
   const [query, setQuery] = useState("");
 
@@ -855,6 +860,13 @@ function PlacesAutoComplete({ setSelectedPlace, setActiveStep }) {
       globalLabel={"address"}
       startIcon={<LocationOn />}
       placeholder={"your address"}
+      inputOnKeyDown={(e) => {
+        if (selectedPlace?.address === e.target.value) {
+          if (e.target.key === "ENTER") {
+            setActiveStep(4);
+          }
+        }
+      }}
       onChange={(event, newValue) => {
         setSelectedPlace({
           lat: parseFloat(newValue?.latitude),

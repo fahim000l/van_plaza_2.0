@@ -22,6 +22,8 @@ const AutoSelect = ({
   freeSolo,
   inputOnchange,
   startIcon,
+  inputOnKeyDown,
+  inputValue,
 }) => {
   return (
     <Autocomplete
@@ -58,6 +60,8 @@ const AutoSelect = ({
           name="category"
           fullWidth
           {...params}
+          value={inputValue}
+          onKeyDown={inputOnKeyDown}
           onChange={inputOnchange}
           placeholder={placeholder}
           className="bg-white my-2"
