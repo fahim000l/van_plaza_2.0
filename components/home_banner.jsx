@@ -75,7 +75,7 @@ const HomeBanner = () => {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Purus
             commodo ipsum duis laoreet maecenas. Feugiat
           </Typography>
-          {authUser?.email && (
+          {!authUser?.email && (
             <Link href={"/create-account"}>
               <Button
                 endIcon={<ArrowRight />}
