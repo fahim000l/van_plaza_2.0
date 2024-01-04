@@ -6,6 +6,7 @@ import { ArrowRight, LocationOn } from "@mui/icons-material";
 import LocationSelectModal from "./LocationSelectModal";
 import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
 import logo from "../public/logo.png";
+import Link from "next/link";
 
 const HomeBanner = () => {
   const locationSelectModal = useRef();
@@ -74,17 +75,21 @@ const HomeBanner = () => {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Purus
             commodo ipsum duis laoreet maecenas. Feugiat
           </Typography>
-          <Button
-            endIcon={<ArrowRight />}
-            sx={{
-              width: ["100%", "100%", "50%"],
-              backgroundColor: "#C5ACED !important",
-              color: "black",
-            }}
-            variant="contained"
-          >
-            Get Started
-          </Button>
+          {authUser?.email && (
+            <Link href={"/create-account"}>
+              <Button
+                endIcon={<ArrowRight />}
+                sx={{
+                  width: ["100%", "100%", "50%"],
+                  backgroundColor: "#C5ACED !important",
+                  color: "black",
+                }}
+                variant="contained"
+              >
+                Get Started
+              </Button>
+            </Link>
+          )}
         </Box>
         <Box sx={{ width: "40%", display: ["none", "none", "block"] }}>
           {/* <Image src={logo} width={550} height={550} /> */}
