@@ -97,7 +97,10 @@ const Header = ({ setMobileOpen, navItems }) => {
           pathname?.includes("/search") ||
           pathname === "/contact-us" ||
           pathname === "/category/[categoryId]" ||
-          pathname === "/shop/[psId]") && (
+          pathname === "/shop/[psId]" ||
+          pathname === "/all-categories" ||
+          pathname === "/signin" ||
+          pathname === "/signup") && (
           <div className="w-full lg:w-[50%]">
             <SearchDrawer />
           </div>
@@ -108,6 +111,7 @@ const Header = ({ setMobileOpen, navItems }) => {
               <Link href={item.path} key={item.path}>
                 <Button
                   startIcon={item.icon}
+                  className={`${pathname === item?.path && "bg-[#C5ACED]"}`}
                   sx={{
                     color: "#fff",
                     fontWeight: "bold",
