@@ -25,6 +25,7 @@ import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
 import BottomNav from "@/components/main_bottom_nav";
 import loader from "../public/logo.png";
 import Image from "next/image";
+import { signOut } from "next-auth/react";
 
 const drawerWidth = 240;
 const navItems = [
@@ -47,13 +48,21 @@ const navItems = [
 
 const authItems = [
   {
-    path: "/",
+    path: "/profile",
     content: "Profile",
     icon: <Avatar />,
   },
   {
     path: "/contact-us",
-    content: "LogOut",
+    content: (
+      <Button
+        variant="contained"
+        onClick={() => signOut()}
+        className="bg-[#222745] hover:bg-[#222745] text-white"
+      >
+        Log Out
+      </Button>
+    ),
     icon: <Logout />,
   },
 ];

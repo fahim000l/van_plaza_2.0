@@ -3,7 +3,7 @@ import Main from "@/layouts/Main";
 import { Button } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { AddShoppingCartSharp } from "@mui/icons-material";
 import SizeSelectModal from "@/components/SizeSelectModal";
 import PsDetailsBottomNav from "@/components/PsDetails/PsDetailsBottomNav";
@@ -11,11 +11,14 @@ import SwipeableViews from "react-swipeable-views";
 import { autoPlay } from "react-swipeable-views-utils";
 import { useTheme } from "@mui/material/styles";
 import { Box } from "@mui/joy";
+import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 const OnSaleProductDetails = () => {
   const { query } = useRouter();
+  const { authUser } = useContext(AUTH_CONTEXT);
+  const { push } = useRouter();
 
   const {
     ps,
@@ -299,7 +302,13 @@ const OnSaleProductDetails = () => {
                   {sellPrice} /-
                 </p>
                 <label
-                  onClick={() => setSelectedProduct(ps[0])}
+                  onClick={() => {
+                    if (authUser?.email) {
+                      setSelectedProduct(ps[0]);
+                    } else {
+                      push("/signin");
+                    }
+                  }}
                   className="bg-[#222745] text-white w-full normal-case py-1 lg:flex items-center justify-center space-x-5 font-bold cursor-pointer shadow-xl rounded-md hidden text-center"
                   htmlFor="sizeSelectModal"
                 >

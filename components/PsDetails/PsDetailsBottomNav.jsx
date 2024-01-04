@@ -34,7 +34,13 @@ const PsDetailsBottomNav = ({ setSelectedProduct, ps }) => {
         <label
           //   variant="contained"
           //   size="sm"
-          onClick={() => setSelectedProduct(ps?.[0])}
+          onClick={() => {
+            if (authUser?.email) {
+              setSelectedProduct(ps?.[0]);
+            } else {
+              push("/signin");
+            }
+          }}
           htmlFor="sizeSelectModal"
           className="btn btn-primary btn-sm normal-case"
         >

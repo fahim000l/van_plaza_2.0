@@ -96,7 +96,8 @@ const Header = ({ setMobileOpen, navItems }) => {
           pathname === "/shop" ||
           pathname?.includes("/search") ||
           pathname === "/contact-us" ||
-          pathname === "/category/[categoryId]") && (
+          pathname === "/category/[categoryId]" ||
+          pathname === "/shop/[psId]") && (
           <div className="w-full lg:w-[50%]">
             <SearchDrawer />
           </div>
