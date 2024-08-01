@@ -7,6 +7,7 @@ import LocationSelectModal from "./LocationSelectModal";
 import { AUTH_CONTEXT } from "@/contexts/AuthProvider";
 import logo from "../public/logo.png";
 import Link from "next/link";
+import TestComponent from "./TestComponent";
 
 const HomeBanner = () => {
   const locationSelectModal = useRef();
@@ -68,6 +69,7 @@ const HomeBanner = () => {
             color: "white",
           }}
         >
+          <TestComponent />
           <Typography variant="h5" sx={{ fontWeight: "bold" }}>
             Let’s Grow Your Brand To The Next Level
           </Typography>
